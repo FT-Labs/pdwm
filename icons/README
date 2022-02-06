@@ -1,0 +1,6 @@
+Putted icons must start from 0. 0.png, 1.png ... until 9.png.
+All icons must be set in /usr/local/share/phyos/dwm/icons/ dir.
+All icons need to have 32x32 size, 8-bit/color RGBA format png.
+Icon 0 -> Logo (phyOS logo could not fit in 32x32, therefore use 35x30 in 0.png)
+Icon 1 -> Settings
+Icon 2..9 -> Statusbar

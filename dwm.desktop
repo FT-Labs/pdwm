@@ -1,0 +1,6 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=dwm
+Comment=This session starts dwm
+Exec=~/.xinitrc
+Type=Application
