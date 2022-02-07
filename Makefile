@@ -36,6 +36,7 @@ dist: clean
 install: all
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	cp -f dwm ${DESTDIR}${PREFIX}/bin
+	cp -f dwm.desktop /usr/share/xsessions/dwm.desktop
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
 	mkdir -p ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
 	cp -f icons/*.png ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
