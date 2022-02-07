@@ -88,7 +88,7 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel, SchemeStatus, SchemeTagsSel, SchemeTagsNorm, SchemeInfoSel, SchemeInfoNorm, SchemeLogo }; /* color schemes */
+enum { SchemeNorm, SchemeSel, SchemeStatus, SchemeTagsSel, SchemeTagsNorm, SchemeInfoSel, SchemeInfoNorm }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
@@ -980,7 +980,7 @@ drawbar(Monitor *m)
 	/* draw status first so it can be overdrawn by tags later */
 	if (m == selmon) { /* status is only drawn on selected monitor */
 
-		load_png_icons(drw);
+		load_png_icons(drw, statusbgcolor, infobarsbgcolor);
 
 		char stextcpy[256];
 		strcpy(stextcpy, stext);
@@ -1043,7 +1043,6 @@ drawbar(Monitor *m)
 	x = 0;
 
 	// Draw logo offset with margin
-	drw_setscheme(drw, scheme[SchemeLogo]);
 	drw_rect(drw, 0, 0, 2 * sb_delimiter_w + sb_logo_w, bh, 1, 0);
 	drw_logo(drw, 0, sb_delimiter_w, sb_logo_y_margin, sb_logo_w, sb_logo_h);
 	x += sb_logo_w + 2 * sb_delimiter_w;

@@ -57,8 +57,8 @@ int drw_text(Drw *drw, int x, int y, unsigned int w, unsigned int h, unsigned in
 void drw_map(Drw *drw, Window win, int x, int y, unsigned int w, unsigned int h);
 
 /* Png support functions */
-void load_png_icons(Drw* drw);
-void loadpng (FILE *file, unsigned char** data, int *width, int *height, int *rowbytes, unsigned char b, unsigned char g, unsigned char r);
-int get_png_files(const char *path, char ***png_list, char*** png_names);
+void load_png_icons(Drw* drw, char* sbcolor, char* ibcolor);
+void loadpng (FILE* file, unsigned char** data, int* width, int* height, int* rowbytes, unsigned char b, unsigned char g, unsigned char r);
+int get_png_files(const char* path, char*** png_list, char*** png_names);
 void drw_logo(Drw* drw, int logo, int x, int y, unsigned int w, unsigned int h);
 void clear_png_icons(void);

@@ -19,11 +19,9 @@ static const unsigned char utfmask[UTF_SIZ + 1] = {0xC0, 0x80, 0xE0, 0xF0, 0xF8}
 static const long utfmin[UTF_SIZ + 1] = {       0,    0,  0x80,  0x800,  0x10000};
 static const long utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF};
 
+
 // Icon path to search for 32x32 png files -> statusbar
 static char* iconpath = "/usr/local/share/phyos/dwm/icons/";
-// Background rgb values of statusbar
-static unsigned char sb_r = 32, sb_g = 178, sb_b = 171;
-static unsigned char ib_rgb = 18;
 static XImage* icon_ximg[10];
 
 
@@ -512,7 +510,7 @@ void tearpng (png_structp png, png_infop info)
 }
 
 void
-loadpng (FILE *file, unsigned char** data, int *width, int *height, int *rowbytes, unsigned char b, unsigned char g, unsigned char r)
+loadpng (FILE* file, unsigned char** data, int* width, int* height, int *rowbytes, unsigned char b, unsigned char g, unsigned char r)
 {
 
 	size_t size = 0;
@@ -571,15 +569,18 @@ loadpng (FILE *file, unsigned char** data, int *width, int *height, int *rowbyte
 }
 
 void
-load_png_icons(Drw* drw)
+load_png_icons(Drw* drw, char* sb, char* ib)
 {
-	if (icon_ximg[0] == NULL) {
+	if (drw && icon_ximg[0] == NULL) {
 		char **png_files;
 		char **png_names;
 		int png_bytes, n, w, h;
+		unsigned int r, g, b;
 		unsigned char* data;
 		FILE* fp;
 		XImage* ximage;
+		sb++;
+		ib++;
 
 		n = get_png_files(iconpath, &png_files, &png_names);
 
@@ -588,13 +589,16 @@ load_png_icons(Drw* drw)
 			fp = fopen(png_files[i], "rb");
 			int idx = png_names[i][0] - '0';
 
-			if (idx < 2)
-				loadpng(fp, &data, &w, &h, &png_bytes, ib_rgb, ib_rgb, ib_rgb);
-			else
-				loadpng(fp, &data, &w, &h, &png_bytes, sb_b, sb_g, sb_r);
+			if (idx < 2) {
+				sscanf(sb, "%02x%02x%02x", &r, &g, &b);
+				loadpng(fp, &data, &w, &h, &png_bytes, b, g, r);
+			}
+			else {
+				sscanf(ib, "%02x%02x%02x", &r, &g, &b);
+				loadpng(fp, &data, &w, &h, &png_bytes, b, g, r);
+			}
 
 			ximage = XCreateImage(drw->dpy, DefaultVisual(drw->dpy, drw->screen), DefaultDepth(drw->dpy, drw->screen), ZPixmap, 0, (char*)data, w, h, 32, png_bytes);
-			fprintf(stderr, "%s", png_names[i]);
 			icon_ximg[idx] = ximage;
 			fclose(fp);
 		}
@@ -604,7 +608,7 @@ load_png_icons(Drw* drw)
 void
 clear_png_icons()
 {
-	for (int i=0; i<5; i++) {
+	for (int i=0; i<10; i++) {
 		if (icon_ximg[i] != NULL)
 			XDestroyImage(icon_ximg[i]);
 	}
