@@ -24,7 +24,6 @@ build() {
 }
 
 package() {
-	mkdir -p $pkgdir/usr/share/xsessions
 	cd "$pkgname"
 	make PREFIX=/usr/local DESTDIR="$pkgdir/" install
 }
