@@ -21,24 +21,29 @@ static const int user_bh			= 36;		/* 0 means normal bar height, >1 means user ba
 static const char *fonts[]          = { "SF Pro Text:style=Regular:size=18", "JoyPixels:size=16:antialias=true:autohint=true"  };
 static char dmenufont[]             = "SF Pro Text:style=Regular:size=18";
 static char dmenuh[] = "36";
+
+#include "themes/catpuccin.h"
+#define selbordercolor blue
+#define normbordercolor gray2
+
+#define tagbarstextcolor black
+#define tagbarsbgcolor blue
+#define tagbarustextcolor blue
+#define tagbarusbgcolor black
+
+#define statustextcolor black
+#define statusbgcolor black
+
+#define infobarstextcolor blue
+#define infobarsbgcolor black
+#define infobarustextcolor black
+
+#define selbgcolor blue2
+
 static char normbgcolor[]           = "#222222";
-static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#121212";
 static char selfgcolor[]            = "#e0ffff";
-static char selbordercolor[]        = "#770000";
-static char selbgcolor[]            = "#e3e3e3";
 
-static char statustextcolor[]	    = "#e0ffff";
-static char statusbgcolor[]		    = "#121212";
-
-static char tagbarstextcolor[]	    = "#121212";
-static char tagbarsbgcolor[]	    = "#e0ffff";
-static char tagbarustextcolor[]	    = "#e0ffff";
-static char tagbarusbgcolor[]	    = "#121212";
-
-static char infobarstextcolor[]	    = "#121212";
-static char infobarsbgcolor[]	    = "#20b2aa";
-static char infobarustextcolor[]	= "#121212";
 static char infobarusbgcolor[]	    = "#878787";
 
 // Logo size
@@ -50,10 +55,13 @@ static const unsigned int sb_delimiter_w = 8;
 static const unsigned int sb_icon_wh = 32;
 static const unsigned int sb_icon_x_margin = 6;
 
+static const unsigned int sb_x_margin = 15;
+static const unsigned int sb_y_margin = 8;
+
 static char *colors[][3] = {
        /*               fg           bg           border   */
        [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
-       [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
+       [SchemeSel]  = { selfgcolor,  selfgcolor,  selbordercolor  },
 	   [SchemeStatus] = { statustextcolor, statusbgcolor, "#000000" },
 	   [SchemeTagsSel] = { tagbarstextcolor, tagbarsbgcolor, "#000000" },
 	   [SchemeTagsNorm] = { tagbarustextcolor, tagbarusbgcolor, "#000000" },

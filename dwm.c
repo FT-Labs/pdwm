@@ -970,7 +970,7 @@ dirtomon(int dir)
 void
 drawbar(Monitor *m)
 {
-	int x, w, tw = 0, twtmp = 0;
+	int x, w, y = 0, tw = 0, twtmp = 0;
 	int boxs = drw->fonts->h / 9;
 	int boxw = drw->fonts->h / 6 + 2;
 	unsigned int i = 0, occ = 0, urg = 0;
@@ -1005,7 +1005,7 @@ drawbar(Monitor *m)
 
 		// Fill all bar with colorscheme first, some png might have empty locations
 		drw_setscheme(drw, scheme[SchemeInfoSel]);
-		drw_rect(drw, m->ww - twtmp, 0, twtmp, bh, 1, 1);
+		drw_rect(drw, m->ww - twtmp, y, twtmp, bh, 1, 1);
 
 		while (sb_arr[i] != NULL) {
 			drw_setscheme(drw, scheme[SchemeInfoSel]);
@@ -1013,22 +1013,22 @@ drawbar(Monitor *m)
 			if (sb_arr[i][0] == 'S') {
 				int idx = sb_arr[i][1] - '0';
 				i++;
-				drw_text(drw, m->ww - twtmp, 0, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
+				drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
 				twtmp -= TEXTW_SB(sb_arr[i]) + sb_icon_x_margin;
 				drw_logo(drw, idx, m->ww - twtmp, 2, sb_icon_wh, sb_icon_wh);
 				twtmp -= sb_icon_wh;
 			}
 			else {
-				drw_text(drw, m->ww - twtmp, 0, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
+				drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
 				twtmp -= TEXTW_SB(sb_arr[i]);
 			}
 
 			// Below draws seperators
 			if (sb_arr[i+1] != NULL) {
-				drw_setscheme(drw, scheme[SchemeTagsNorm]);
 				twtmp -= sb_delimiter_w;
-				drw_rect(drw, m->ww - twtmp, 4, sb_delimiter_w, bh - 8, 1, 1);
-				drw_rect(drw, m->ww - twtmp + sb_delimiter_w / 4, 0, sb_delimiter_w / 2, bh , 1, 1);
+				drw_setscheme(drw, scheme[SchemeSel]);
+				drw_rect(drw, m->ww - twtmp + sb_delimiter_w / 4, y, sb_delimiter_w / 2, bh , 1, 1);
+				drw_rect(drw, m->ww - twtmp, y + 4, sb_delimiter_w, bh - 8, 1, 1);
 				twtmp -= 2 * sb_delimiter_w;
 			}
 			i++;
@@ -1043,8 +1043,9 @@ drawbar(Monitor *m)
 	x = 0;
 
 	// Draw logo offset with margin
-	drw_rect(drw, 0, 0, 2 * sb_delimiter_w + sb_logo_w, bh, 1, 0);
-	drw_logo(drw, 0, sb_delimiter_w, sb_logo_y_margin, sb_logo_w, sb_logo_h);
+	drw_setscheme(drw, scheme[SchemeTagsSel]);
+	drw_rect(drw, 0, y, 2 * sb_delimiter_w + sb_logo_w, bh, 1, 0);
+	drw_logo(drw, 0, sb_delimiter_w, y + sb_logo_y_margin, sb_logo_w, sb_logo_h);
 	x += sb_logo_w + 2 * sb_delimiter_w;
 
 
@@ -1055,34 +1056,34 @@ drawbar(Monitor *m)
 
 		w = TEXTW(tags[0]);
 		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeTagsSel : SchemeTagsNorm]);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
+		drw_text(drw, x, y, w, bh, lrpad / 2, tags[i], urg & 1 << i);
 		x += w;
 	}
 	w = blw = TEXTW(m->ltsymbol);
 	drw_setscheme(drw, scheme[SchemeTagsNorm]);
-	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+	x = drw_text(drw, x, y, w, bh, lrpad / 2, m->ltsymbol, 0);
 
 	for (i=0; i<LENGTH(config); i++) {
 		w = TEXTW(config[i].name);
 		drw_setscheme(drw, scheme[SchemeTagsNorm]);
-		drw_rect(drw, x, 0, w + sb_icon_wh + sb_icon_x_margin, bh, 1, 1);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, config[i].name, urg & 1 << i);
+		drw_rect(drw, x, y, w + sb_icon_wh + sb_icon_x_margin, bh, 1, 1);
+		drw_text(drw, x, y, w, bh, lrpad / 2, config[i].name, urg & 1 << i);
 		drw_logo(drw, 1, x + w, 2, sb_icon_wh, sb_icon_wh);
 		w += sb_icon_wh + sb_icon_x_margin;
 		drw_setscheme(drw, scheme[SchemeTagsNorm]);
-		drw_rect(drw, x, 0, w, bh, 0, 0);
+		drw_rect(drw, x, y, w, bh, 0, 0);
 		x += w;
 	}
 
 	if ((w = m->ww - tw - x) > bh) {
 		if (m->sel) {
 			drw_setscheme(drw, scheme[m == selmon ? SchemeInfoSel : SchemeInfoNorm]);
-			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
+			drw_text(drw, x, y, w, bh, lrpad / 2, m->sel->name, 0);
 			if (m->sel->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 		} else {
 			drw_setscheme(drw, scheme[SchemeInfoNorm]);
-			drw_rect(drw, x, 0, w, bh, 1, 1);
+			drw_rect(drw, x, y, w, bh, 1, 1);
 		}
 	}
 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
@@ -2370,7 +2371,8 @@ updatebars(void)
 	for (m = mons; m; m = m->next) {
 		if (m->barwin)
 			continue;
-		m->barwin = XCreateWindow(dpy, root, m->wx, m->by, m->ww, bh, 0, DefaultDepth(dpy, screen),
+		// TODO
+		m->barwin = XCreateWindow(dpy, root, m->wx , m->by, m->ww, bh, 0, DefaultDepth(dpy, screen),
 				CopyFromParent, DefaultVisual(dpy, screen),
 				CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
 		XDefineCursor(dpy, m->barwin, cursor[CurNormal]->cursor);
@@ -2442,10 +2444,10 @@ updategeom(void)
 				{
 					dirty = 1;
 					m->num = i;
-					m->mx = m->wx = unique[i].x_org;
-					m->my = m->wy = unique[i].y_org;
-					m->mw = m->ww = unique[i].width;
-					m->mh = m->wh = unique[i].height;
+					m->mx = m->wx = unique[i].x_org + sb_x_margin;
+					m->my = m->wy = unique[i].y_org + sb_y_margin;
+					m->mw = m->ww = unique[i].width - 2 * sb_x_margin;
+					m->mh = m->wh = unique[i].height - sb_y_margin;
 					updatebarpos(m);
 				}
 		} else { /* less monitors available nn < n */
