@@ -2371,7 +2371,6 @@ updatebars(void)
 	for (m = mons; m; m = m->next) {
 		if (m->barwin)
 			continue;
-		// TODO
 		m->barwin = XCreateWindow(dpy, root, m->wx , m->by, m->ww, bh, 0, DefaultDepth(dpy, screen),
 				CopyFromParent, DefaultVisual(dpy, screen),
 				CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
@@ -2384,8 +2383,8 @@ updatebars(void)
 void
 updatebarpos(Monitor *m)
 {
-	m->wy = m->my;
-	m->wh = m->mh;
+//	m->wy = m->my;
+//	m->wh = m->mh;
 	if (m->showbar) {
 		m->wh -= bh;
 		m->by = m->topbar ? m->wy : m->wy + m->wh;
@@ -2444,10 +2443,14 @@ updategeom(void)
 				{
 					dirty = 1;
 					m->num = i;
-					m->mx = m->wx = unique[i].x_org + sb_x_margin;
-					m->my = m->wy = unique[i].y_org + sb_y_margin;
-					m->mw = m->ww = unique[i].width - 2 * sb_x_margin;
-					m->mh = m->wh = unique[i].height - sb_y_margin;
+					m->mx = unique[i].x_org;
+					m->wx = unique[i].x_org + sb_x_margin;
+					m->my = unique[i].y_org;
+					m->wy = unique[i].y_org + sb_y_margin;
+					m->mw = unique[i].width;
+					m->ww = unique[i].width - 2 * sb_x_margin;
+					m->mh = unique[i].height;
+					m->wh = unique[i].height - sb_y_margin;
 					updatebarpos(m);
 				}
 		} else { /* less monitors available nn < n */
