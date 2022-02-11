@@ -2383,8 +2383,8 @@ updatebars(void)
 void
 updatebarpos(Monitor *m)
 {
-//	m->wy = m->my;
-//	m->wh = m->mh;
+	m->wy = m->my + sb_y_margin;
+	m->wh = m->mh;
 	if (m->showbar) {
 		m->wh -= bh;
 		m->by = m->topbar ? m->wy : m->wy + m->wh;
