@@ -1027,8 +1027,8 @@ drawbar(Monitor *m)
 			if (sb_arr[i+1] != NULL) {
 				twtmp -= sb_delimiter_w;
 				drw_setscheme(drw, scheme[SchemeSel]);
-				drw_rect(drw, m->ww - twtmp + sb_delimiter_w / 4, y, sb_delimiter_w / 2, bh , 1, 1);
-				drw_rect(drw, m->ww - twtmp, y + 4, sb_delimiter_w, bh - 8, 1, 1);
+				drw_rect(drw, m->ww - twtmp + sb_delimiter_w / 4, y, sb_delimiter_w / 2, bh , 1, 0);
+				drw_rect(drw, m->ww - twtmp, y + 4, sb_delimiter_w, bh - 8, 1, 0);
 				twtmp -= 2 * sb_delimiter_w;
 			}
 			i++;

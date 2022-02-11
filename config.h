@@ -43,7 +43,6 @@ static char dmenuh[] = "36";
 static char normbgcolor[]           = "#222222";
 static char normfgcolor[]           = "#121212";
 static char selfgcolor[]            = "#e0ffff";
-
 static char infobarusbgcolor[]	    = "#878787";
 
 // Logo size
@@ -52,16 +51,18 @@ static const unsigned int sb_logo_h = 30;
 static const unsigned int sb_logo_y_margin = 2;
 static const unsigned int sb_delimiter_w = 8;
 
+// Default icon width, height and margin
 static const unsigned int sb_icon_wh = 32;
 static const unsigned int sb_icon_x_margin = 6;
 
+// Status bar x and y margin
 static const unsigned int sb_x_margin = 15;
 static const unsigned int sb_y_margin = 8;
 
 static char *colors[][3] = {
        /*               fg           bg           border   */
        [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
-       [SchemeSel]  = { selfgcolor,  selfgcolor,  selbordercolor  },
+       [SchemeSel]  = { selfgcolor,  green,  selbordercolor  },
 	   [SchemeStatus] = { statustextcolor, statusbgcolor, "#000000" },
 	   [SchemeTagsSel] = { tagbarstextcolor, tagbarsbgcolor, "#000000" },
 	   [SchemeTagsNorm] = { tagbarustextcolor, tagbarusbgcolor, "#000000" },
