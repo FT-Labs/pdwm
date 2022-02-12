@@ -557,7 +557,7 @@ loadpng (FILE* file, unsigned char** data, int* width, int* height, int *rowbyte
 		for (x=0; x<*width; x++) {
 			png_bytep px = &(row[x * 4]);
 
-			if (!px[3]){
+			if (px[3] < 150){
 				px[0] = b;
 				px[1] = g;
 				px[2] = r;
@@ -575,7 +575,6 @@ load_png_icons(Drw* drw, char* sb, char* ib)
 		char **png_files;
 		char **png_names;
 		int png_bytes, n, w, h;
-		char buf[250];
 		unsigned int r, g, b;
 		unsigned char* data;
 		FILE* fp;

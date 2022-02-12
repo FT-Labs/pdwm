@@ -1013,10 +1013,10 @@ drawbar(Monitor *m)
 			if (sb_arr[i][0] == 'S') {
 				int idx = sb_arr[i][1] - '0';
 				i++;
-				drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
-				twtmp -= TEXTW_SB(sb_arr[i]) + sb_icon_x_margin;
 				drw_logo(drw, idx, m->ww - twtmp, 2, sb_icon_wh, sb_icon_wh);
-				twtmp -= sb_icon_wh;
+				twtmp -= sb_icon_wh + sb_icon_x_margin;
+				drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
+				twtmp -= TEXTW_SB(sb_arr[i]);
 			}
 			else {
 				drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
