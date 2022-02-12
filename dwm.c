@@ -1067,7 +1067,7 @@ drawbar(Monitor *m)
 		w = TEXTW(config[i].name);
 		drw_setscheme(drw, scheme[SchemeTagsNorm]);
 		drw_rect(drw, x, y, w + sb_icon_wh + sb_icon_x_margin, bh, 1, 1);
-		drw_text(drw, x, y, w, bh, lrpad / 2, config[i].name, urg & 1 << i);
+		drw_text(drw, x, y, w, bh, lrpad / 2, config[i].name, 0);
 		drw_logo(drw, 1, x + w, 2, sb_icon_wh, sb_icon_wh);
 		w += sb_icon_wh + sb_icon_x_margin;
 		drw_setscheme(drw, scheme[SchemeTagsNorm]);

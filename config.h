@@ -18,7 +18,7 @@ static const int smartgaps          = 0;        /* 1 means no outer gap when the
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int user_bh			= 36;		/* 0 means normal bar height, >1 means user bar height */
-static const char *fonts[]          = { "SF Pro Text:style=Regular:size=18", "JoyPixels:size=16:antialias=true:autohint=true"  };
+static const char *fonts[]          = { "SF Pro Text:style=Regular:size=18", "JoyPixels:size=16:antialias=true:autohint=true"};
 static char dmenufont[]             = "SF Pro Text:style=Regular:size=18";
 static char dmenuh[] = "36";
 
