@@ -575,6 +575,7 @@ load_png_icons(Drw* drw, char* sb, char* ib)
 		char **png_files;
 		char **png_names;
 		int png_bytes, n, w, h;
+		char buf[250];
 		unsigned int r, g, b;
 		unsigned char* data;
 		FILE* fp;
