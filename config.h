@@ -18,8 +18,8 @@ static const int smartgaps          = 0;        /* 1 means no outer gap when the
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int user_bh			= 36;		/* 0 means normal bar height, >1 means user bar height */
-static const char *fonts[]          = { "SF Pro Text:style=Regular:size=18", "JoyPixels:size=16:antialias=true:autohint=true"};
-static char dmenufont[]             = "SF Pro Text:style=Regular:size=18";
+static const char *fonts[]          = { "JetBrains Mono:style=Regular:size=16", "Symbols Nerd Font:style=2048-em:size=20","JoyPixels:size=16:antialias=true:autohint=true"};
+static char dmenufont[]             = "JetBrains Mono:style=Regular:size=16";
 static char dmenuh[] = "36";
 
 #include "themes/catpuccin.h"
