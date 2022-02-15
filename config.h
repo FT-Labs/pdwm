@@ -68,6 +68,8 @@ static char *colors[][3] = {
 	   [SchemeTagsNorm] = { tagbarustextcolor, tagbarusbgcolor, "#000000" },
 	   [SchemeInfoSel] = { infobarstextcolor, infobarsbgcolor, "#000000" },
 	   [SchemeInfoNorm] = { infobarustextcolor, infobarusbgcolor, "#000000" },
+	   [SchemeOptimal] = { green, statusbgcolor, "#000000" },
+	   [SchemeCritical] = { red, statusbgcolor, "#000000" },
 };
 
 static const char* brave[] = { "brave", "google.com", NULL };

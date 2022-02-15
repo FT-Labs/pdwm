@@ -88,7 +88,7 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel, SchemeStatus, SchemeTagsSel, SchemeTagsNorm, SchemeInfoSel, SchemeInfoNorm }; /* color schemes */
+enum { SchemeNorm, SchemeSel, SchemeStatus, SchemeTagsSel, SchemeTagsNorm, SchemeInfoSel, SchemeInfoNorm, SchemeOptimal, SchemeCritical }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
@@ -1019,6 +1019,27 @@ drawbar(Monitor *m)
 				twtmp -= TEXTW_SB(sb_arr[i]);
 			}
 			else {
+				if (sb_arr[i][strlen(sb_arr[i]) - 1] == '%') {
+					char buf[3];
+					char* tmp;
+					int x = 0;
+
+					strncpy(buf, sb_arr[i] + strlen(sb_arr[i]) - 5, strlen(sb_arr[i]) - 1);
+					tmp = buf;
+					x = atoi(tmp);
+
+					while (!x && strlen(tmp) > 0) {
+						tmp++;
+						x = atoi(tmp);
+					}
+
+					if (x <= 30) {
+						drw_setscheme(drw, scheme[SchemeCritical]);
+					}
+					else {
+						drw_setscheme(drw, scheme[SchemeOptimal]);
+					}
+				}
 				drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
 				twtmp -= TEXTW_SB(sb_arr[i]);
 			}
