@@ -8,7 +8,7 @@
 
 /* appearance */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
-static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int snap      = 25;       /* snap pixel */
 static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 15;       /* horiz outer gap between windows and screen edge */
@@ -56,7 +56,7 @@ static const unsigned int sb_icon_wh = 32;
 static const unsigned int sb_icon_x_margin = 6;
 
 // Status bar x and y margin
-static const unsigned int sb_x_margin = 15;
+static const unsigned int sb_x_margin = 12;
 static const unsigned int sb_y_margin = 8;
 
 static char *colors[][3] = {

@@ -2389,8 +2389,15 @@ updatebarpos(Monitor *m)
 		m->wh -= bh;
 		m->by = m->topbar ? m->wy : m->wy + m->wh;
 		m->wy = m->topbar ? m->wy + bh : m->wy;
-	} else
+		m->ww -= 2 * sb_x_margin;
+		m->wx += sb_x_margin;
+	} else {
 		m->by = -bh;
+		m->wy -= sb_y_margin;
+		m->wh += sb_y_margin;
+		m->ww += 2 * sb_x_margin;
+		m->wx -= sb_x_margin;
+	}
 }
 
 void
@@ -2443,14 +2450,11 @@ updategeom(void)
 				{
 					dirty = 1;
 					m->num = i;
-					m->mx = unique[i].x_org;
-					m->wx = unique[i].x_org + sb_x_margin;
-					m->my = unique[i].y_org;
-					m->wy = unique[i].y_org + sb_y_margin;
-					m->mw = unique[i].width;
-					m->ww = unique[i].width - 2 * sb_x_margin;
-					m->mh = unique[i].height;
-					m->wh = unique[i].height - sb_y_margin;
+					m->mx = m->wx = unique[i].x_org;
+					m->my = m->wy = unique[i].y_org ;
+					m->mw = m->ww = unique[i].width;
+					m->mh = unique[i].height - sb_y_margin;
+					m->wh = unique[i].height;
 					updatebarpos(m);
 				}
 		} else { /* less monitors available nn < n */
