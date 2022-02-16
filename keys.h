@@ -1,6 +1,5 @@
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-
 	STACKKEYS(MODKEY,                          focus)
 	STACKKEYS(MODKEY|ShiftMask,                push)
 	/*{ MODKEY,			XK_F1,		spawn,		SHCMD("") },
@@ -62,10 +61,12 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,	XK_m,		incnmaster,     {.i = -1 } },
 	{ MODKEY,			XK_space,	zoom,		{0} },
 	{ MODKEY|ShiftMask,	XK_space,	togglefloating,	{0} },
-	{ 0,				XK_Print,	spawn,		SHCMD("maim ~/Pictures/Screenshots/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
-	{ ShiftMask,		XK_Print,	spawn,		SHCMD("maimpick ~/Pictures/Screenshots") },
+	{ 0,				XK_Print,	spawn,		SHCMD("maim ~/Pictures/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
+	{ ShiftMask,		XK_Print,	spawn,		SHCMD("maimpick ~/Pictures/") },
 	{ MODKEY,			XK_Print,	spawn,		SHCMD("dmenurecord") },
 	{ MODKEY|ShiftMask,	XK_Print,	spawn,		SHCMD("dmenurecord kill") },
+	{ MODKEY,			XK_Left,				cyclelayout, {.i = -1} },
+	{ MODKEY,			XK_Right,				cyclelayout, {.i = +1} },
 	{ 0, XF86XK_AudioMute,  		spawn,		SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 3; kill -44 $(pidof dwmblocks)") },
 	{ 0, XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer --allow-boost -d 3; kill -44 $(pidof dwmblocks)") },
@@ -82,6 +83,9 @@ static Key keys[] = {
 	{ 0, XF86XK_Calculator,			spawn,		SHCMD(TERMINAL " -e bc -l") },
 	{ 0, XF86XK_WWW,				spawn,		SHCMD("$BROWSER") },
 	{ 0, XF86XK_DOS,				spawn,		SHCMD(TERMINAL) },
-	{ MODKEY,			 		    XK_Left,		cyclelayout, {.i = -1} },
-	{ MODKEY,					    XK_Right,		cyclelayout, {.i = +1} },
+	{ 0, XF86XK_TouchpadToggle,		spawn,		SHCMD("touchpadtap") },
+	{ 0, XF86XK_MonBrightnessUp,	spawn,		SHCMD("light -A 2 && brightness") },
+	{ 0, XF86XK_MonBrightnessDown,	spawn,		SHCMD("light -U 2 && brightness") },
+    { 0, XF86XK_KbdBrightnessDown,  spawn,		SHCMD("var=$( ls /sys/class/leds/ | grep kbd_backlight ); light -s sysfs/leds/$var -r -U 1")},
+    { 0, XF86XK_KbdBrightnessUp,    spawn,		SHCMD("var=$( ls /sys/class/leds/ | grep kbd_backlight ); light -s sysfs/leds/$var -r -A 1")},
 };
