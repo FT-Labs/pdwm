@@ -17,7 +17,6 @@ md5sums=('SKIP')
 
 build() {
 	cd "$pkgname"
-	mkdir -p $HOME/.cache/phyos/dwm
 	[ -f $HOME/.config/phyos/dwm/keys.h ] && yes | cp -f $HOME/.config/phyos/dwm/keys.h ./keys.h
 	[ -f $HOME/.config/phyos/dwm/*.png ] && yes | cp -f $HOME/.config/phyos/dwm/*.png icons/
 	make
@@ -25,6 +24,6 @@ build() {
 
 package() {
 	cd "$pkgname"
-	[ ! -f /usr/share/xsessions/dwm.desktop ] && install -m644 -D ./dwm.desktop $pkgdir/usr/share/xsessions/dwm.desktop
+	install -m644 -D ./dwm.desktop $pkgdir/usr/share/xsessions/dwm.desktop
 	make PREFIX=/usr/local DESTDIR="$pkgdir/" install
 }
