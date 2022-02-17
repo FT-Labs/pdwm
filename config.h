@@ -57,7 +57,7 @@ static const unsigned int sb_icon_x_margin = 6;
 
 // Status bar x and y margin
 static const unsigned int sb_x_margin = 12;
-static const unsigned int sb_y_margin = 8;
+static const unsigned int sb_y_margin = 12;
 
 static char *colors[][3] = {
        /*               fg           bg           border   */
