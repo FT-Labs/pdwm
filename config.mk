@@ -14,8 +14,8 @@ X11LIB = /usr/X11R6/lib
 XINERAMALIBS  = -lXinerama
 XINERAMAFLAGS = -DXINERAMA
 
-# Libpng for png support
-LIBPNG = -lpng
+# Imlib2 for png support
+IMLIB2 = -lImlib2
 
 # freetype
 FREETYPELIBS = -lfontconfig -lXft
@@ -25,7 +25,7 @@ FREETYPEINC = /usr/include/freetype2
 
 # includes and libs
 INCS = -I${X11INC} -I${FREETYPEINC}
-LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS} ${LIBPNG} -lX11-xcb -lxcb -lxcb-res
+LIBS = -L${X11LIB} -lX11 ${XINERAMALIBS} ${FREETYPELIBS} ${IMLIB2} -lX11-xcb -lxcb -lxcb-res -lXrender
 
 # flags
 CPPFLAGS = -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_POSIX_C_SOURCE=200809L -DVERSION=\"${VERSION}\" ${XINERAMAFLAGS}

@@ -48,7 +48,7 @@ static char infobarusbgcolor[]	    = "#878787";
 // Logo size
 static const unsigned int sb_logo_w = 35;
 static const unsigned int sb_logo_h = 30;
-static const unsigned int sb_logo_y_margin = 2;
+static const unsigned int sb_logo_y_margin = 3;
 static const unsigned int sb_delimiter_w = 8;
 
 // Default icon width, height and margin
@@ -58,6 +58,11 @@ static const unsigned int sb_icon_x_margin = 6;
 // Status bar x and y margin
 static const unsigned int sb_x_margin = 12;
 static const unsigned int sb_y_margin = 12;
+
+
+// Icon size for status text
+#define ICONSIZE sb_icon_wh
+#define ICONSPACING sb_icon_x_margin
 
 static char *colors[][3] = {
        /*               fg           bg           border   */
