@@ -59,6 +59,11 @@ static const unsigned int sb_icon_x_margin = 6;
 static const unsigned int sb_x_margin = 12;
 static const unsigned int sb_y_margin = 8;
 
+
+// Icon size for status text
+#define ICONSIZE sb_icon_wh
+#define ICONSPACING sb_icon_x_margin
+
 static char *colors[][3] = {
        /*               fg           bg           border   */
        [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },

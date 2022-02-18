@@ -6,7 +6,7 @@
 #include <string.h>
 #include <X11/Xlib.h>
 #include <X11/Xft/Xft.h>
-#include <png.h>
+#include <Imlib2.h>
 
 #include "drw.h"
 #include "util.h"
@@ -21,8 +21,8 @@ static const long utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF
 
 
 // Icon path to search for 32x32 png files -> statusbar
-static char* iconpath = "/usr/local/share/phyos/dwm/icons/";
-static XImage* icon_ximg[10];
+static const char* iconpath = "/usr/local/share/phyos/dwm/icons/";
+static Picture icon_ximg[10];
 
 
 static long
@@ -79,6 +79,7 @@ drw_create(Display *dpy, int screen, Window root, unsigned int w, unsigned int h
 	drw->w = w;
 	drw->h = h;
 	drw->drawable = XCreatePixmap(dpy, root, w, h, DefaultDepth(dpy, screen));
+	drw->picture = XRenderCreatePicture(dpy, drw->drawable, XRenderFindVisualFormat(dpy, DefaultVisual(dpy, screen)), 0, NULL);
 	drw->gc = XCreateGC(dpy, root, 0, NULL);
 	XSetLineAttributes(dpy, drw->gc, 1, LineSolid, CapButt, JoinMiter);
 
@@ -93,18 +94,95 @@ drw_resize(Drw *drw, unsigned int w, unsigned int h)
 
 	drw->w = w;
 	drw->h = h;
+	if (drw->picture)
+		XRenderFreePicture(drw->dpy, drw->picture);
 	if (drw->drawable)
 		XFreePixmap(drw->dpy, drw->drawable);
 	drw->drawable = XCreatePixmap(drw->dpy, drw->root, w, h, DefaultDepth(drw->dpy, drw->screen));
+	drw->picture = XRenderCreatePicture(drw->dpy, drw->drawable, XRenderFindVisualFormat(drw->dpy, DefaultVisual(drw->dpy, drw->screen)), 0, NULL);
 }
 
 void
 drw_free(Drw *drw)
 {
+	XRenderFreePicture(drw->dpy, drw->picture);
 	XFreePixmap(drw->dpy, drw->drawable);
 	XFreeGC(drw->dpy, drw->gc);
 	free(drw);
 }
+
+Picture
+drw_picture_create_resized(Drw *drw, char *src, unsigned int srcw, unsigned int srch, unsigned int dstw, unsigned int dsth) {
+	Pixmap pm;
+	Picture pic;
+	GC gc;
+
+	if (srcw <= (dstw << 1u) && srch <= (dsth << 1u)) {
+		XImage img = {
+			srcw, srch, 0, ZPixmap, src,
+			ImageByteOrder(drw->dpy), BitmapUnit(drw->dpy), BitmapBitOrder(drw->dpy), 32,
+			32, 0, 32,
+			0, 0, 0
+		};
+		XInitImage(&img);
+
+		pm = XCreatePixmap(drw->dpy, drw->root, srcw, srch, 32);
+		gc = XCreateGC(drw->dpy, pm, 0, NULL);
+		XPutImage(drw->dpy, pm, gc, &img, 0, 0, 0, 0, srcw, srch);
+		XFreeGC(drw->dpy, gc);
+
+		pic = XRenderCreatePicture(drw->dpy, pm, XRenderFindStandardFormat(drw->dpy, PictStandardARGB32), 0, NULL);
+		XFreePixmap(drw->dpy, pm);
+
+		XRenderSetPictureFilter(drw->dpy, pic, FilterBilinear, NULL, 0);
+		XTransform xf;
+		xf.matrix[0][0] = (srcw << 16u) / dstw; xf.matrix[0][1] = 0; xf.matrix[0][2] = 0;
+		xf.matrix[1][0] = 0; xf.matrix[1][1] = (srch << 16u) / dsth; xf.matrix[1][2] = 0;
+		xf.matrix[2][0] = 0; xf.matrix[2][1] = 0; xf.matrix[2][2] = 65536;
+		XRenderSetPictureTransform(drw->dpy, pic, &xf);
+	} else {
+		Imlib_Image origin = imlib_create_image_using_data(srcw, srch, (DATA32 *)src);
+		if (!origin) return None;
+		imlib_context_set_image(origin);
+		imlib_image_set_has_alpha(1);
+		Imlib_Image scaled = imlib_create_cropped_scaled_image(0, 0, srcw, srch, dstw, dsth);
+		imlib_free_image_and_decache();
+		if (!scaled) return None;
+		imlib_context_set_image(scaled);
+		imlib_image_set_has_alpha(1);
+
+		XImage img = {
+		    dstw, dsth, 0, ZPixmap, (char *)imlib_image_get_data_for_reading_only(),
+		    ImageByteOrder(drw->dpy), BitmapUnit(drw->dpy), BitmapBitOrder(drw->dpy), 32,
+		    32, 0, 32,
+		    0, 0, 0
+		};
+		XInitImage(&img);
+
+		pm = XCreatePixmap(drw->dpy, drw->root, dstw, dsth, 32);
+		gc = XCreateGC(drw->dpy, pm, 0, NULL);
+		XPutImage(drw->dpy, pm, gc, &img, 0, 0, 0, 0, dstw, dsth);
+		imlib_free_image_and_decache();
+		XFreeGC(drw->dpy, gc);
+
+		pic = XRenderCreatePicture(drw->dpy, pm, XRenderFindStandardFormat(drw->dpy, PictStandardARGB32), 0, NULL);
+		XFreePixmap(drw->dpy, pm);
+	}
+
+	return pic;
+}
+
+void
+drw_pic(Drw *drw, int x, int y, unsigned int w, unsigned int h, Picture pic, int idx)
+{
+	if (!drw)
+		return;
+	if (idx == -1)
+		XRenderComposite(drw->dpy, PictOpOver, pic, None, drw->picture, 0, 0, 0, 0, x, y, w, h);
+	else
+		XRenderComposite(drw->dpy, PictOpOver, icon_ximg[idx], None, drw->picture, 0, 0, 0, 0, x, y, w, h);
+}
+
 
 /* This function is an implementation detail. Library users should use
  * drw_fontset_create instead.
@@ -431,12 +509,6 @@ drw_cur_free(Drw *drw, Cur *cursor)
 	free(cursor);
 }
 
-void
-drw_logo(Drw* drw, int logo, int x, int y, unsigned int w, unsigned int h)
-{
-	XPutImage(drw->dpy, drw->drawable, drw->gc, icon_ximg[logo], 0, 0, x , y, w, h);
-}
-
 // Png draw support
 int
 get_png_files(const char *path, char ***png_list, char*** png_names)
@@ -500,116 +572,44 @@ get_png_files(const char *path, char ***png_list, char*** png_names)
 	return npngs;
 }
 
-static
-void tearpng (png_structp png, png_infop info)
-{
-	if (png) {
-		png_infop *realInfo = (info? &info: NULL);
-		png_destroy_read_struct (&png, realInfo, NULL);
-	}
-}
-
 void
-loadpng (FILE* file, unsigned char** data, int* width, int* height, int *rowbytes, unsigned char b, unsigned char g, unsigned char r)
+load_png_icons(Drw* drw, unsigned int w, unsigned int h)
 {
-
-	size_t size = 0;
-	int x, y;
-
-	png_structp png = NULL;
-	png_infop info = NULL;
-	unsigned char **rowPointers = NULL;
-
-	int depth = 0,
-	colortype = 0,
-	interlace = 0,
-	compression = 0,
-	filter = 0;
-
-	png = png_create_read_struct (PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-	info = png_create_info_struct (png);
-	png_init_io (png, file);
-	png_read_info (png, info);
-	png_get_IHDR (png, info, (png_uint_32*)width, (png_uint_32*)height, &depth, &colortype, &interlace, &compression, &filter);
-
-	*rowbytes = png_get_rowbytes (png, info);
-
-	png_set_bgr (png);
-	*width = png_get_image_width (png, info);
-	*height = png_get_image_height (png, info);
-	size = *height * *rowbytes;
-
-	// This gets freed by XDestroyImage
-	*data = (unsigned char*) malloc (sizeof (png_byte) * size);
-
-	rowPointers = (unsigned char**) malloc (*height * sizeof (unsigned char*));
-
-	png_bytep cursor = *data;
-
-	for (int i=0; i<*height; ++i, cursor += *rowbytes)
-		rowPointers[i] = cursor;
-
-	png_read_image (png, rowPointers);
-
-	for (y=0; y<*height; ++y, cursor+=*rowbytes) {
-		png_bytep row = rowPointers[y];
-
-		for (x=0; x<*width; x++) {
-			png_bytep px = &(row[x * 4]);
-
-			if (px[3] < 150){
-				px[0] = b;
-				px[1] = g;
-				px[2] = r;
-			}
-		}
-	}
-	tearpng (png, info);
-	free (rowPointers);
-}
-
-void
-load_png_icons(Drw* drw, char* sb, char* ib)
-{
-	if (drw && icon_ximg[0] == NULL) {
+	if (drw && !icon_ximg[0]) {
 		char **png_files;
 		char **png_names;
-		int png_bytes, n, w, h;
-		unsigned int r, g, b;
-		unsigned char* data;
-		FILE* fp;
-		XImage* ximage;
-		sb++;
-		ib++;
+		int n;
+		unsigned int* data;
+		Imlib_Image image;
+		Picture pic;
 
 		n = get_png_files(iconpath, &png_files, &png_names);
 
 		for (int i=0; i<n && png_files[i] != NULL; i++)
 		{
-			fp = fopen(png_files[i], "rb");
 			int idx = png_names[i][0] - '0';
+			image = imlib_load_image(png_files[i]);
+			imlib_context_set_image(image);
+			imlib_image_set_has_alpha(1);
+			data = imlib_image_get_data_for_reading_only();
 
-			if (idx < 2) {
-				sscanf(sb, "%02x%02x%02x", &r, &g, &b);
-				loadpng(fp, &data, &w, &h, &png_bytes, b, g, r);
+			if (idx == 0) {
+				pic = drw_picture_create_resized(drw, (char*)data, 35, 30, 35, 30);
 			}
 			else {
-				sscanf(ib, "%02x%02x%02x", &r, &g, &b);
-				loadpng(fp, &data, &w, &h, &png_bytes, b, g, r);
+				pic = drw_picture_create_resized(drw, (char*)data, w, h, w, h);
 			}
 
-			ximage = XCreateImage(drw->dpy, DefaultVisual(drw->dpy, drw->screen), DefaultDepth(drw->dpy, drw->screen), ZPixmap, 0, (char*)data, w, h, 32, png_bytes);
-			icon_ximg[idx] = ximage;
-			fclose(fp);
+			icon_ximg[idx] = pic;
+			imlib_free_image();
 		}
 	}
 }
 
 void
-clear_png_icons()
+clear_png_icons(Drw* drw)
 {
-	for (int i=0; i<10; i++) {
-		if (icon_ximg[i] != NULL)
-			XDestroyImage(icon_ximg[i]);
+	for (int i=0; i<10 && icon_ximg[i]; i++) {
+		XRenderFreePicture(drw->dpy, icon_ximg[i]);
 	}
 }
