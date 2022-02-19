@@ -540,6 +540,7 @@ swallow(Client *p, Client *c)
 	Window w = p->win;
 	p->win = c->win;
 	c->win = w;
+	updateicon(p);
 	updatetitle(p);
 	XMoveResizeWindow(dpy, p->win, p->x, p->y, p->w, p->h);
 	arrange(p->mon);
@@ -1391,8 +1392,8 @@ killclient(const Arg *arg)
 		XGrabServer(dpy);
 		XSetErrorHandler(xerrordummy);
 		XSetCloseDownMode(dpy, DestroyAll);
-		XKillClient(dpy, selmon->sel->win);
 		freeicon(selmon->sel);
+		XKillClient(dpy, selmon->sel->win);
 		XSync(dpy, False);
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
