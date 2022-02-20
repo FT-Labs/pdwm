@@ -750,24 +750,19 @@ clientmessage(XEvent *e)
 			setfullscreen(c, (cme->data.l[0] == 1 /* _NET_WM_STATE_ADD    */
 				|| (cme->data.l[0] == 2 /* _NET_WM_STATE_TOGGLE */ && !c->isfullscreen)));
 	} else if (cme->message_type == netatom[NetActiveWindow]) {
-		for (i = 0; i < LENGTH(tags) && !((1 << i) & c->tags); i++) {
-			const Arg a = {.ui = (1 << (i + 1)) };
-			if (selmon->sel != c)
-			{
-				selmon = c->mon;
-				view(&a);
-				focus(c);
-				XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w/2, c->h/2);
-				restack(selmon);
-				return;
+		i = 0;
+		do {
+			if ((1 << i) & c->tags) {
+				const Arg a = {.ui = (1 << i) };
+				if (selmon->sel != c) {
+					selmon = c->mon;
+					view(&a);
+					focus(c);
+					XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w/2, c->h/2);
+					restack(selmon);
+				}
 			}
-		}
-		const Arg a = {.ui = 1};
-		selmon = c->mon;
-		view(&a);
-		focus(c);
-		XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w/2, c->h/2);
-		restack(selmon);
+		} while (i < LENGTH(tags) && !((1 << i++) & c->tags));
 	}
 }
 
