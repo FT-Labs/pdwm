@@ -34,6 +34,7 @@ static Key keys[] = {
 	{ MOD2KEY, 		    XK_9,   setlayout, {.v = &layouts[9]} },	  /* 3 column layout */
 	{ MOD2KEY, 		    XK_0,   setlayout, {.v = &layouts[8]} },	  /* Floating layout */
 	{ MODKEY,			XK_BackSpace,	spawn,		SHCMD("sysact") },
+	{ MOD2KEY,			XK_Tab,		spawn,		SHCMD("rofi -show window") },
 	{ MODKEY,			XK_q,		killclient,	{0} },
 	{ MODKEY,			XK_w,		spawn,		SHCMD("$BROWSER") },
 	{ MODKEY,			XK_r,		spawn,		SHCMD(TERMINAL " -e lfrun") },
