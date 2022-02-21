@@ -1024,7 +1024,7 @@ drawbar(Monitor *m)
 
 		// Fill all bar with colorscheme first, some png might have empty locations
 		drw_setscheme(drw, scheme[SchemeInfoSel]);
-		drw_rect(drw, m->ww - twtmp, y, twtmp, bh, 1, 1);
+		drw_rect(drw, m->ww - twtmp - sb_icon_wh, y, twtmp + sb_icon_wh, bh, 1, 1);
 
 		while (sb_arr[i] != NULL) {
 			drw_setscheme(drw, scheme[SchemeInfoSel]);
@@ -1124,7 +1124,7 @@ drawbar(Monitor *m)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 		} else {
 			drw_setscheme(drw, scheme[SchemeInfoNorm]);
-			drw_rect(drw, x, y, w, bh, 1, 1);
+			drw_rect(drw, x, y, w - sb_icon_wh, bh, 1, 1);
 		}
 	}
 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
@@ -1618,7 +1618,7 @@ movemouse(const Arg *arg)
 			handler[ev.type](&ev);
 			break;
 		case MotionNotify:
-			if ((ev.xmotion.time - lasttime) <= (1000 / 60))
+			if ((ev.xmotion.time - lasttime) <= (1000 / 280))
 				continue;
 			lasttime = ev.xmotion.time;
 
@@ -1859,7 +1859,7 @@ resizemouse(const Arg *arg)
 			handler[ev.type](&ev);
 			break;
 		case MotionNotify:
-			if ((ev.xmotion.time - lasttime) <= (1000 / 60))
+			if ((ev.xmotion.time - lasttime) <= (1000 / 280))
 				continue;
 			lasttime = ev.xmotion.time;
 
@@ -2489,8 +2489,6 @@ updatebars(void)
 		.override_redirect = True,
 		.background_pixmap = ParentRelative,
 		.event_mask = ButtonPressMask|ExposureMask,
-		.border_pixel = 0,
-		.background_pixel = 0
 	};
 	XClassHint ch = {"dwm", "dwm"};
 	for (m = mons; m; m = m->next) {
