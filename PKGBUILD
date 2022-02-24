@@ -24,6 +24,5 @@ build() {
 
 package() {
 	cd "$pkgname"
-	install -m644 -D ./dwm.desktop $pkgdir/usr/share/xsessions/dwm.desktop
 	make PREFIX=/usr/local DESTDIR="$pkgdir/" install
 }
