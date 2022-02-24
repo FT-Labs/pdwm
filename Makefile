@@ -40,12 +40,12 @@ install: all
 	mkdir -p ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
 	cp -f icons/*.png ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
 	mkdir -p $(DESTDIR)${PREFIX}/share/xsessions
-	cp -f dwm.desktop ${DESTDIR}${PREFIX}/xsessions/
+	cp -f dwm.desktop ${DESTDIR}${PREFIX}/share/xsessions/
 
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwm\
 		${DESTDIR}${MANPREFIX}/man1/dwm.1
 	rm -rf ${DESTDIR}${PREFIX}/share/phyos/dwm
-	rm -f ${DESTDIR}${PREFIX}/dwm.desktop
+	rm -f ${DESTDIR}${PREFIX}/share/xsessions/dwm.desktop
 
 .PHONY: all options clean dist install uninstall
