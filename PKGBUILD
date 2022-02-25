@@ -1,7 +1,7 @@
 # Maintainer: Arda Atci<phystecharda@gmail.com>
 pkgname=dwm-phyOS
 pkgver=6.2
-pkgrel=2
+pkgrel=3
 pkgdesc="dwm build for phyOS"
 arch=(x86_64)
 url="git://github.com/PhyTech-R0/dwm-phyOS"
