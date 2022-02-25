@@ -21,7 +21,7 @@ static const long utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF
 
 
 // Icon path to search for 32x32 png files -> statusbar
-static const char* iconpath = "/usr/local/share/phyos/dwm/icons/";
+static const char* iconpath = "/usr/share/phyos/dwm/icons/";
 static Picture icon_ximg[10];
 
 
