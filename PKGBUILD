@@ -23,7 +23,6 @@ build() {
 }
 
 package() {
-	mkdir -p /usr/share/xsessions
 	cp -f dwm.desktop /usr/share/xsessions/dwm.desktop
 	cd "$pkgname"
 	make PREFIX=/usr/local DESTDIR="$pkgdir/" install
