@@ -19,7 +19,6 @@ build() {
 	cd "$pkgname"
 	[ -f $HOME/.config/phyos/dwm/keys.h ] && yes | cp -f $HOME/.config/phyos/dwm/keys.h ./keys.h
 	[ -f $HOME/.config/phyos/dwm/*.png ] && yes | cp -f $HOME/.config/phyos/dwm/*.png icons/
-	cp -f dwm.desktop /usr/share/xsessions/dwm.desktop
 	make
 }
 
