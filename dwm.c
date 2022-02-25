@@ -1018,14 +1018,13 @@ drawbar(Monitor *m)
 
 
 		i = 0;
-		tw -= 3 * sb_delimiter_w - 2 * sb_icon_x_margin;
+		tw -= 3 * sb_delimiter_w - sb_icon_x_margin;
 		sb_tw = tw;
 		twtmp = tw;
 
 		// Fill all bar with colorscheme first, some png might have empty locations
 		drw_setscheme(drw, scheme[SchemeInfoSel]);
-		drw_rect(drw, m->ww - twtmp, y, twtmp, bh, 1, 1);
-		twtmp -= sb_icon_x_margin;
+		drw_rect(drw, m->ww - twtmp - sb_icon_wh, y, twtmp + sb_icon_wh, bh, 1, 1);
 
 		while (sb_arr[i] != NULL) {
 			drw_setscheme(drw, scheme[SchemeInfoSel]);
@@ -1125,7 +1124,7 @@ drawbar(Monitor *m)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 		} else {
 			drw_setscheme(drw, scheme[SchemeInfoNorm]);
-			drw_rect(drw, x, y, w, bh, 1, 1);
+			drw_rect(drw, x, y, w - sb_icon_wh, bh, 1, 1);
 		}
 	}
 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
