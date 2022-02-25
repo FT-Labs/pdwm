@@ -19,10 +19,11 @@ build() {
 	cd "$pkgname"
 	[ -f $HOME/.config/phyos/dwm/keys.h ] && yes | cp -f $HOME/.config/phyos/dwm/keys.h ./keys.h
 	[ -f $HOME/.config/phyos/dwm/*.png ] && yes | cp -f $HOME/.config/phyos/dwm/*.png icons/
+	cp -f dwm.desktop /usr/share/xsessions
 	make
 }
 
 package() {
 	cd "$pkgname"
-	make PREFIX=/usr/ DESTDIR="$pkgdir/" install
+	make PREFIX=/usr/local DESTDIR="$pkgdir/" install
 }
