@@ -49,7 +49,7 @@ static Key keys[] = {
 	{ MOD2KEY,			XK_Tab,		spawn,		SHCMD("rofi -show window") },
 	{ MODKEY,			XK_q,		killclient,	{0} },
 	{ MODKEY,			XK_w,		spawn,		SHCMD("$BROWSER") },
-	{ MODKEY,			XK_r,		spawn,		SHCMD(TERMINAL " -e lfrun") },
+	{ MODKEY,			XK_r,		spawn,		SHCMD(TERMINAL " -e lf") },
 	{ MODKEY,			XK_p,		spawn,		SHCMD(TERMINAL " -e gotop") },
 	{ MODKEY|MOD2KEY,	XK_p,		spawn,		SHCMD(TERMINAL " -e nvtop") },
 	{ MOD2KEY,		    XK_p,		spawn,		SHCMD(TERMINAL " -e s-tui") },
