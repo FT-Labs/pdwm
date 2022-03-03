@@ -1,5 +1,10 @@
 ## dwm-phyOS
 
+### Screenshots
+
+<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s1.png">
+<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s2.png">
+<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s3.png">
 
 
  This modified suckless **dwm** window manager is built for arch based _phyOS_ distro but can be installed with following for any linux OS.
@@ -23,6 +28,7 @@ Programs below are all **source code modified** programs therefore all of them a
 
 #### MAKE SURE TO USE DOTFILES REPO, ALL PROGRAM CONFIGURATION AND SCRIPTS ARE IN IT
  - https://github.com/PhyTech-R0/dotfiles
+
 
 ### I am currently maintaning this for arch linux only, therefore arch users can follow the below instructions to install everything easily:
 
