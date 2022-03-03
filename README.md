@@ -34,6 +34,7 @@
 #### Non-arch users need to install all of them seperately from links below:
 Programs below are all **source code modified** programs therefore all of them are needed to download from:
  - Simple installation would work for all repos other than fonts-phyOS, clone the repo and:
+ 
      `make && sudo make install`
 
 Main account : **https://github.com/PhyTech-R0**
