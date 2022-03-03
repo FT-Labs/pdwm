@@ -31,8 +31,12 @@
  - maim
  - joypixels emoji font
 
+#### Non-arch users need to install all of them seperately from links below:
 Programs below are all **source code modified** programs therefore all of them are needed to download from:
- **https://github.com/PhyTech-R0**
+ - Simple installation would work for all repos other than fonts-phyOS, clone the repo and:
+    make && sudo make install
+
+Main account : **https://github.com/PhyTech-R0**
 
  - https://github.com/PhyTech-R0/dunst-phyOS
  - https://github.com/PhyTech-R0/fonts-phyOS
@@ -56,9 +60,13 @@ Then install necessary programs with **pacman** easily:
     pacman -Sy phyOS-dwm phyOS-dunst phyOS-dwmblocks phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi picom unclutter lf ttf-joypixels light
 
 #### Installation for different distros then arch linux:
-
     git clone https://github.com/PhyTech-R0/dwm-phyOS
     cd dwm-phyOS && make && sudo make install
+You need to install fonts to your system first (Nerd fonts, including all glyphs etc.):
+    git clone github.com/phytech-r0/fonts-phyOS
+	cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/ttf
+	sudo fc-cache
+
 ### ! IMPORTANT
 Settings button is unfunctional currently. Later on, i will make a simple Qt program to create and load configurations via **settings** button. All of the keybinds will be configurable through a simple gui, which will save you from configuring via _config.h_ file manually.
 Note that keybinds & default programs are not in **config.h**. To change default configurations, please change them in **keys.h**. Arch users can change keybinds differently via a script called **phyup** in dotfiles repo. It will be explained later in this file.
@@ -103,6 +111,21 @@ Key Combination | Action
 
 </div>
 <div>
+
+## Terminal keybinds
+
+<div align="center">
+
+Key Combination | Action
+----------------- | ----------
+ <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>j</kbd>     | Decrease font size (zoom -)
+ <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd>     | Increase font size (zoom +)
+ <kbd>Alt</kbd> + <kbd>o</kbd>      | Copy output of command
+ <kbd>Alt</kbd> + <kbd>;</kbd>      | Cycle fonts
+
+</div>
+<div>
+
 
 ## Window Movement
 

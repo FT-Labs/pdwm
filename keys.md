@@ -31,6 +31,21 @@ Key Combination | Action
 </div>
 <div>
 
+## Terminal keybinds
+
+<div align="center">
+
+Key Combination | Action
+----------------- | ----------
+ <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>j</kbd>     | Decrease font size (zoom -)
+ <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd>     | Increase font size (zoom +)
+ <kbd>Alt</kbd> + <kbd>o</kbd>      | Copy output of command
+ <kbd>Alt</kbd> + <kbd>;</kbd>      | Cycle fonts
+
+</div>
+<div>
+
+
 ## Window Movement
 
 <div align="center">
