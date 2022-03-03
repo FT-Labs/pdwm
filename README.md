@@ -45,12 +45,13 @@ Note that keybinds & default programs are not in **config.h**. To change default
 
 ## Default keys (same in keys.md)
 
+
 ### NOTE: <kbd>Caps Lock</kbd> == <kbd>Super</kbd>
 ### NOTE: <kbd>Caps Lock</kbd> is also equal to <kbd>ESC</kbd> in terminal (vim etc..)
 
 ## Program Keys:
 
-<center>
+<div align="center">
 
 Key Combination | Action
 ----------------- | ----------
@@ -72,11 +73,12 @@ Key Combination | Action
  <kbd>Super</kbd> + <kbd>F11</kbd>   | Camera
  <kbd>Shift</kbd> + <kbd>Printscreen</kbd>   | Screenshot (choose area or screen)
 
-</center>
+</div>
+<div>
 
 ## Window Movement
 
-<center>
+<div align="center">
 
 Key Combination | Action
 ----------------- | ----------
@@ -96,14 +98,15 @@ Key Combination | Action
  <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>m</kbd>          | Decrease master (just try it to understand)
  <kbd>Super</kbd> + <kbd>Space</kbd>          | Set focused as master
 
-</center>
+</div>
+<div>
 
 
 ## Layouts
 
 ### You can Right Click <kbd>RMB</kbd> on []= in status bar to choose layout with mouse
 
-<center>
+<div align="center">
 
 Key Combination | Action
 ----------------- | ----------
@@ -117,17 +120,19 @@ Key Combination | Action
  <kbd>Alt</kbd> + <kbd>8</kbd>          | Centered floating master
  <kbd>Alt</kbd> + <kbd>9</kbd>          | Floating (windows 10 style)
 
-</center>
+</div>
+<div>
 
 
 ## Choose tag
 
 ### You can Left Click <kbd>LMB</kbd> on 1-9 in status bar to focus tag
 
-<center>
+<div align="center">
 
 Key Combination | Action
 ----------------- | ----------
  <kbd>Super</kbd> + <kbd>1</kbd> .. <kbd>9</kbd>          | Go to tag **number**
 
-</center>
+</div>
+<div>
