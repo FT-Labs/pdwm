@@ -2,8 +2,9 @@
 
 ### Screenshots
 
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s1.png">
 (Alt + Tab to switch windows)
+<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s1.png">
+
 <img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s2.png">
 <img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s3.png">
 
