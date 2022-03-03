@@ -64,7 +64,8 @@ Then install necessary programs with **pacman** easily:
     git clone https://github.com/PhyTech-R0/dwm-phyOS
     cd dwm-phyOS && make && sudo make install
 You need to install fonts to your system first (Nerd fonts, including all glyphs etc.):
-    git clone github.com/phytech-r0/fonts-phyOS
+
+        git clone github.com/phytech-r0/fonts-phyOS
 	cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/ttf
 	sudo fc-cache
 
