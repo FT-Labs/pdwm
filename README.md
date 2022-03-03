@@ -65,9 +65,9 @@ Then install necessary programs with **pacman** easily:
     cd dwm-phyOS && make && sudo make install
 You need to install fonts to your system first (Nerd fonts, including all glyphs etc.):
 
-        git clone github.com/phytech-r0/fonts-phyOS
-	cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/ttf
-	sudo fc-cache
+    git clone github.com/phytech-r0/fonts-phyOS
+    cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/ttf
+    sudo fc-cache
 
 ### ! IMPORTANT
 Settings button is unfunctional currently. Later on, i will make a simple Qt program to create and load configurations via **settings** button. All of the keybinds will be configurable through a simple gui, which will save you from configuring via _config.h_ file manually.
