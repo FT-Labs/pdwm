@@ -37,10 +37,10 @@ static Key keys[] = {
 	{ MODKEY,			XK_grave,	spawn,	SHCMD("dmenuunicode") },
 	{ MOD2KEY,			XK_1,		setlayout,	{.v = &layouts[0]} }, /* tile */
 	{ MOD2KEY,			XK_2,		setlayout,	{.v = &layouts[1]} }, /* bstack */
-	{ MOD2KEY,			XK_3,		setlayout,	{.v = &layouts[2]} }, /* spiral */
-	{ MOD2KEY,	    	XK_4,		setlayout,	{.v = &layouts[3]} }, /* dwindle */
-	{ MOD2KEY,			XK_5,		setlayout,	{.v = &layouts[4]} }, /* deck */
-	{ MOD2KEY,	    	XK_6,		setlayout,	{.v = &layouts[5]} }, /* monocle */
+	{ MOD2KEY,			XK_3,		setlayout,	{.v = &layouts[2]} }, /* monocle */
+	{ MOD2KEY,	    	XK_4,		setlayout,	{.v = &layouts[3]} }, /* deck */
+	{ MOD2KEY,			XK_5,		setlayout,	{.v = &layouts[4]} }, /* spiral */
+	{ MOD2KEY,	    	XK_6,		setlayout,	{.v = &layouts[5]} }, /* dwindle */
 	{ MOD2KEY,			XK_7,		setlayout,	{.v = &layouts[6]} }, /* centeredmaster */
 	{ MOD2KEY,  		XK_8,		setlayout,	{.v = &layouts[7]} }, /* centeredfloatingmaster */
 	{ MOD2KEY, 		    XK_9,   setlayout, {.v = &layouts[9]} },	  /* 3 column layout */

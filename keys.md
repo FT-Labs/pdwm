@@ -1,4 +1,4 @@
-### NOTE: <kbd>Caps Lock</kbd> == <kbd>Super</kbd>
+### NOTE: <kbd>Caps Lock</kbd> == <kbd>Win</kbd>
 ### NOTE: <kbd>Caps Lock</kbd> is also equal to <kbd>ESC</kbd> in terminal (vim etc..)
 
 ## Program Keys:
@@ -7,23 +7,26 @@
 
 Key Combination | Action
 ----------------- | ----------
- <kbd>Super</kbd> + <kbd>q</kbd>          | Quit focused
- <kbd>Super</kbd> + <kbd>Return</kbd>          | Terminal(st)
- <kbd>Super</kbd> + <kbd>BackSpace</kbd>   | Power menu
- <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>Return</kbd>  | Scratchpad (Terminal) [Press again to toggle]
- <kbd>Super</kbd> + <kbd>w</kbd>   | $BROWSER(default brave)
- <kbd>Super</kbd> + <kbd>r</kbd>   | File Browser (lf)
- <kbd>Super</kbd> + <kbd>d</kbd>   | Execute Applications (rofi)
- <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>d</kbd>   | Execute Any Runnable (dmenu)
- <kbd>Super</kbd> + <kbd>p</kbd>   | gotop (System monitor)
- <kbd>Super</kbd> + <kbd>Alt</kbd> + <kbd>p</kbd>   | gpu monitor (nvidia)
+ <kbd>Win</kbd> + <kbd>q</kbd>          | Quit focused
+ <kbd>Win</kbd> + <kbd>Return</kbd>          | Terminal(st)
+ <kbd>Win</kbd> + <kbd>BackSpace</kbd>   | Power menu
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>Return</kbd>  | Scratchpad (Terminal) [Press again to toggle]
+ <kbd>Win</kbd> + <kbd>w</kbd>   | $BROWSER(default brave)
+ <kbd>Win</kbd> + <kbd>r</kbd>   | File Browser (lf)
+ <kbd>Win</kbd> + <kbd>d</kbd>   | Execute Applications (rofi)
+ <kbd>Win</kbd> + <kbd>b</kbd>   | Toggle status bar (hide)
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>d</kbd>   | Execute Any Runnable (dmenu)
+ <kbd>Win</kbd> + <kbd>p</kbd>   | gotop (System monitor)
+ <kbd>Win</kbd> + <kbd>Alt</kbd> + <kbd>p</kbd>   | gpu monitor (nvidia)
  <kbd>Alt</kbd> + <kbd>p</kbd>   | stress test and monitor (s-tui)
- <kbd>Super</kbd> + <kbd>F4</kbd>   | pulsemixer (audio input)
- <kbd>Super</kbd> + <kbd>F5</kbd>   | set multiple monitors and choose refresh rate
- <kbd>Super</kbd> + <kbd>F9</kbd>   | mount drive
- <kbd>Super</kbd> + <kbd>F10</kbd>   | unmount drive
- <kbd>Super</kbd> + <kbd>F11</kbd>   | Camera
+ <kbd>Win</kbd> + <kbd>F4</kbd>   | pulsemixer (audio input)
+ <kbd>Win</kbd> + <kbd>F5</kbd>   | set multiple monitors and choose refresh rate
+ <kbd>Win</kbd> + <kbd>F9</kbd>   | mount drive
+ <kbd>Win</kbd> + <kbd>F10</kbd>   | unmount drive
+ <kbd>Win</kbd> + <kbd>F11</kbd>   | Camera
+ <kbd>Printscreen</kbd>   | Screenshot fullscreen
  <kbd>Shift</kbd> + <kbd>Printscreen</kbd>   | Screenshot (choose area or screen)
+ <kbd>Win</kbd> + <kbd>\`</kbd>   | Choose emoji and copy
 
 </div>
 <div>
@@ -34,21 +37,23 @@ Key Combination | Action
 
 Key Combination | Action
 ----------------- | ----------
- <kbd>Super</kbd> + <kbd>j</kbd>          | Focus next
- <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>j</kbd>          | Move focused to next
- <kbd>Super</kbd> + <kbd>k</kbd>          | Focus previous
- <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd>          | Move focused to previous
- <kbd>Super</kbd> + <kbd>l</kbd>          | Resize master +
- <kbd>Super</kbd> + <kbd>h</kbd>          | Resize master -
- <kbd>Super</kbd> + <kbd>s</kbd>          | Sticky window toggle (show window in all tags)
- <kbd>Super</kbd> + <kbd>f</kbd>          | Fullscreen (toggle)
- <kbd>Super</kbd> + <kbd>g</kbd>          | Toggle gaps
- <kbd>Super</kbd> + <kbd>x</kbd>          | Decrease gaps
- <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>x</kbd>          | Increase gaps
- <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>g</kbd>          | Set default gaps
- <kbd>Super</kbd> + <kbd>m</kbd>          | Increase master (just try it to understand)
- <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>m</kbd>          | Decrease master (just try it to understand)
- <kbd>Super</kbd> + <kbd>Space</kbd>          | Set focused as master
+ <kbd>Alt</kbd> + <kbd>Tab</kbd>          | Choose window and focus
+ <kbd>Win</kbd> + <kbd>j</kbd>          | Focus next
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>j</kbd>          | Move focused to next
+ <kbd>Win</kbd> + <kbd>k</kbd>          | Focus previous
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd>          | Move focused to previous
+ <kbd>Win</kbd> + <kbd>l</kbd>          | Resize master +
+ <kbd>Win</kbd> + <kbd>h</kbd>          | Resize master -
+ <kbd>Win</kbd> + <kbd>s</kbd>          | Sticky window toggle (show window in all tags)
+ <kbd>Win</kbd> + <kbd>f</kbd>          | Fullscreen (toggle)
+ <kbd>Win</kbd> + <kbd>g</kbd>          | Toggle gaps
+ <kbd>Win</kbd> + <kbd>x</kbd>          | Decrease gaps
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>x</kbd>          | Increase gaps
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>g</kbd>          | Set default gaps
+ <kbd>Win</kbd> + <kbd>m</kbd>          | Increase master (just try it to understand)
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>m</kbd>          | Decrease master (just try it to understand)
+ <kbd>Win</kbd> + <kbd>Space</kbd>          | Set focused as master
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>Space</kbd>          | Toggle floating window
 
 </div>
 <div>
@@ -56,7 +61,7 @@ Key Combination | Action
 
 ## Layouts
 
-### You can Right Click <kbd>RMB</kbd> on []= in status bar to choose layout with mouse
+### You can Right Click <kbd>RMB</kbd> on ' []= ' in status bar to choose layout with mouse
 
 <div align="center">
 
@@ -71,12 +76,14 @@ Key Combination | Action
  <kbd>Alt</kbd> + <kbd>7</kbd>          | Centered master
  <kbd>Alt</kbd> + <kbd>8</kbd>          | Centered floating master
  <kbd>Alt</kbd> + <kbd>9</kbd>          | Floating (windows 10 style)
+ <kbd>Win</kbd> + <kbd>Right</kbd>          | Cycle layout next
+ <kbd>Win</kbd> + <kbd>Left</kbd>          | Cycle layout previous
 
 </div>
 <div>
 
 
-## Choose tag
+## Tag operations
 
 ### You can Left Click <kbd>LMB</kbd> on 1-9 in status bar to focus tag
 
@@ -84,7 +91,41 @@ Key Combination | Action
 
 Key Combination | Action
 ----------------- | ----------
- <kbd>Super</kbd> + <kbd>1</kbd> .. <kbd>9</kbd>          | Go to tag **number**
+ <kbd>Win</kbd> + <kbd>1</kbd> .. <kbd>9</kbd>          | Go to tag **number**
+ <kbd>Win</kbd> + <kbd>WheelUp</kbd>           | Go to next tag
+ <kbd>Win</kbd> + <kbd>WheelDown</kbd>           | Go to previous tag
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>1</kbd> .. <kbd>9</kbd>          | Send focused window to tag **number**
+
+</div>
+<div>
+
+
+## Utility keys
+
+<div align="center">
+
+Key Combination | Action
+----------------- | ----------
+ <kbd>Sound Up</kbd>        | Increase sound
+ <kbd>Sound Down</kbd>        | Decrease sound
+ <kbd>Brightness Down</kbd>        | Decrease brightness
+ <kbd>Brightness Up</kbd>        | Increase brightness
+ <kbd>fn</kbd> + <kbd>TouchpadToggle</kbd> | Toggle touchpad
+ <kbd>fn</kbd> + <kbd>Kbd Backlight Up</kbd> | Increase keyboard backlight
+ <kbd>fn</kbd> + <kbd>Kbd Backlight Down</kbd> | Decrease keyboard backlight
+
+</div>
+<div>
+
+## Mouse actions
+
+<div align="center">
+
+Key Combination | Action
+----------------- | ----------
+ <kbd>Win</kbd> + <kbd>LMB</kbd>     | Move window with mouse (sets window to floating mode)
+ <kbd>Win</kbd> + <kbd>RMB</kbd>     | Resize window with mouse (sets window to floating mode)
+ <kbd>Middle Click</kbd>			 | At edge of screen middle click to hide status bar
 
 </div>
 <div>
