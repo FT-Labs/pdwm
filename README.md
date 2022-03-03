@@ -74,7 +74,8 @@ Note that keybinds & default programs are not in **config.h**. To change default
 
 #### For arch users (if you are using dotfiles)
 You can copy "keys.h" file to '~/.config/phyos/dwm/' to change default bindings. Change keys.h with your taste, after that run:
-    phyup dwm
+
+    `phyup dwm`
 To update dwm easily. (wget required, you probably have it)
 
 ## Default keys (same in keys.md)
