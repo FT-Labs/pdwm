@@ -3,7 +3,7 @@
 
 ## Program Keys:
 
-<center>
+<div align="center">
 
 Key Combination | Action
 ----------------- | ----------
@@ -25,7 +25,8 @@ Key Combination | Action
  <kbd>Super</kbd> + <kbd>F11</kbd>   | Camera
  <kbd>Shift</kbd> + <kbd>Printscreen</kbd>   | Screenshot (choose area or screen)
 
-</center>
+</div>
+<div>
 
 ## Window Movement
 
