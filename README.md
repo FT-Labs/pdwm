@@ -12,7 +12,7 @@
 <img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s5.png">
 
 
- This modified suckless **dwm** window manager is built for arch based _phyOS_ distro but can be installed with following for any linux OS.
+ This modified suckless **dwm** window manager is built for arch based _phyOS_ (release is soon with calamares) distro but can be installed with following for any linux OS.
  ### Requirement for total functionality:
 
  - light
@@ -34,7 +34,7 @@
 #### Non-arch users need to install all of them seperately from links below:
 Programs below are all **source code modified** programs therefore all of them are needed to download from:
  - Simple installation would work for all repos other than fonts-phyOS, clone the repo and:
- 
+
      `make && sudo make install`
 
 Main account : **https://github.com/PhyTech-R0**
