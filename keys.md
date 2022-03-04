@@ -11,7 +11,7 @@ Key Combination | Action
  <kbd>Win</kbd> + <kbd>Return</kbd>          | Terminal(st)
  <kbd>Win</kbd> + <kbd>BackSpace</kbd>   | Power menu
  <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>Return</kbd>  | Scratchpad (Terminal) [Press again to toggle]
- <kbd>Win</kbd> + <kbd>w</kbd>   | $BROWSER(default brave)
+ <kbd>Win</kbd> + <kbd>w</kbd>   | $BROWSER(default ungoogled chromium)
  <kbd>Win</kbd> + <kbd>r</kbd>   | File Browser (lf)
  <kbd>Win</kbd> + <kbd>d</kbd>   | Execute Applications (rofi)
  <kbd>Win</kbd> + <kbd>b</kbd>   | Toggle status bar (hide)
