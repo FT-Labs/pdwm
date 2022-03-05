@@ -77,10 +77,10 @@ static char *colors[][3] = {
 	   [SchemeCritical] = { red, statusbgcolor, "#000000" },
 };
 
-static const char* brave[] = { "brave", "google.com", NULL };
+const char* key_pdf[] = {TERMINAL, "-n", "key_pdf", "-g", "120x34", "-e", "zathura", "/usr/share/phyos/dwm/keys-dwm.pdf", NULL };
 
-static const Config config[] = {
-	{brave, "Settings"},
+const Config config[] = {
+	{key_pdf, "Keys"},
 };
 
 typedef struct {
@@ -94,7 +94,7 @@ const char *spcmd2[] = {TERMINAL, "-n", "spcalc", "-f", "SF Pro Text:style=Regul
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",      spcmd1},
-	{"spranger",    spcmd2},
+	{"key_pdf",		key_pdf},
 };
 
 /* tagging */

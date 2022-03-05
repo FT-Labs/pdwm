@@ -39,6 +39,7 @@ install: all
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
 	mkdir -p ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
 	cp -f icons/*.png ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
+	cp -f keys-dwm.pdf ${DESTDIR}${PREFIX}/share/phyos/dwm/
 	mkdir -p $(DESTDIR)${PREFIX}/share/xsessions
 	cp -f dwm.desktop ${DESTDIR}${PREFIX}/share/xsessions/
 
