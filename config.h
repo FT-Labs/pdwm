@@ -89,12 +89,10 @@ typedef struct {
 } Sp;
 
 const char *spcmd1[] = {TERMINAL, "-n", "spterm", "-g", "120x34", NULL };
-const char *spcmd2[] = {TERMINAL, "-n", "spcalc", "-f", "SF Pro Text:style=Regular:size=18", "-g", "50x20", "-e", "bc", "-lq", NULL };
 
 static Sp scratchpads[] = {
 	/* name          cmd  */
 	{"spterm",      spcmd1},
-	{"key_pdf",		key_pdf},
 };
 
 /* tagging */
