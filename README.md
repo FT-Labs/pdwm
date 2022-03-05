@@ -30,6 +30,7 @@
  - imlib2
  - maim
  - joypixels emoji font
+ - zathura (pdf reader, used for keys)
 
 #### Non-arch users need to install all of them seperately from links below:
 Programs below are all **source code modified** programs therefore all of them are needed to download from:
@@ -47,6 +48,7 @@ Main account : **https://github.com/PhyTech-R0**
 ## IMPORTANT!! READ BELOW
 Make sure to use my dotfiles, all of the **scripts** and path variables need to be set correctly for full functionality.
  - https://github.com/PhyTech-R0/dotfiles
+**Click on 'Keys' button on top left in status bar to check out keybindings.**
 
 
 ### I am currently maintaning this for arch linux only, therefore arch users can follow the below instructions to install everything easily:
@@ -68,10 +70,6 @@ You need to install fonts to your system first (Nerd fonts, including all glyphs
     git clone github.com/phytech-r0/fonts-phyOS
     cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/ttf
     sudo fc-cache
-
-### ! IMPORTANT
-Settings button is unfunctional currently. Later on, i will make a simple Qt program to create and load configurations via **settings** button. All of the keybinds will be configurable through a simple gui, which will save you from configuring via _config.h_ file manually.
-Note that keybinds & default programs are not in **config.h**. To change default configurations, please change them in **keys.h**. Arch users can change keybinds differently via a script called **phyup** in dotfiles repo. It will be explained later in this file.
 
 #### For arch users (if you are using dotfiles)
 You can copy "keys.h" file to '~/.config/phyos/dwm/' to change default bindings. Change keys.h with your taste, after that run:
