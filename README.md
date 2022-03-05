@@ -13,6 +13,7 @@
 
 
  This modified suckless **dwm** window manager is built for arch based _phyOS_ (release is soon with calamares) distro but can be installed with following for any linux OS.
+ 
 **Click on 'Keys' button on top left in status bar to check out keybindings.**
  
  ### Requirement for total functionality:
