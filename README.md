@@ -13,6 +13,8 @@
 
 
  This modified suckless **dwm** window manager is built for arch based _phyOS_ (release is soon with calamares) distro but can be installed with following for any linux OS.
+**Click on 'Keys' button on top left in status bar to check out keybindings.**
+ 
  ### Requirement for total functionality:
 
  - light
@@ -48,7 +50,6 @@ Main account : **https://github.com/PhyTech-R0**
 ## IMPORTANT!! READ BELOW
 Make sure to use my dotfiles, all of the **scripts** and path variables need to be set correctly for full functionality.
  - https://github.com/PhyTech-R0/dotfiles
-**Click on 'Keys' button on top left in status bar to check out keybindings.**
 
 
 ### I am currently maintaning this for arch linux only, therefore arch users can follow the below instructions to install everything easily:
