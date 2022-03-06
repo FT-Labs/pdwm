@@ -1,0 +1,6 @@
+*.o
+*.d
+*.gcda
+*.gcno
+*.gcov
+/lcov.info
