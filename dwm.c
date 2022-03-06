@@ -1489,6 +1489,9 @@ manage(Window w, XWindowAttributes *wa)
 
 	updateicon(c);
 	updatetitle(c);
+	updatewindowtype(c);
+	updatesizehints(c);
+	updatewmhints(c);
 	if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
 		c->mon = t->mon;
 		c->tags = t->tags;
@@ -1498,23 +1501,22 @@ manage(Window w, XWindowAttributes *wa)
 		term = termforwin(c);
 	}
 
-	if (c->x + WIDTH(c) > c->mon->mx + c->mon->mw)
-		c->x = c->mon->mx + c->mon->mw - WIDTH(c);
-	if (c->y + HEIGHT(c) > c->mon->my + c->mon->mh)
-		c->y = c->mon->my + c->mon->mh - HEIGHT(c);
-	c->x = MAX(c->x, c->mon->mx);
-	/* only fix client y-offset, if the client center might cover the bar */
-	c->y = MAX(c->y, ((c->mon->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
-		&& (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
-	c->bw = c->mon->borderpx;
+	if (!c->iscentered) {
+		if (c->x + WIDTH(c) > c->mon->mx + c->mon->mw)
+			c->x = c->mon->mx + c->mon->mw - WIDTH(c);
+		if (c->y + HEIGHT(c) > c->mon->my + c->mon->mh)
+			c->y = c->mon->my + c->mon->mh - HEIGHT(c);
+		c->x = MAX(c->x, c->mon->mx);
+		/* only fix client y-offset, if the client center might cover the bar */
+		c->y = MAX(c->y, ((c->mon->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
+			&& (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
+	}
 
+	c->bw = c->mon->borderpx;
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
 	XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
 	configure(c); /* propagates border_width, if size doesn't change */
-	updatewindowtype(c);
-	updatesizehints(c);
-	updatewmhints(c);
 	XSelectInput(dpy, w, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
 	grabbuttons(c, 0);
 	if (!c->isfloating)
