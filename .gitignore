@@ -3,4 +3,5 @@
 *.gcda
 *.gcno
 *.gcov
+dwm
 /lcov.info
