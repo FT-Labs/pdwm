@@ -14,7 +14,9 @@
 <img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s6.png">
 
 
- This modified suckless **dwm** window manager is built for arch based _phyOS_ (release is soon with calamares) distro but can be installed with following for any linux OS.
+ This modified suckless **dwm** window manager is built for arch based _phyOS_ distro but can be installed with following for any linux OS.
+ - Beta version iso has been released on gitlab. It will automatically install everything and clean up bloat packages with calamares.
+ - https://gitlab.com/phytech/phyos-iso
 
 ### Click on 'Keys' button on top left in status bar to check out keybindings.
 
