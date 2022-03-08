@@ -81,13 +81,15 @@ You need to install fonts to your system first (Nerd fonts, including all glyphs
 You can copy "keys.h" file to '~/.config/phyos/dwm/' to change default bindings. Change keys.h with your taste, after that run:
 
     phyup dwm
+    
+To update dwm easily. (wget required, you probably have it)
+    
 #### For non-arch and arch users (updating dotfiles and configs)
 
 	phyup dotfiles
 
 Note that this will replace all dots with new ones, if you have your current vim configuration or etc. please move them or rename them before using this command.
 
-To update dwm easily. (wget required, you probably have it)
 
 ## Default keys (same in keys.md)
 
