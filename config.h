@@ -26,8 +26,8 @@ static char dmenuh[] = "36";
 #define selbordercolor blue
 #define normbordercolor gray2
 
-#define tagbarstextcolor green
-#define tagbarsbgcolor blue
+#define tagbarstextcolor black
+#define tagbarsbgcolor green
 #define tagbarustextcolor blue
 #define tagbarusbgcolor black
 
