@@ -12,7 +12,7 @@ optdepends=('fonts-phyOS' 'dmenu-phyOS' 'st-phyOS' 'dwmblocks-phyOS')
 provides=("dwm")
 conflicts=("dwm")
 options=('zipman')
-source=('git://github.com/PhyTech-R0/dwm-phyOS')
+source=('git+https://github.com/PhyTech-R0/dwm-phyOS')
 md5sums=('SKIP')
 
 build() {
