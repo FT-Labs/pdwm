@@ -766,7 +766,8 @@ clientmessage(XEvent *e)
 					selmon = c->mon;
 					view(&a);
 					focus(c);
-					XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w/2, c->h/2);
+					if (!c->isfloating)
+						XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w/2, c->h/2);
 					restack(selmon);
 				}
 			}
