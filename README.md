@@ -86,7 +86,7 @@ To update dwm easily. (wget required, you probably have it)
     
 #### For non-arch and arch users (updating dotfiles and configs)
 
-	phyup dotfiles
+	phyup dots
 
 Note that this will replace all dots with new ones, if you have your current vim configuration or etc. please move them or rename them before using this command.
 
