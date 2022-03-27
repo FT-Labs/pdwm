@@ -3,15 +3,14 @@
 ### Screenshots
 
 (Alt + Tab to switch windows)
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s1.png">
-
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s2.png">
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s3.png">
+<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s1.png">
+<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s2.png">
+<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s3.png">
 (catppuccin & tokyo night theme)
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s4.png">
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s5.png">
+<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s4.png">
+<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s5.png">
 (Power menu 'right one is to renew dwm without restart')
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/master/screenshots/s6.png">
+<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s6.png">
 
 
  This modified suckless **dwm** window manager is built for arch based _phyOS_ distro but can be installed with following for any linux OS.
