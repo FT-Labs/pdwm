@@ -6,3 +6,5 @@
 .*
 dwm
 /lcov.info
+compile_commands.json
+.cache/**
