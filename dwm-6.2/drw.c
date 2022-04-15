@@ -613,4 +613,3 @@ clear_png_icons(Drw* drw)
 		XRenderFreePicture(drw->dpy, icon_ximg[i]);
 	}
 }
-
