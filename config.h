@@ -17,6 +17,9 @@ static const int swallowfloating    = 0;        /* 1 means swallow floating wind
 static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
+static const int showdock			= 1;
+static const int user_dh			= 80;
+static int dock_w					= 512;		/* Just for creation size, window size changes dynamically according to clients */
 static const int user_bh			= 36;		/* 0 means normal bar height, >1 means user bar height */
 static const char *fonts[]          = { "JetBrains Mono:style=Regular:size=16", "Symbols Nerd Font:style=2048-em:size=20","JoyPixels:size=16:antialias=true:autohint=true"};
 static char dmenufont[]             = "JetBrains Mono:style=Regular:size=16";
@@ -53,7 +56,7 @@ static const unsigned int sb_delimiter_w = 8;
 
 // Default icon width, height and margin
 static const unsigned int sb_icon_wh = 32;
-static const unsigned int sb_icon_x_margin = 6;
+static const unsigned int sb_icon_x_margin = 12;
 
 // Status bar x and y margin
 static const unsigned int sb_x_margin = 12;
@@ -158,7 +161,7 @@ static Button buttons[] = {
 	{ ClkStatusText,        0,              Button5,        sigdwmblocks,   {.i = 5} },
 #endif
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,         MODKEY,         Button2,        defaultgaps,	{0} },
+	{ ClkClientWin,         MODKEY,         Button2,        toggledock,	{0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
 	{ ClkLtSymbol,			0,				Button3,		layoutmenu,		{0}	},
 	{ ClkRootWin,		MODKEY,		Button4,	shiftview,	{.i = +1} },
@@ -169,7 +172,8 @@ static Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkTagBar,		0,		Button4,	shiftview,	{.i = -1} },
 	{ ClkTagBar,		0,		Button5,	shiftview,	{.i = 1} },
-	{ ClkRootWin,		0,		Button2,	togglebar,	{0} },
+	{ ClkRootWin,		0,		Button2,	toggledock,	{0} },
 };
 
 #include "keys.h"
+

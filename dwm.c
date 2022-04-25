@@ -128,10 +128,12 @@ struct Client {
 	pid_t pid;
 	Client *next;
 	Client *snext;
+	Client *curtagnext;
 	Client *swallowing;
 	Monitor *mon;
 	Window win;
 };
+Client *curtagc;
 
 typedef struct {
 	unsigned int mod;
@@ -169,11 +171,13 @@ struct Monitor {
 	unsigned int tagset[2];
 	int showbar;
 	int topbar;
+	int showdock;
 	Client *clients;
 	Client *sel;
 	Client *stack;
 	Monitor *next;
 	Window barwin;
+	Window dockwin;
 	const Layout *lt[2];
 	Pertag *pertag;
 };
@@ -215,6 +219,7 @@ static void detachstack(Client *c);
 static Monitor *dirtomon(int dir);
 static void drawbar(Monitor *m);
 static void drawbars(void);
+static void drawdock(Monitor *m);
 static void enternotify(XEvent *e);
 static void expose(XEvent *e);
 static void freeicon(Client *c);
@@ -276,6 +281,7 @@ static int stackpos(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void togglebar(const Arg *arg);
+static void toggledock(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void togglescratch(const Arg *arg);
 static void togglesticky(const Arg *arg);
@@ -621,6 +627,21 @@ buttonpress(XEvent *e)
 		selmon = m;
 		focus(NULL);
 	}
+	if (ev->window == selmon->dockwin && curtagc) {
+		x = 32;
+		while (curtagc)
+		{
+			if (BETWEEN(ev->x, x, x + sb_icon_wh) || (!curtagc->icon && BETWEEN(ev->x, x, x + TEXTW_SB(curtagc->name))))
+			{
+				focus(curtagc);
+				XWarpPointer(dpy, None, curtagc->win, 0, 0, 0, 0, curtagc->w / 2, curtagc->h / 2);
+				toggledock(NULL);
+				return;
+			}
+			x += (curtagc->icon ? sb_icon_wh + sb_icon_x_margin : TEXTW_SB(curtagc->name) + sb_icon_x_margin);
+			curtagc = curtagc->curtagnext;
+		}
+	}
 	if (ev->window == selmon->barwin) {
 		i = 0;
 		x = sb_logo_w + 2 * sb_delimiter_w;
@@ -740,6 +761,8 @@ cleanupmon(Monitor *mon)
 	}
 	XUnmapWindow(dpy, mon->barwin);
 	XDestroyWindow(dpy, mon->barwin);
+	XUnmapWindow(dpy, mon->dockwin);
+	XDestroyWindow(dpy, mon->dockwin);
 	free(mon);
 }
 
@@ -1147,6 +1170,48 @@ drawbars(void)
 
 	for (m = mons; m; m = m->next)
 		drawbar(m);
+}
+
+void
+drawdock(Monitor *m)
+{
+	Client *c, *tmpc;
+	curtagc = tmpc = NULL;
+	int curdockwidth = 64, y = m->wy + m->wh - user_dh, x = 32, icon_y = y + (user_dh - sb_icon_wh) / 2;
+	if (m == selmon && m->showdock)
+	{
+		drw_setscheme(drw, scheme[SchemeNorm]);
+		drw_rect(drw, 0, y, m->ww, user_dh, 1, 0);
+		for (c = m->stack; c; c = c->snext)
+		{
+			if (c->tags == m->pertag->curtag) {
+				if (!curtagc) {
+					curtagc = c;
+					tmpc = curtagc;
+				}
+				else {
+					tmpc->curtagnext = c;
+					tmpc = tmpc->curtagnext;
+				}
+
+				if (c->icon) {
+					curdockwidth += c->icw + sb_icon_x_margin;
+					drw_pic(drw, x, icon_y, c->icw, c->ich, c->icon, -1);
+					x += c->icw + sb_icon_x_margin;
+				}
+				else
+				{
+					drw_setscheme(drw, scheme[SchemeInfoNorm]);
+					drw_text(drw, x, icon_y, TEXTW_SB(c->name), c->icw, 0, c->name, 0);
+					x += TEXTW_SB(c->name) + sb_icon_x_margin;
+					curdockwidth += TEXTW_SB(c->name) + sb_icon_x_margin;
+				}
+			}
+		}
+		curdockwidth -= sb_icon_x_margin;
+		XMoveResizeWindow(dpy, m->dockwin, (m->ww - curdockwidth)/2, y, curdockwidth, user_dh);
+		drw_map(drw, m->dockwin, 0, y, curdockwidth, user_dh);
+	}
 }
 
 
@@ -2307,6 +2372,19 @@ togglebar(const Arg *arg)
 }
 
 void
+toggledock(const Arg *arg)
+{
+	selmon->showdock = (selmon->showdock ? 0 : 1);
+	if (selmon->showdock) {
+		drawdock(selmon);
+		XRaiseWindow(dpy, selmon->dockwin);
+	}
+	else
+		XMoveResizeWindow(dpy, selmon->dockwin, selmon->wx + ((selmon->ww - dock_w)/2), selmon->wy + selmon->wh , dock_w, user_dh);
+	arrange(selmon);
+}
+
+void
 togglefloating(const Arg *arg)
 {
 	if (!selmon->sel)
@@ -2504,15 +2582,24 @@ updatebars(void)
 	};
 	XClassHint ch = {"dwm", "dwm"};
 	for (m = mons; m; m = m->next) {
-		if (m->barwin)
-			continue;
-
-		m->barwin = XCreateWindow(dpy, root, m->wx , m->by, m->ww, bh, 0, DefaultDepth(dpy, screen),
-				CopyFromParent, DefaultVisual(dpy, screen),
-				CWColormap|CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
-		XDefineCursor(dpy, m->barwin, cursor[CurNormal]->cursor);
-		XMapRaised(dpy, m->barwin);
-		XSetClassHint(dpy, m->barwin, &ch);
+		if (!m->barwin)
+		{
+			m->barwin = XCreateWindow(dpy, root, m->wx , m->by, m->ww, bh, 0, DefaultDepth(dpy, screen),
+					CopyFromParent, DefaultVisual(dpy, screen),
+					CWColormap|CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
+			XDefineCursor(dpy, m->barwin, cursor[CurNormal]->cursor);
+			XMapRaised(dpy, m->barwin);
+			XSetClassHint(dpy, m->barwin, &ch);
+		}
+		if (!m->dockwin)
+		{
+			m->dockwin = XCreateWindow(dpy, root, m->wx + (m->ww - dock_w)/2, m->wy + m->wh, dock_w, user_dh, 0, DefaultDepth(dpy, screen),
+					CopyFromParent, DefaultVisual(dpy, screen),
+					CWColormap|CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
+			XDefineCursor(dpy, m->dockwin, cursor[CurNormal]->cursor);
+			XMapRaised(dpy, m->dockwin);
+			XSetClassHint(dpy, m->dockwin, &ch);
+		}
 	}
 }
 
