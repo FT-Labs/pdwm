@@ -59,6 +59,7 @@
                                * MAX(0, MIN((y)+(h),(m)->wy+(m)->wh) - MAX((y),(m)->wy)))
 #define ISINC(X)                ((X) > 1000 && (X) < 3000)
 #define ISVISIBLE(C)            ((C->tags & C->mon->tagset[C->mon->seltags]) || C->issticky)
+#define HIDDEN(C)               ((getstate(C->win) == IconicState))
 #define PREVSEL                 3000
 #define LENGTH(X)               (sizeof X / sizeof X[0])
 #define MOUSEMASK               (BUTTONMASK|PointerMotionMask)
@@ -170,8 +171,8 @@ struct Monitor {
 	unsigned int sellt;
 	unsigned int tagset[2];
 	int showbar;
-	int topbar;
 	int showdock;
+	int topbar;
 	Client *clients;
 	Client *sel;
 	Client *stack;
@@ -227,6 +228,8 @@ static void focus(Client *c);
 static void focusin(XEvent *e);
 static void focusmon(const Arg *arg);
 static void focusstack(const Arg *arg);
+static void hide(const Arg *arg);
+static void hidewin(Client *c);
 static Picture geticonprop(Window w, unsigned int *icw, unsigned int *ich);
 static Atom getatomprop(Client *c, Atom prop);
 static int getrootptr(int *x, int *y);
@@ -269,6 +272,7 @@ static void setmfact(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
+static void showwin(Client *c);
 static void sigchld(int unused);
 #ifndef __OpenBSD__
 static int getdwmblockspid();
@@ -633,8 +637,9 @@ buttonpress(XEvent *e)
 		{
 			if (BETWEEN(ev->x, x, x + sb_icon_wh) || (!curtagc->icon && BETWEEN(ev->x, x, x + TEXTW_SB(curtagc->name))))
 			{
-				focus(curtagc);
+				showwin(curtagc);
 				XWarpPointer(dpy, None, curtagc->win, 0, 0, 0, 0, curtagc->w / 2, curtagc->h / 2);
+				focus(curtagc);
 				toggledock(NULL);
 				return;
 			}
@@ -1182,7 +1187,7 @@ drawdock(Monitor *m)
 	{
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		drw_rect(drw, 0, y, m->ww, user_dh, 1, 0);
-		for (c = m->stack; c; c = c->snext)
+		for (c = m->clients; c; c = c->next)
 		{
 			if (c->tags == m->pertag->curtag) {
 				if (!curtagc) {
@@ -1436,6 +1441,38 @@ grabkeys(void)
 }
 
 void
+hide(const Arg *arg)
+{
+	hidewin(selmon->sel);
+	detachstack(selmon->sel);
+	focus(NULL);
+	arrange(selmon);
+	restack(selmon);
+}
+
+void
+hidewin(Client *c)
+{
+	if (!c || HIDDEN(c))
+		return;
+	Window w = c->win;
+	static XWindowAttributes ra, ca;
+
+	XGrabServer(dpy);
+	XGetWindowAttributes(dpy, root, &ra);
+	XGetWindowAttributes(dpy, w, &ca);
+	/* Prevent UnmapNotify events */
+	XSelectInput(dpy, root, ra.your_event_mask & ~SubstructureNotifyMask);
+	XSelectInput(dpy, w, ca.your_event_mask & ~StructureNotifyMask);
+	XUnmapWindow(dpy, w);
+	setclientstate(c, IconicState);
+	XSelectInput(dpy, root, ra.your_event_mask);
+	XSelectInput(dpy, w, ca.your_event_mask);
+	XUngrabServer(dpy);
+}
+
+
+void
 incnmaster(const Arg *arg)
 {
 	selmon->nmaster = selmon->pertag->nmasters[selmon->pertag->curtag] = MAX(selmon->nmaster + arg->i, 0);
@@ -1594,7 +1631,8 @@ manage(Window w, XWindowAttributes *wa)
 	XChangeProperty(dpy, root, netatom[NetClientList], XA_WINDOW, 32, PropModeAppend,
 		(unsigned char *) &(c->win), 1);
 	XMoveResizeWindow(dpy, c->win, c->x + 2 * sw, c->y, c->w, c->h); /* some windows require this */
-	setclientstate(c, NormalState);
+	if (!HIDDEN(c))
+		setclientstate(c, NormalState);
 	if (c->mon->sel && c->mon->sel->isfullscreen) {
 		XMapWindow(dpy, c->win);
 		return;
@@ -1603,7 +1641,8 @@ manage(Window w, XWindowAttributes *wa)
 		unfocus(selmon->sel, 0);
 	c->mon->sel = c;
 	arrange(c->mon);
-	XMapWindow(dpy, c->win);
+	if (!HIDDEN(c))
+		XMapWindow(dpy, c->win);
 	if (term)
 		swallow(term, c);
 	focus(NULL);
@@ -1728,7 +1767,7 @@ movemouse(const Arg *arg)
 Client *
 nexttiled(Client *c)
 {
-	for (; c && (c->isfloating || !ISVISIBLE(c)); c = c->next);
+	for (; c && (c->isfloating || !ISVISIBLE(c) || HIDDEN(c)); c = c->next);
 	return c;
 }
 
@@ -1980,7 +2019,7 @@ restack(Monitor *m)
 		wc.stack_mode = Below;
 		wc.sibling = m->barwin;
 		for (c = m->stack; c; c = c->snext)
-			if (!c->isfloating && ISVISIBLE(c)) {
+			if (!c->isfloating && ISVISIBLE(c) && !HIDDEN(c)) {
 				XConfigureWindow(dpy, c->win, CWSibling|CWStackMode, &wc);
 				wc.sibling = c->win;
 			}
@@ -2270,7 +2309,7 @@ showhide(Client *c)
 {
 	if (!c)
 		return;
-	if (ISVISIBLE(c)) {
+	if (ISVISIBLE(c) && !HIDDEN(c)) {
 		if ((c->tags & SPTAGMASK) && c->isfloating) {
 			c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
 			c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
@@ -2285,6 +2324,17 @@ showhide(Client *c)
 		showhide(c->snext);
 		XMoveWindow(dpy, c->win, WIDTH(c) * -2, c->y);
 	}
+}
+
+void
+showwin(Client *c)
+{
+	if (!c || !HIDDEN(c))
+		return;
+	attachstack(c);
+	XMapWindow(dpy, c->win);
+	setclientstate(c, NormalState);
+	arrange(c->mon);
 }
 
 void
