@@ -2459,6 +2459,7 @@ toggledock(const Arg *arg)
 	if (selmon->showdock) {
 		drawdock(selmon);
 		XRaiseWindow(dpy, selmon->dockwin);
+		XWarpPointer(dpy, None, selmon->dockwin, 0, 0, 0, 0, 32, user_dh/2);
 	}
 	else
 		XMoveResizeWindow(dpy, selmon->dockwin, selmon->wx + ((selmon->ww - dock_w)/2), selmon->wy + selmon->wh , dock_w, user_dh);
