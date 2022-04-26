@@ -2463,7 +2463,6 @@ toggledock(const Arg *arg)
 	}
 	else
 		XMoveResizeWindow(dpy, selmon->dockwin, selmon->wx + selmon->ww/2, selmon->wy + selmon->wh , user_dh, user_dh);
-	arrange(selmon);
 }
 
 void
