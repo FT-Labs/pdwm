@@ -19,7 +19,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const int showdock			= 1;
 static const int user_dh			= 80;
-static int dock_w					= 512;		/* Just for creation size, window size changes dynamically according to clients */
+static const int docklrmargin		= 64;
 static const int user_bh			= 36;		/* 0 means normal bar height, >1 means user bar height */
 static const char *fonts[]          = { "JetBrains Mono:style=Regular:size=16", "Symbols Nerd Font:style=2048-em:size=20","JoyPixels:size=16:antialias=true:autohint=true"};
 static char dmenufont[]             = "JetBrains Mono:style=Regular:size=16";
@@ -48,20 +48,18 @@ static char normfgcolor[]           = "#121212";
 static char selfgcolor[]            = "#e0ffff";
 static char infobarusbgcolor[]	    = "#878787";
 
-// Logo size
+/* Status bar left logo sizes */
 static const unsigned int sb_logo_w = 35;
 static const unsigned int sb_logo_h = 30;
 static const unsigned int sb_logo_y_margin = 3;
-static const unsigned int sb_delimiter_w = 8;
 
-/* Default icon width, height and margin */
+/* Default icon width, height, margin and delimiter width */
 static const unsigned int sb_icon_wh = 32;
 static const unsigned int sb_icon_x_margin = 12;
+static const unsigned int sb_delimiter_w = 8;
 
 /* Status bar x and y margin */
-static const unsigned int sb_x_margin = 12;
-static const unsigned int sb_y_margin = 12;
-
+static const unsigned int sb_margin = 12;
 
 /* Icon size for status text */
 #define ICONSIZE sb_icon_wh

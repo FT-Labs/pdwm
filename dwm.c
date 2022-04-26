@@ -323,7 +323,7 @@ static pid_t winpid(Window w);
 
 /* variables */
 static const char broken[] = "broken";
-static char* sb_arr[10];
+static char* sb_arr[10]; /* Array that holds name of pngs */
 static int sb_tw;
 static char stext[256];
 static char rawstext[256];
@@ -1182,7 +1182,7 @@ drawdock(Monitor *m)
 {
 	Client *c, *tmpc;
 	curtagc = tmpc = NULL;
-	int curdockwidth = 64, y = m->wy + m->wh - user_dh, x = 32, icon_y = y + (user_dh - sb_icon_wh) / 2;
+	int curdockwidth = docklrmargin, y = m->wy + m->wh - user_dh, x = curdockwidth/2, icon_y = y + (user_dh - sb_icon_wh) / 2;
 	if (m == selmon && m->showdock)
 	{
 		drw_setscheme(drw, scheme[SchemeNorm]);
@@ -2459,10 +2459,10 @@ toggledock(const Arg *arg)
 	if (selmon->showdock) {
 		drawdock(selmon);
 		XRaiseWindow(dpy, selmon->dockwin);
-		XWarpPointer(dpy, None, selmon->dockwin, 0, 0, 0, 0, 32, user_dh/2);
+		XWarpPointer(dpy, None, selmon->dockwin, 0, 0, 0, 0, docklrmargin/2 + sb_icon_wh/2, user_dh/2);
 	}
 	else
-		XMoveResizeWindow(dpy, selmon->dockwin, selmon->wx + ((selmon->ww - dock_w)/2), selmon->wy + selmon->wh , dock_w, user_dh);
+		XMoveResizeWindow(dpy, selmon->dockwin, selmon->wx + selmon->ww/2, selmon->wy + selmon->wh , user_dh, user_dh);
 	arrange(selmon);
 }
 
@@ -2675,7 +2675,7 @@ updatebars(void)
 		}
 		if (!m->dockwin)
 		{
-			m->dockwin = XCreateWindow(dpy, root, m->wx + (m->ww - dock_w)/2, m->wy + m->wh, dock_w, user_dh, 0, DefaultDepth(dpy, screen),
+			m->dockwin = XCreateWindow(dpy, root, m->wx + m->ww/2, m->wy + m->wh, user_dh, user_dh, 0, DefaultDepth(dpy, screen),
 					CopyFromParent, DefaultVisual(dpy, screen),
 					CWColormap|CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
 			XDefineCursor(dpy, m->dockwin, cursor[CurNormal]->cursor);
@@ -2688,20 +2688,20 @@ updatebars(void)
 void
 updatebarpos(Monitor *m)
 {
-	m->wy = m->my + sb_y_margin;
+	m->wy = m->my + sb_margin;
 	m->wh = m->mh;
 	if (m->showbar) {
 		m->wh -= bh;
 		m->by = m->topbar ? m->wy : m->wy + m->wh;
 		m->wy = m->topbar ? m->wy + bh : m->wy;
-		m->ww -= 2 * sb_x_margin;
-		m->wx += sb_x_margin;
+		m->ww -= 2 * sb_margin;
+		m->wx += sb_margin;
 	} else {
 		m->by = -bh;
-		m->wy -= sb_y_margin;
-		m->wh += sb_y_margin;
-		m->ww += 2 * sb_x_margin;
-		m->wx -= sb_x_margin;
+		m->wy -= sb_margin;
+		m->wh += sb_margin;
+		m->ww += 2 * sb_margin;
+		m->wx -= sb_margin;
 	}
 }
 
@@ -2758,7 +2758,7 @@ updategeom(void)
 					m->mx = m->wx = unique[i].x_org;
 					m->my = m->wy = unique[i].y_org ;
 					m->mw = m->ww = unique[i].width;
-					m->mh = unique[i].height - sb_y_margin;
+					m->mh = unique[i].height - sb_margin;
 					m->wh = unique[i].height;
 					updatebarpos(m);
 				}
