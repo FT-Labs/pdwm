@@ -1189,7 +1189,7 @@ drawdock(Monitor *m)
 		drw_rect(drw, 0, y, m->ww, user_dh, 1, 0);
 		for (c = m->clients; c; c = c->next)
 		{
-			if (c->tags == m->pertag->curtag) {
+			if (ISVISIBLE(c)) {
 				if (!curtagc) {
 					curtagc = c;
 					tmpc = curtagc;
@@ -1302,7 +1302,7 @@ focusmon(const Arg *arg)
 		XWarpPointer(dpy, None, selmon->sel->win, 0, 0, 0, 0, selmon->sel->w/2, selmon->sel->h/2);
 }
 
-void
+/* void
 focusstack(const Arg *arg)
 {
 	int i = stackpos(arg);
@@ -1316,6 +1316,40 @@ focusstack(const Arg *arg)
 	focus(c ? c : p);
 	restack(selmon);
 	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w/2, c->h/2);
+} */
+
+void
+focusstack(const Arg *arg)
+{
+	int pos = stackpos(arg);
+	if (!selmon->sel || !selmon->clients)
+		return;
+	Client *c = NULL, *i;
+
+	if (pos) {
+		if (selmon->sel)
+			for (c = selmon->sel->next; (c && (!ISVISIBLE(c) || HIDDEN(c))); c = c->next);
+		if (!c)
+			for (c = selmon->clients; c && (!ISVISIBLE(c) || HIDDEN(c)); c = c->next);
+	} else {
+		if (selmon->sel) {
+			for (i = selmon->clients; i != selmon->sel; i = i->next)
+				if (ISVISIBLE(i) && !HIDDEN(i))
+					c = i;
+		} else
+			c = selmon->clients;
+
+		if (!c)
+			for (; i; i = i->next )
+				if (ISVISIBLE(i) && !HIDDEN(i))
+					c = i;
+	}
+
+	if (c) {
+		focus(c);
+		restack(selmon);
+		XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w/2, c->h/2);
+	}
 }
 
 Atom
@@ -1444,10 +1478,8 @@ void
 hide(const Arg *arg)
 {
 	hidewin(selmon->sel);
-	detachstack(selmon->sel);
-	focus(NULL);
 	arrange(selmon);
-	restack(selmon);
+	focusstack(arg);
 }
 
 void
@@ -2331,7 +2363,6 @@ showwin(Client *c)
 {
 	if (!c || !HIDDEN(c))
 		return;
-	attachstack(c);
 	XMapWindow(dpy, c->win);
 	setclientstate(c, NormalState);
 	arrange(c->mon);
