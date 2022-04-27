@@ -80,9 +80,9 @@ You need to install fonts to your system first (Nerd fonts, including all glyphs
 You can copy "keys.h" file to '~/.config/phyos/dwm/' to change default bindings. Change keys.h with your taste, after that run:
 
     phyup dwm
-    
+
 To update dwm easily. (wget required, you probably have it)
-    
+
 #### For non-arch and arch users (updating dotfiles and configs)
 
 	phyup dots
@@ -235,7 +235,9 @@ Key Combination | Action
 ----------------- | ----------
  <kbd>Win</kbd> + <kbd>LMB</kbd>     | Move window with mouse (sets window to floating mode)
  <kbd>Win</kbd> + <kbd>RMB</kbd>     | Resize window with mouse (sets window to floating mode)
- <kbd>Middle Click</kbd>			 | At edge of screen middle click to hide status bar
+ <kbd>Middle Click</kbd>			 | At edge of screen middle click to toggle bottom dock
+ <kbd>Win</kbd> + <kbd>Middle Click</kbd> | Toggle dock when a client is focused
+ <kbd>Alt</kbd> + <kbd>Middle Click</kbd> | Hide focused window (iconic state, restore it from dock)
 
 </div>
 <div>
