@@ -1302,22 +1302,6 @@ focusmon(const Arg *arg)
 		XWarpPointer(dpy, None, selmon->sel->win, 0, 0, 0, 0, selmon->sel->w/2, selmon->sel->h/2);
 }
 
-/* void
-focusstack(const Arg *arg)
-{
-	int i = stackpos(arg);
-	Client *c, *p;
-
-	if (i < 0 || !selmon->sel || selmon->sel->isfullscreen)
-		return;
-
-	for(p = NULL, c = selmon->clients; c && (i || !ISVISIBLE(c));
-	    i -= ISVISIBLE(c) ? 1 : 0, p = c, c = c->next);
-	focus(c ? c : p);
-	restack(selmon);
-	XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w/2, c->h/2);
-} */
-
 void
 focusstack(const Arg *arg)
 {
