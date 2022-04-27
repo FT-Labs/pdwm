@@ -1,12 +1,12 @@
 # Maintainer: Arda Atci<phystecharda@gmail.com>
 pkgname=dwm-phyOS
-pkgver=6.2
-pkgrel=3
+pkgver=6.3
+pkgrel=1
 pkgdesc="dwm build for phyOS"
 arch=(x86_64)
 url="git://github.com/PhyTech-R0/dwm-phyOS"
 license=('MIT')
-depends=('libxcb' 'libxft-bgra' 'libpng')
+depends=('libxcb' 'libxft-bgra' 'imlib2')
 makedepends=('git' 'make')
 optdepends=('fonts-phyOS' 'dmenu-phyOS' 'st-phyOS' 'dwmblocks-phyOS')
 provides=("dwm")
