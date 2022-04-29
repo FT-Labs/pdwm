@@ -20,6 +20,7 @@
  *
  * To understand everything else, start reading main().
  */
+#include <X11/X.h>
 #include <assert.h>
 #include <errno.h>
 #include <locale.h>
@@ -218,6 +219,7 @@ static void destroynotify(XEvent *e);
 static void detach(Client *c);
 static void detachstack(Client *c);
 static Monitor *dirtomon(int dir);
+static void dockevent(XEvent *e, int evtype);
 static void drawbar(Monitor *m);
 static void drawbars(void);
 static void drawdock(Monitor *m);
@@ -619,7 +621,7 @@ buttonpress(XEvent *e)
 {
 	unsigned int i, x, click, occ = 0;
 	Arg arg = {0};
-	Client *c;
+	Client *c = curtagc;
 	Monitor *m;
 	XButtonPressedEvent *ev = &e->xbutton;
 
@@ -631,22 +633,11 @@ buttonpress(XEvent *e)
 		selmon = m;
 		focus(NULL);
 	}
-	if (ev->window == selmon->dockwin && curtagc) {
-		x = 32;
-		while (curtagc)
-		{
-			if (BETWEEN(ev->x, x, x + sb_icon_wh) || (!curtagc->icon && BETWEEN(ev->x, x, x + TEXTW_SB(curtagc->name))))
-			{
-				showwin(curtagc);
-				XWarpPointer(dpy, None, curtagc->win, 0, 0, 0, 0, curtagc->w / 2, curtagc->h / 2);
-				focus(curtagc);
-				toggledock(NULL);
-				return;
-			}
-			x += (curtagc->icon ? sb_icon_wh + sb_icon_x_margin : TEXTW_SB(curtagc->name) + sb_icon_x_margin);
-			curtagc = curtagc->curtagnext;
-		}
+	if (ev->window == selmon->dockwin && c) {
+		dockevent(e, 1);
+		return;
 	}
+
 	if (ev->window == selmon->barwin) {
 		i = 0;
 		x = sb_logo_w + 2 * sb_delimiter_w;
@@ -1021,7 +1012,34 @@ dirtomon(int dir)
 	return m;
 }
 
-
+void
+dockevent(XEvent *e, int evtype)
+{
+	Client *c = curtagc;
+	XButtonPressedEvent *ev = &e->xbutton;
+	int x = 32;
+	while (c)
+	{
+		if (BETWEEN(ev->x, x, x + sb_icon_wh) || (!c->icon && BETWEEN(ev->x, x, x + TEXTW_SB(c->name))))
+		{
+			if (evtype)
+			{
+				showwin(c);
+				XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
+				focus(c);
+				toggledock(NULL);
+			}
+			else if (!evtype && selmon->sel != c)
+			{
+				selmon->sel = c;
+				drawbar(selmon);
+			}
+			return;
+		}
+		x += (c->icon ? sb_icon_wh + sb_icon_x_margin : TEXTW_SB(c->name) + sb_icon_x_margin);
+		c = c->curtagnext;
+	}
+}
 
 void
 drawbar(Monitor *m)
@@ -1156,7 +1174,7 @@ drawbar(Monitor *m)
 	if ((w = m->ww - tw - x) > bh) {
 		if (m->sel) {
 			drw_setscheme(drw, scheme[m == selmon ? SchemeInfoSel : SchemeInfoNorm]);
-			drw_text(drw, x, 0, w, bh, lrpad / 2 + (m->sel->icon ? m->sel->icw + ICONSPACING : 0), m->sel->name, 0);
+			drw_text(drw, x, 0, w, bh, lrpad / 2 + (m->sel->icon ? m->sel->icw + ICONSPACING : 0), m->sel->name, HIDDEN(m->sel) ? 1 : 0);
 			if (m->sel->icon) drw_pic(drw, x + lrpad / 2, (bh - m->sel->ich) / 2, m->sel->icw, m->sel->ich, m->sel->icon, -1);
 			if (m->sel->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
@@ -1197,6 +1215,11 @@ drawdock(Monitor *m)
 				else {
 					tmpc->curtagnext = c;
 					tmpc = tmpc->curtagnext;
+				}
+
+				if (curdockwidth == docklrmargin) {
+					m->sel = c;
+					drawbar(m);
 				}
 
 				if (c->icon) {
@@ -1305,12 +1328,11 @@ focusmon(const Arg *arg)
 void
 focusstack(const Arg *arg)
 {
-	int pos = stackpos(arg);
 	if (!selmon->sel || !selmon->clients)
 		return;
 	Client *c = NULL, *i;
 
-	if (pos) {
+	if (arg->i > 0) {
 		if (selmon->sel)
 			for (c = selmon->sel->next; (c && (!ISVISIBLE(c) || HIDDEN(c))); c = c->next);
 		if (!c)
@@ -1320,9 +1342,7 @@ focusstack(const Arg *arg)
 			for (i = selmon->clients; i != selmon->sel; i = i->next)
 				if (ISVISIBLE(i) && !HIDDEN(i))
 					c = i;
-		} else
-			c = selmon->clients;
-
+		}
 		if (!c)
 			for (; i; i = i->next )
 				if (ISVISIBLE(i) && !HIDDEN(i))
@@ -1709,6 +1729,12 @@ motionnotify(XEvent *e)
 	static Monitor *mon = NULL;
 	Monitor *m;
 	XMotionEvent *ev = &e->xmotion;
+
+	if (ev->window != selmon->dockwin && selmon->showdock)
+		toggledock(NULL);
+	else if (ev->window == selmon->dockwin)
+		dockevent(e, 0);
+
 
 	if (ev->window != root)
 		return;
@@ -2658,6 +2684,7 @@ updatebars(void)
 		}
 		if (!m->dockwin)
 		{
+			wa.event_mask |= PointerMotionMask;
 			m->dockwin = XCreateWindow(dpy, root, m->wx + m->ww/2, m->wy + m->wh, user_dh, user_dh, 0, DefaultDepth(dpy, screen),
 					CopyFromParent, DefaultVisual(dpy, screen),
 					CWColormap|CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
