@@ -1017,7 +1017,8 @@ dockevent(XEvent *e, int evtype)
 {
 	Client *c = curtagc;
 	XButtonPressedEvent *ev = &e->xbutton;
-	int x = 32;
+	int x = docklrmargin/2;
+
 	while (c)
 	{
 		if (BETWEEN(ev->x, x, x + sb_icon_wh) || (!c->icon && BETWEEN(ev->x, x, x + TEXTW_SB(c->name))))
@@ -1028,13 +1029,13 @@ dockevent(XEvent *e, int evtype)
 				XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
 				focus(c);
 				toggledock(NULL);
+				return;
 			}
 			else if (!evtype && selmon->sel != c)
 			{
 				selmon->sel = c;
 				drawbar(selmon);
 			}
-			return;
 		}
 		x += (c->icon ? sb_icon_wh + sb_icon_x_margin : TEXTW_SB(c->name) + sb_icon_x_margin);
 		c = c->curtagnext;
@@ -1237,7 +1238,7 @@ drawdock(Monitor *m)
 			}
 		}
 		curdockwidth -= sb_icon_x_margin;
-		XMoveResizeWindow(dpy, m->dockwin, (m->ww - curdockwidth)/2, y, curdockwidth, user_dh);
+		XMoveResizeWindow(dpy, m->dockwin, m->wx + (m->ww - curdockwidth)/2, y, curdockwidth, user_dh);
 		drw_map(drw, m->dockwin, 0, y, curdockwidth, user_dh);
 	}
 }
@@ -1730,11 +1731,8 @@ motionnotify(XEvent *e)
 	Monitor *m;
 	XMotionEvent *ev = &e->xmotion;
 
-	if (ev->window != selmon->dockwin && selmon->showdock)
-		toggledock(NULL);
-	else if (ev->window == selmon->dockwin)
+	if (ev->window == selmon->dockwin)
 		dockevent(e, 0);
-
 
 	if (ev->window != root)
 		return;
