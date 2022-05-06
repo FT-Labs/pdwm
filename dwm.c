@@ -2687,6 +2687,7 @@ updatebars(void)
 		if (!m->dockwin)
 		{
 			wa.event_mask |= PointerMotionMask;
+			wa.event_mask ^= ExposureMask;
 			m->dockwin = XCreateWindow(dpy, root, -user_dh * 2, m->wy + m->wh, user_dh, user_dh, 0, DefaultDepth(dpy, screen),
 					CopyFromParent, DefaultVisual(dpy, screen),
 					CWColormap|CWBackPixmap|CWOverrideRedirect|CWEventMask, &wa);
