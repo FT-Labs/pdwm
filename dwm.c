@@ -2464,6 +2464,8 @@ togglebar(const Arg *arg)
 void
 toggledock(const Arg *arg)
 {
+	if (!selmon->sel)
+		return;
 	selmon->showdock = (selmon->showdock ? 0 : 1);
 	if (selmon->showdock) {
 		drawdock(selmon);
@@ -2684,7 +2686,7 @@ updatebars(void)
 		if (!m->dockwin)
 		{
 			wa.event_mask |= PointerMotionMask;
-			m->dockwin = XCreateWindow(dpy, root, m->wx + m->ww/2, m->wy + m->wh, user_dh, user_dh, 0, DefaultDepth(dpy, screen),
+			m->dockwin = XCreateWindow(dpy, root, -user_dh * 2, m->wy + m->wh, user_dh, user_dh, 0, DefaultDepth(dpy, screen),
 					CopyFromParent, DefaultVisual(dpy, screen),
 					CWColormap|CWBackPixmap|CWOverrideRedirect|CWEventMask, &wa);
 			XDefineCursor(dpy, m->dockwin, cursor[CurNormal]->cursor);
