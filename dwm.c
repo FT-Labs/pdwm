@@ -11,7 +11,6 @@
  * in O(1) time.
  *
  * Each child of the root window is called a client, except windows which have
- * set the override_redirect flag. Clients are organized in a linked client
  * list on each monitor, the focus history is remembered through a stack list
  * on each monitor. Each client contains a bit array to indicate the tags of a
  * client.
@@ -135,7 +134,7 @@ struct Client {
 	Monitor *mon;
 	Window win;
 };
-Client *curtagc;
+static Client *curtagc;
 
 typedef struct {
 	unsigned int mod;
@@ -220,7 +219,7 @@ static void detach(Client *c);
 static void detachstack(Client *c);
 static Monitor *dirtomon(int dir);
 static void dockevent(XEvent *e, int evtype);
-static void drawbar(Monitor *m);
+static void drawbar(Monitor *m, Client *cdock);
 static void drawbars(void);
 static void drawdock(Monitor *m);
 static void enternotify(XEvent *e);
@@ -1016,12 +1015,11 @@ void
 dockevent(XEvent *e, int evtype)
 {
 	Client *c = curtagc;
-	XButtonPressedEvent *ev = &e->xbutton;
 	int x = docklrmargin/2;
 
 	while (c)
 	{
-		if (BETWEEN(ev->x, x, x + sb_icon_wh) || (!c->icon && BETWEEN(ev->x, x, x + TEXTW_SB(c->name))))
+		if (BETWEEN(e->xmotion.x, x, x + sb_icon_wh) || (!c->icon && BETWEEN(e->xmotion.x, x, x + TEXTW_SB(c->name))))
 		{
 			if (evtype)
 			{
@@ -1029,13 +1027,13 @@ dockevent(XEvent *e, int evtype)
 				XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
 				focus(c);
 				toggledock(NULL);
-				return;
 			}
-			else if (!evtype && selmon->sel != c)
+			else
 			{
-				selmon->sel = c;
-				drawbar(selmon);
+				drawbar(selmon, c);
+				XSync(dpy, True);
 			}
+			return;
 		}
 		x += (c->icon ? sb_icon_wh + sb_icon_x_margin : TEXTW_SB(c->name) + sb_icon_x_margin);
 		c = c->curtagnext;
@@ -1043,7 +1041,7 @@ dockevent(XEvent *e, int evtype)
 }
 
 void
-drawbar(Monitor *m)
+drawbar(Monitor *m, Client *cdock)
 {
 	int x, w, y = 0, tw = 0, twtmp = 0;
 	int boxs = drw->fonts->h / 9;
@@ -1173,12 +1171,13 @@ drawbar(Monitor *m)
 	}
 
 	if ((w = m->ww - tw - x) > bh) {
-		if (m->sel) {
+		if (m->sel || cdock) {
+			c = cdock ? cdock : m->sel;
 			drw_setscheme(drw, scheme[m == selmon ? SchemeInfoSel : SchemeInfoNorm]);
-			drw_text(drw, x, 0, w, bh, lrpad / 2 + (m->sel->icon ? m->sel->icw + ICONSPACING : 0), m->sel->name, HIDDEN(m->sel) ? 1 : 0);
-			if (m->sel->icon) drw_pic(drw, x + lrpad / 2, (bh - m->sel->ich) / 2, m->sel->icw, m->sel->ich, m->sel->icon, -1);
-			if (m->sel->isfloating)
-				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
+			drw_text(drw, x, 0, w, bh, lrpad / 2 + (c->icon ? c->icw + ICONSPACING : 0), c->name, HIDDEN(c) ? 1 : 0);
+			if (c->icon) drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon, -1);
+			if (c->isfloating)
+				drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
 		} else {
 			drw_setscheme(drw, scheme[SchemeInfoNorm]);
 			drw_rect(drw, x, y, w, bh, 1, 1);
@@ -1193,7 +1192,7 @@ drawbars(void)
 	Monitor *m;
 
 	for (m = mons; m; m = m->next)
-		drawbar(m);
+		drawbar(m, NULL);
 }
 
 void
@@ -1218,10 +1217,8 @@ drawdock(Monitor *m)
 					tmpc = tmpc->curtagnext;
 				}
 
-				if (curdockwidth == docklrmargin) {
-					m->sel = c;
-					drawbar(m);
-				}
+				if (curdockwidth == docklrmargin)
+					drawbar(m, c);
 
 				if (c->icon) {
 					curdockwidth += c->icw + sb_icon_x_margin;
@@ -1270,7 +1267,7 @@ expose(XEvent *e)
 	XExposeEvent *ev = &e->xexpose;
 
 	if (ev->count == 0 && (m = wintomon(ev->window)))
-		drawbar(m);
+		drawbar(m, NULL);
 }
 
 void
@@ -1936,7 +1933,7 @@ propertynotify(XEvent *e)
 			updateicon(c);
 			updatetitle(c);
 			if (c == c->mon->sel)
-				drawbar(c->mon);
+				drawbar(c->mon, NULL);
 		}
 		if (ev->atom == netatom[NetWMWindowType])
 			updatewindowtype(c);
@@ -2050,7 +2047,7 @@ restack(Monitor *m)
 	XEvent ev;
 	XWindowChanges wc;
 
-	drawbar(m);
+	drawbar(m, NULL);
 	if (!m->sel)
 		return;
 	if (m->sel->isfloating || !m->lt[m->sellt]->arrange)
@@ -2238,7 +2235,7 @@ setlayout(const Arg *arg)
 	if (selmon->sel)
 		arrange(selmon);
 	else
-		drawbar(selmon);
+		drawbar(selmon, NULL);
 }
 
 /* arg > 1.0 will set mfact absolutely */
@@ -2685,7 +2682,7 @@ updatebars(void)
 			wa.event_mask |= PointerMotionMask;
 			m->dockwin = XCreateWindow(dpy, root, m->wx + m->ww/2, m->wy + m->wh, user_dh, user_dh, 0, DefaultDepth(dpy, screen),
 					CopyFromParent, DefaultVisual(dpy, screen),
-					CWColormap|CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
+					CWColormap|CWBackPixmap|CWOverrideRedirect|CWEventMask, &wa);
 			XDefineCursor(dpy, m->dockwin, cursor[CurNormal]->cursor);
 			XMapRaised(dpy, m->dockwin);
 			XSetClassHint(dpy, m->dockwin, &ch);
@@ -2872,7 +2869,7 @@ updatestatus(void)
 		strcpy(stext, "dwm-"VERSION);
 	else
 		copyvalidchars(stext, rawstext);
-	drawbar(selmon);
+	drawbar(selmon, NULL);
 }
 
 void
