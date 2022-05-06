@@ -1024,8 +1024,9 @@ dockevent(XEvent *e, int evtype)
 			if (evtype)
 			{
 				showwin(c);
-				XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
 				focus(c);
+				restack(selmon);
+				XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
 				toggledock(NULL);
 			}
 			else
