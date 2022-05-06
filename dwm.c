@@ -1248,6 +1248,8 @@ enternotify(XEvent *e)
 	Monitor *m;
 	XCrossingEvent *ev = &e->xcrossing;
 
+	if (selmon->showdock)
+		toggledock(NULL);
 	if ((ev->mode != NotifyNormal || ev->detail == NotifyInferior) && ev->window != root)
 		return;
 	c = wintoclient(ev->window);
@@ -1730,6 +1732,8 @@ motionnotify(XEvent *e)
 
 	if (ev->window == selmon->dockwin)
 		dockevent(e, 0);
+	else if (selmon->showdock)
+		toggledock(NULL);
 
 	if (ev->window != root)
 		return;

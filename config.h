@@ -171,7 +171,7 @@ static Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkTagBar,			0,				Button4,		shiftview,		{.i = -1} },
 	{ ClkTagBar,			0,				Button5,		shiftview,		{.i = 1} },
-	{ ClkRootWin,			0,				Button2,		toggledock,		{0} },
+	{ ClkRootWin,			MODKEY,  		Button2,		toggledock,		{0} },
 };
 
 #include "keys.h"
