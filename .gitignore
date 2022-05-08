@@ -5,6 +5,7 @@
 *.gcov
 .*
 dwm
+dwmblocks
 /lcov.info
 **/compile_commands.json
 .cache/**
