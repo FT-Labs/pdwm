@@ -6,37 +6,36 @@
 #include <X11/Xlib.h>
 #include <libconfig.h>
 #define CMDLENGTH		50
-#define BLOCK_SIZE		7
 
 typedef struct {
-	char* cmd;
+	char *cmd;
 	unsigned int interval;
 	unsigned int signal;
 } Block;
-void sig_handler(int num);
-void button_handler(int sig, siginfo_t *si, void *ucontext);
+static void free_blocks(void);
+static void sig_handler(int num);
+static void button_handler(int sig, siginfo_t *si, void *ucontext);
 void replace(char *str, char old, char new);
-void remove_all(char *str, char to_remove);
-void get_cmds(int time);
+static void remove_all(char *str, char to_remove);
+static void get_cmds(int time);
 #ifndef __OpenBSD__
-void get_sig_cmds(int signal);
-FILE *open_config_file_at(const char *base, char **out_path);
-char *parse_libconfig(void);
-void setup_signals();
-void sig_handler(int signum);
+static void get_sig_cmds(int signal);
+static FILE *open_config_file_at(const char *base, char **out_path);
+static char *parse_libconfig(void);
+static void setup_signals();
+static void sig_handler(int signum);
 #endif
-int get_status(char *str, char *last);
-void set_root();
-void status_loop();
-void term_handler(int signum);
-const char *xdg_config_home(void);
-
+static int get_status(char *str, char *last);
+static void set_root();
+static void status_loop();
+static void term_handler(int signum);
+static const char *xdg_config_home(void);
 
 
 static Display *dpy;
 static int screen;
 static Window root;
-static char *statusbar[50];
+static char (*statusbar)[50];
 static char statusstr[2][256];
 static int statusContinue = 1;
 static void (*writestatus) () = set_root;
@@ -44,23 +43,29 @@ static const char *delim = "|";
 static int block_size = 0;
 static Block *blocks;
 
+void free_blocks(void)
+{
+	for (int i = 0; i < block_size; i++)
+		free(blocks[i].cmd);
+}
+
 const char *xdg_config_home(void) {
 	char *xdgh = getenv("XDG_CONFIG_HOME");
 	char *home = getenv("HOME");
 	const char *default_dir = "/.config";
 
-	if (!xdgh) {
-		if (!home) {
+	if (!xdgh)
+	{
+		if (!home)
 			return NULL;
-		}
 
 		xdgh = malloc(strlen(home) + strlen(default_dir) + 1);
 
 		strcpy(xdgh, home);
 		strcat(xdgh, default_dir);
-	} else {
-		xdgh = strdup(xdgh);
 	}
+	else
+		xdgh = strdup(xdgh);
 	return xdgh;
 }
 
@@ -79,8 +84,8 @@ FILE *open_config_file_at(const char *base, char **out_path)
 		*out_path = out;
 		return ret;
 	}
-	else
-		free(out);
+
+	free(out);
 	return NULL;
 }
 
@@ -101,6 +106,7 @@ char *parse_libconfig(void)
 		goto err;
 	}
 	FILE *f = open_config_file_at(str, &path);
+	free((char *)str);
 
 	if (!path)
 	{
@@ -130,17 +136,19 @@ char *parse_libconfig(void)
 	{
 		int count = config_setting_length(setting);
 		int i;
-		block_size = count;
 		if (!is_init)
 		{
+			block_size = count;
 			blocks = calloc(block_size, sizeof(Block));
-			*statusbar = malloc(block_size);
+			statusbar = malloc(block_size * sizeof(*statusbar));
 			is_init = 1;
 		}
 		else
 		{
+			free_blocks();
+			block_size = count;
 			blocks = realloc(blocks, sizeof(Block) * block_size);
-			*statusbar = realloc(*statusbar, block_size);
+			statusbar = realloc(statusbar, block_size * sizeof(*statusbar));
 		}
 
 		for (i = 0; i < count; i++)
@@ -156,10 +164,9 @@ char *parse_libconfig(void)
 				continue;
 			blocks[i] = (Block) {.cmd = strdup(cmd), .interval = interval, .signal = signal};
 		}
+		config_destroy(&cfg);
 		return path;
 	}
-	else
-		goto err;
 err:
 	fprintf(stderr, "Error occurred on parsing/reading config file. Reverting to defaults\n");
 	free(path);
@@ -207,6 +214,7 @@ void get_cmd(const Block *block, char *output)
 	i = strlen(output);
     if ((i > 0 && block != &blocks[block_size - 1]))
         strcat(output, delim);
+
     i+=strlen(delim);
 	output[i++] = '\0';
 	pclose(cmdf);
@@ -217,9 +225,7 @@ void get_cmds(int time)
 	const Block* current;
 	for(int i = 0; i < block_size; i++)
 	{
-		printf("%d\n", i);
-		current = &blocks[i];
-		printf("%s\n", current->cmd);
+		current = blocks + i;
 		if ((current->interval != 0 && time % current->interval == 0) || time == -1)
 			get_cmd(current,statusbar[i]);
 	}
@@ -334,7 +340,10 @@ void button_handler(int sig, siginfo_t *si, void *ucontext)
 				break;
 		}
 		char shcmd[1024];
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 		sprintf(shcmd,"%s && kill -%d %d",current->cmd, current->signal+34,process_id);
+#pragma GCC diagnostic pop
 		char *command[] = { "/bin/sh", "-c", shcmd, NULL };
 		setenv("BLOCK_BUTTON", button, 1);
 		setsid();
@@ -342,12 +351,14 @@ void button_handler(int sig, siginfo_t *si, void *ucontext)
 		exit(EXIT_SUCCESS);
 	}
 }
-
 #endif
 
 void term_handler(int signum)
 {
 	statusContinue = 0;
+	free_blocks();
+	free(blocks);
+	free(statusbar);
 	exit(0);
 }
 
@@ -361,16 +372,15 @@ int main(int argc, char** argv)
 			writestatus = pstdout;
 	}
 
-	//char *path = parse_libconfig();
-	char *path = NULL;
+	char *path = parse_libconfig();
 
 	if (!path)
 	{
-		block_size = BLOCK_SIZE;
-		blocks = calloc(block_size, sizeof(Block));
-		*statusbar = malloc(block_size);
 		#include "dwmblocks.h"
+		block_size = BLOCK_SIZE;
 	}
+	else
+		free(path);
 
 	signal(SIGTERM, term_handler);
 	signal(SIGINT, term_handler);
