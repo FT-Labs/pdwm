@@ -21,7 +21,7 @@ options:
 
 ${OBJ}: config.h keys.h config.mk
 
-#${OBJ_BLOCKS}: dmwblocks.h config.mk
+${OBJ_BLOCKS}: dwmblocks.h
 
 dwm: ${OBJ}
 	${CC} -o $@ ${OBJ} ${LDFLAGS}

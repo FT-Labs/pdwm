@@ -12,41 +12,42 @@ typedef struct {
 	unsigned int interval;
 	unsigned int signal;
 } Block;
-static void free_blocks(void);
-static void sig_handler(int num);
-static void button_handler(int sig, siginfo_t *si, void *ucontext);
+static inline void free_blocks(void);
+void sig_handler(int num);
+void button_handler(int sig, siginfo_t *si, void *ucontext);
 void replace(char *str, char old, char new);
-static void remove_all(char *str, char to_remove);
-static void get_cmds(int time);
+void remove_all(char *str, char to_remove);
+void get_cmds(int time);
 #ifndef __OpenBSD__
 static void get_sig_cmds(int signal);
 static FILE *open_config_file_at(const char *base, char **out_path);
 static char *parse_libconfig(void);
-static void setup_signals();
-static void sig_handler(int signum);
+void setup_signals();
+void sig_handler(int signum);
 #endif
-static int get_status(char *str, char *last);
-static void set_root();
+int get_status(char *str, char *last);
+void set_root();
 static void status_loop();
-static void term_handler(int signum);
+void term_handler(int signum);
 static const char *xdg_config_home(void);
 
 
 static Display *dpy;
 static int screen;
 static Window root;
-static char (*statusbar)[50];
+static char (*statusbar)[CMDLENGTH];
 static char statusstr[2][256];
 static int statusContinue = 1;
-static void (*writestatus) () = set_root;
+void (*writestatus) () = set_root;
 static const char *delim = "|";
 static int block_size = 0;
 static Block *blocks;
 
-void free_blocks(void)
+inline void free_blocks(void)
 {
 	for (int i = 0; i < block_size; i++)
 		free(blocks[i].cmd);
+	free(blocks);
 }
 
 const char *xdg_config_home(void) {
@@ -139,15 +140,15 @@ char *parse_libconfig(void)
 		if (!is_init)
 		{
 			block_size = count;
-			blocks = calloc(block_size, sizeof(Block));
-			statusbar = malloc(block_size * sizeof(*statusbar));
+			blocks = malloc(block_size * sizeof(Block));
+			statusbar = calloc(block_size, sizeof(*statusbar));
 			is_init = 1;
 		}
 		else
 		{
 			free_blocks();
 			block_size = count;
-			blocks = realloc(blocks, sizeof(Block) * block_size);
+			blocks = malloc(sizeof(Block) * block_size);
 			statusbar = realloc(statusbar, block_size * sizeof(*statusbar));
 		}
 
@@ -161,7 +162,7 @@ char *parse_libconfig(void)
 			if (!(config_setting_lookup_string(block, "cmd", &cmd)
 				  && config_setting_lookup_int(block, "interval", &interval)
 				  && config_setting_lookup_int(block, "signal", &signal)))
-				continue;
+				return NULL;
 			blocks[i] = (Block) {.cmd = strdup(cmd), .interval = interval, .signal = signal};
 		}
 		config_destroy(&cfg);
@@ -357,7 +358,6 @@ void term_handler(int signum)
 {
 	statusContinue = 0;
 	free_blocks();
-	free(blocks);
 	free(statusbar);
 	exit(0);
 }
