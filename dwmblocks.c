@@ -8,11 +8,10 @@
 #define CMDLENGTH		50
 
 typedef struct {
-	char *cmd;
+	char cmd[CMDLENGTH];
 	unsigned int interval;
 	unsigned int signal;
 } Block;
-static inline void free_blocks(void);
 void sig_handler(int num);
 void button_handler(int sig, siginfo_t *si, void *ucontext);
 void replace(char *str, char old, char new);
@@ -42,13 +41,6 @@ void (*writestatus) () = set_root;
 static const char *delim = "|";
 static int block_size = 0;
 static Block *blocks;
-
-inline void free_blocks(void)
-{
-	for (int i = 0; i < block_size; i++)
-		free(blocks[i].cmd);
-	free(blocks);
-}
 
 const char *xdg_config_home(void) {
 	char *xdgh = getenv("XDG_CONFIG_HOME");
@@ -146,9 +138,8 @@ char *parse_libconfig(void)
 		}
 		else
 		{
-			free_blocks();
 			block_size = count;
-			blocks = malloc(sizeof(Block) * block_size);
+			blocks = realloc(blocks, sizeof(Block) * block_size);
 			statusbar = realloc(statusbar, block_size * sizeof(*statusbar));
 		}
 
@@ -163,7 +154,8 @@ char *parse_libconfig(void)
 				  && config_setting_lookup_int(block, "interval", &interval)
 				  && config_setting_lookup_int(block, "signal", &signal)))
 				return NULL;
-			blocks[i] = (Block) {.cmd = strdup(cmd), .interval = interval, .signal = signal};
+			blocks[i] = (Block) {.interval = interval, .signal = signal};
+			strcpy(blocks[i].cmd, cmd);
 		}
 		config_destroy(&cfg);
 		return path;
@@ -357,8 +349,11 @@ void button_handler(int sig, siginfo_t *si, void *ucontext)
 void term_handler(int signum)
 {
 	statusContinue = 0;
-	free_blocks();
-	free(statusbar);
+	if (signum == SIGKILL)
+	{
+		free(blocks);
+		free(statusbar);
+	}
 	exit(0);
 }
 
