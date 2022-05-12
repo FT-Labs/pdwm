@@ -21,7 +21,6 @@ static const long utfmax[UTF_SIZ + 1] = {0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFFF
 
 
 // Icon path to search for 32x32 png files -> statusbar
-static const char* iconpath = "/usr/share/phyos/dwm/icons/";
 static Picture icon_ximg[10];
 
 
@@ -509,86 +508,39 @@ drw_cur_free(Drw *drw, Cur *cursor)
 	free(cursor);
 }
 
-// Png draw support
-int
-get_png_files(const char *path, char ***png_list, char*** png_names)
-{
-	const unsigned char PNG_MAGIC[] = { 0x89, 0x50, 0x4e, 0x47,
-					    0x0d, 0x0a, 0x1a, 0x0a };
-	unsigned char header[8];
-	int nbytes, npngs = 0;
-	FILE *fp;
-	DIR *dp;
-	struct dirent *entry;
-	char **png_array;
-	char **png_n;
-
-	dp = opendir(path);
-	png_array = (char **) malloc(sizeof(char *) * 10);
-	png_n = (char **) malloc(sizeof(char *) * 10);
-	size_t plen = strlen(path);
-
-	while ((entry = readdir(dp)) != NULL) {
-		char* fpath = (char*) malloc(plen + strlen(entry->d_name) + 2);
-
-		if (fpath == NULL) {
-			fprintf(stderr, "memory alloc error");
-		}
-
-		if (strlen(entry->d_name) > 3) {
-			sprintf(fpath, "%s%s", path, entry->d_name);
-
-			if ((fp = fopen(fpath, "rb")) == NULL)
-				fprintf(stderr, "open %s fail\n", entry->d_name);
-
-			memset(header, 0, sizeof(header));
-			nbytes = fread(header, sizeof(unsigned char), sizeof(header), fp);
-
-			if (nbytes == sizeof(header) && !memcmp(header, PNG_MAGIC, sizeof(header))) {
-				png_array[npngs] = (char *) malloc(strlen(fpath) + 1);
-				png_n[npngs] = (char *) malloc(strlen(entry->d_name) + 1);
-				strcpy(png_array[npngs], fpath);
-				strcpy(png_n[npngs], entry->d_name);
-				npngs++;
-			}
-			fclose(fp);
-		}
-		if (npngs > 0 && npngs % 10 == 0) {
-			png_array = (char **) realloc(png_array,
-					sizeof(char *) * 10 * (npngs / 10 + 1));
-			png_n = (char **) realloc(png_n,
-					sizeof(char *) * 10 * (npngs / 10 + 1));
-
-		}
-		free(fpath);
-	}
-
-	closedir(dp);
-	png_array = (char **) realloc(png_array, sizeof(char *) * npngs);
-	png_n = (char **) realloc(png_n, sizeof(char *) * npngs);
-	*png_list = png_array;
-	*png_names = png_n;
-
-	return npngs;
-}
-
 void
 load_png_icons(Drw* drw, unsigned int w, unsigned int h)
 {
-	if (drw && !icon_ximg[0]) {
-		char **png_files;
-		char **png_names;
-		int n;
+	if (!drw || icon_ximg[0])
+		return;
+
+	static const char* iconpath = "/usr/share/phyos/dwm/icons";
 		unsigned int* data;
 		Imlib_Image image;
 		Picture pic;
 
-		n = get_png_files(iconpath, &png_files, &png_names);
+		struct dirent *dp;
+		DIR *dfd;
 
-		for (int i=0; i<n && png_files[i] != NULL; i++)
+		if (!(dfd = opendir(iconpath)))
 		{
-			int idx = png_names[i][0] - '0';
-			image = imlib_load_image(png_files[i]);
+			fprintf(stderr, "Can't open %s\n", iconpath);
+			return;
+		}
+
+		char fname[284];
+
+		while ((dp = readdir(dfd)))
+		{
+			struct stat stbuf;
+			sprintf(fname, "%s/%s", iconpath, dp->d_name);
+			int s = stat(fname, &stbuf);
+
+			if (s == -1 || S_ISDIR(s) || strlen(dp->d_name) <= 2)
+				continue; /* Can't stat file, just continue */
+
+			int idx = *dp->d_name - '0';
+			image = imlib_load_image(fname);
 			imlib_context_set_image(image);
 			imlib_image_set_has_alpha(1);
 			data = imlib_image_get_data_for_reading_only();
@@ -603,7 +555,6 @@ load_png_icons(Drw* drw, unsigned int w, unsigned int h)
 			icon_ximg[idx] = pic;
 			imlib_free_image();
 		}
-	}
 }
 
 void
