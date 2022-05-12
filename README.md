@@ -15,32 +15,11 @@
 (Power menu 'right one is to renew dwm without restart')
 <img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s6.png">
 
-
  This modified suckless **dwm** window manager is built for arch based _phyOS_ distro but can be installed with following for any linux OS.
  - Beta version iso has been released on gitlab. It will automatically install everything and clean up bloat packages with calamares.
  - https://gitlab.com/phytech/phyos-iso
 
 ### Click on 'Keys' button on top left in status bar to check out keybindings.
-
-### Requirement for total functionality:
-
- - light
- - picom
- - unclutter
- - rofi
- - dmenu
- - lf
- - xmenu
- - s-tui (stress test)
- - cointop (terminal crypto prices)
- - nvtop (nvidia gpu monitor)
- - pamixer
- - pulsemixer
- - imlib2
- - maim
- - joypixels emoji font
- - zathura (pdf reader, used for keys)
-
 #### Non-arch users need to install all of them seperately from links below:
 Programs below are all **source code modified** programs therefore all of them are needed to download from:
  - Simple installation would work for all repos other than fonts-phyOS, clone the repo and:
@@ -62,10 +41,30 @@ All dwmblocks and scripts are in **dwmblocksconfig** directory. All configuratio
 if it is not found it will revert to default. Note that if __statusbar__ scripts are not in path, it won't work correctly. Please be sure that all scripts are something in your **$PATH** variable.
 #### Path for config file must be: "$HOME/.config/phyos/dwmblocks"
 - I thought about creating this folder and configuration files automatically, however they will erase on if you changed your config file and reinstalled dwm. Therefore please create this folder, move everything in **dwmblocksconfig** to path above and follow the steps below.
+- All blocks in bar is clickable. It will open programs, or make some action if clicked. Just check scripts for how to implement your own.
 - In **dwmblocksconfig** folder, there is a main configuration file called __dwmblocks.cfg__ . This is the main config file, you can add or delete any configuration files from there by __@include__ directive, just use the same syntax in that file.
 - All the bash scripts can be found in **dwmblocksconfig/scripts**. Choose any scripts you want, then add them on your path, like "/usr/local/bin" etc. or anywhere you want.
 - Don't delete .cfg files contained in **dwmblocksconfig/statusbar**, you can add or remove them from main config file. Not included files won't be loaded in dwmblocks.
 - Note that most scripts use glyphs, please install a compatible nerd font for it. You can checkout fonts-phyOS repo for default fonts that i currenty use.
+
+### Requirement for total functionality:
+
+ - light
+ - picom
+ - unclutter
+ - rofi
+ - dmenu
+ - lf
+ - xmenu
+ - s-tui (stress test)
+ - cointop (terminal crypto prices)
+ - nvtop (nvidia gpu monitor)
+ - pamixer
+ - pulsemixer
+ - imlib2
+ - maim
+ - joypixels emoji font
+ - zathura (pdf reader, used for keys)
 
 ### I am currently maintaning this for arch linux only, therefore arch users can follow the below instructions to install everything easily:
 
