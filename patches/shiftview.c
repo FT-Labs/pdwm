@@ -66,3 +66,4 @@ shifttag(const Arg *arg)
 		tag(&a);
 	}
 }
+

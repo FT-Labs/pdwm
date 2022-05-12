@@ -45,10 +45,10 @@ install: all
 	cp -f dwm dwmblocks ${DESTDIR}${PREFIX}/bin
 	chmod 755 ${DESTDIR}${PREFIX}/bin/{dwm,dwmblocks}
 	mkdir -p ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
-	cp -f icons/*.png ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
-	cp -f keys-dwm.pdf ${DESTDIR}${PREFIX}/share/phyos/dwm/
+	cp -f patches/icons/*.png ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
+	cp -f patches/keys-dwm.pdf ${DESTDIR}${PREFIX}/share/phyos/dwm/keys-dwm.pdf
 	mkdir -p $(DESTDIR)${PREFIX}/share/xsessions
-	cp -f dwm.desktop ${DESTDIR}${PREFIX}/share/xsessions/
+	cp -f patches/dwm.desktop ${DESTDIR}${PREFIX}/share/xsessions/dwm.desktop
 
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/{dwm,dwmblocks} \

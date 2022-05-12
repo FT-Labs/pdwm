@@ -1062,7 +1062,7 @@ drawbar(Monitor *m, Client *cdock)
 
 		while (sb_arr[i] != NULL)
 		{
-			if (sb_arr[i][0] != 'S') {
+			if (strlen(sb_arr[i]) != 1) {
 				tw += TEXTW_SB(sb_arr[i]);
 				tw += 3 * sb_delimiter_w;
 			}
@@ -1085,8 +1085,8 @@ drawbar(Monitor *m, Client *cdock)
 		while (sb_arr[i] != NULL) {
 			drw_setscheme(drw, scheme[SchemeInfoSel]);
 
-			if (sb_arr[i][0] == 'S') {
-				int idx = sb_arr[i][1] - '0';
+			if (strlen(sb_arr[i]) == 1) {
+				int idx = sb_arr[i][0] - '0';
 				i++;
 				drw_pic(drw, m->ww - twtmp, 2, sb_icon_wh, sb_icon_wh, None, idx);
 				twtmp -= sb_icon_wh + sb_icon_x_margin;

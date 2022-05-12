@@ -1,10 +1,8 @@
 /* See LICENSE file for copyright and license details. */
-#include "tcl.c"
 
 /* Constants */
 #define TERMINAL "st"
 #define TERMCLASS "St"
-
 
 /* appearance */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
@@ -25,7 +23,7 @@ static const char *fonts[]          = { "JetBrains Mono:style=Regular:size=16", 
 static char dmenufont[]             = "JetBrains Mono:style=Regular:size=16";
 static char dmenuh[] = "36";
 
-#include "themes/catpuccin.h"
+#include "patches/themes/catpuccin.h"
 #define selbordercolor blue
 #define normbordercolor gray2
 
@@ -104,7 +102,7 @@ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] 
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 #define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
-#include "vanitygaps.c"
+#include "patches/vanitygaps.c"
 static const Layout layouts[] = {
 	/* symbol     arrange function */
  	{ "[]=",	tile },			/* Default: Master on left, slaves on right */
@@ -116,7 +114,6 @@ static const Layout layouts[] = {
 	{ "|M|",	centeredmaster },		/* Master in middle, slaves on sides */
 	{ ">M>",	centeredfloatingmaster },	/* Same but master floats */
 	{ "><>",	NULL },			/* no layout function means floating behavior */
-	{ "|||",    tcl },   /* Column Layout */
 	{ NULL,		NULL }
 };
 
@@ -144,7 +141,7 @@ static const char *termcmd[]  = { TERMINAL, NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
 
 #include <X11/XF86keysym.h>
-#include "shiftview.c"
+#include "patches/shiftview.c"
 
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
@@ -159,9 +156,9 @@ static Button buttons[] = {
 	{ ClkStatusText,        0,              Button5,        sigdwmblocks,   {.i = 5} },
 #endif
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-	{ ClkClientWin,         MODKEY,         Button2,        toggledock,		{0} },
+	{ ClkClientWin,         MOD2KEY,        Button3,        toggledock,		{0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-	{ ClkClientWin,         MOD2KEY,        Button2,        hide,			{.i = -1} },
+	{ ClkClientWin,         MOD2KEY,        Button1,        hide,			{.i = -1} },
 	{ ClkLtSymbol,			0,				Button3,		layoutmenu,		{0}	},
 	{ ClkRootWin,			MODKEY,			Button4,		shiftview,		{.i = +1} },
 	{ ClkRootWin,			MODKEY,			Button5,		shiftview,		{.i = -1} },
