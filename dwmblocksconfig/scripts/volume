@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# Prints the current volume or 🔇 if muted.
+
+
+case $BLOCK_BUTTON in
+	1) setsid -f "$TERMINAL" -e pulsemixer ;;
+	3) notify-send "📢 Volume module" "\- Shows volume 🔊, 🔇 if muted." ;;
+esac
+
+function send_notification {
+  iconSound=""
+  iconMuted=""
+  if [ $(pamixer --get-mute) = true ]; then
+    dunstify -r 3 -a top-center -u normal "$iconMuted    Muted"
+  else
+    bar=$(seq --separator="─" 0 "$((vol / 5))" | sed 's/[0-9]//g')
+    dunstify -r 3 -a top-center -u normal "$iconSound $bar"
+  fi
+}
+
+vol="$(pamixer --get-volume)"
+
+[ $(pamixer --get-mute) = true ] && send_notification && echo 🔇 && exit
+
+if [ "$vol" -gt "70" ]; then
+	icon="🔊"
+elif [ "$vol" -lt "30" ]; then
+	icon="🔈"
+else
+	icon="🔉"
+fi
+
+send_notification && echo "$icon  $vol%"

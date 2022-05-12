@@ -1,0 +1,12 @@
+#!/bin/sh
+
+case $BLOCK_BUTTON in
+	1) "$TERMINAL" -e nmtui; pkill -RTMIN+4 dwmblocks ;;
+esac
+
+case "$(cat /sys/class/net/w*/operstate 2>/dev/null)" in
+	down) wifiicon="睊 0%" ;;
+	up) wifiicon="$(awk '/^\s*w/ { print "   " int($3 * 100 / 70) "%" }' /proc/net/wireless)" ;;
+esac
+
+printf "%s%s\n" "$wifiicon" "$(sed "s/down//;s/up//" /sys/class/net/e*/operstate 2>/dev/null)"
