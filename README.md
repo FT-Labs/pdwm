@@ -1,4 +1,5 @@
-## dwm-phyOS
+## dwm-phyOS (dwm and dwmblocks in one)
+## Clickable and modifiable dwmblocks without compiling, all editing can be done from configuration files
 
 ### Screenshots
 
@@ -21,7 +22,7 @@
 
 ### Click on 'Keys' button on top left in status bar to check out keybindings.
 
- ### Requirement for total functionality:
+### Requirement for total functionality:
 
  - light
  - picom
@@ -51,12 +52,20 @@ Main account : **https://github.com/PhyTech-R0**
  - https://github.com/PhyTech-R0/dunst-phyOS
  - https://github.com/PhyTech-R0/fonts-phyOS
  - https://github.com/PhyTech-R0/st-phyOS
- - https://github.com/PhyTech-R0/dwmblocks-phyOS
 
-## IMPORTANT!! READ BELOW
+### IMPORTANT!! READ BELOW (If you just want statusbar scripts, you can omit this just read below)
 Make sure to use my dotfiles, all of the **scripts** and path variables need to be set correctly for full functionality.
  - https://github.com/PhyTech-R0/dotfiles
 
+### ABOUT DWMBLOCKS AND SCRIPTS
+All dwmblocks and scripts are in **dwmblocksconfig** directory. All configuration files can be read from single path only,
+if it is not found it will revert to default. Note that if __statusbar__ scripts are not in path, it won't work correctly. Please be sure that all scripts are something in your **$PATH** variable.
+#### Path for config file must be: "$HOME/.config/phyos/dwmblocks"
+- I thought about creating this folder and configuration files automatically, however they will erase on if you changed your config file and reinstalled dwm. Therefore please create this folder, move everything in **dwmblocksconfig** to path above and follow the steps below.
+- In **dwmblocksconfig** folder, there is a main configuration file called __dwmblocks.cfg__ . This is the main config file, you can add or delete any configuration files from there by __@include__ directive, just use the same syntax in that file.
+- All the bash scripts can be found in **dwmblocksconfig/scripts**. Choose any scripts you want, then add them on your path, like "/usr/local/bin" etc. or anywhere you want.
+- Don't delete .cfg files contained in **dwmblocksconfig/statusbar**, you can add or remove them from main config file. Not included files won't be loaded in dwmblocks.
+- Note that most scripts use glyphs, please install a compatible nerd font for it. You can checkout fonts-phyOS repo for default fonts that i currenty use.
 
 ### I am currently maintaning this for arch linux only, therefore arch users can follow the below instructions to install everything easily:
 
