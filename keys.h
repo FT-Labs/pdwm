@@ -43,7 +43,7 @@ static Key keys[] = {
 	{ MOD2KEY,	    	XK_6,		setlayout,	{.v = &layouts[5]} }, /* dwindle */
 	{ MOD2KEY,			XK_7,		setlayout,	{.v = &layouts[6]} }, /* centeredmaster */
 	{ MOD2KEY,  		XK_8,		setlayout,	{.v = &layouts[7]} }, /* centeredfloatingmaster */
-	{ MOD2KEY, 		    XK_0,   setlayout, {.v = &layouts[8]} },	  /* Floating layout */
+	{ MOD2KEY, 		    XK_9,	    setlayout, {.v = &layouts[8]} },	  /* Floating layout */
 	{ MODKEY,			XK_BackSpace,	spawn,		SHCMD("sysact") },
 	{ MOD2KEY,			XK_Tab,		spawn,		SHCMD("rofi -show window") },
 	{ MODKEY,			XK_q,		killclient,	{0} },
