@@ -589,25 +589,26 @@ unswallow(Client *c)
 int
 processrawtext(char* text) {
 	int x = 0, i;
+	int s = strlen(text);
 
-	for (i = 0; i<strlen(text) && text[i] != '\0'; i++) {
+	for (i = 0; i<s && text[i] != '\0'; i++) {
 		if (text[i] == '|') {
-			// If seperator and next char is not icon (icon char is S)
-			if (text[i+1] != 'S') {
-				x += (3 * sb_delimiter_w) / 2;
+			// If seperator and next char is not icon (between |0-9|, just 1 character)
+			if (!BETWEEN(text[i+1], '0', '9') || i+2 < s || text[i+2] != '|') {
+				x += (sb_delimiter_w + sb_icon_x_margin * 2) / 2;
 			}
 			x -= TEXTW_SB("|");
 		}
-		else if (text[i] == 'S') {
+		else if (BETWEEN(text[i], '0', '9') && text[i+1] == '|' && (i == 0 || text[i-1] == '|' )) {
 			// If icon, delete seperator margin and add icon size + icon_x_margin
 			x += sb_icon_wh + sb_icon_x_margin;
-			x -= 3 * sb_delimiter_w;
-			char tmp[2]; tmp[0] = text[i], tmp[1] = text[i+1];
+			x -= (sb_delimiter_w + 2 * sb_icon_x_margin)/2;
+			char tmp[] = {text[i], '\0'};
 			x -= TEXTW_SB(tmp);
 		}
 		else if (text[i+1] == '|') {
 			// If next element is seperator add half width
-			x += (3 * sb_delimiter_w) / 2;
+			x += (2 * sb_icon_x_margin + sb_delimiter_w) / 2;
 		}
 	}
 
@@ -1064,7 +1065,7 @@ drawbar(Monitor *m, Client *cdock)
 		{
 			if (strlen(sb_arr[i]) != 1) {
 				tw += TEXTW_SB(sb_arr[i]);
-				tw += 3 * sb_delimiter_w;
+				tw += sb_delimiter_w + 2 * sb_icon_x_margin;
 			}
 			else
 				tw += sb_icon_wh + sb_icon_x_margin;
@@ -1073,7 +1074,6 @@ drawbar(Monitor *m, Client *cdock)
 
 
 		i = 0;
-		tw -= 3 * sb_delimiter_w - 2 * sb_icon_x_margin;
 		sb_tw = tw;
 		twtmp = tw;
 
@@ -1086,9 +1086,8 @@ drawbar(Monitor *m, Client *cdock)
 			drw_setscheme(drw, scheme[SchemeInfoSel]);
 
 			if (strlen(sb_arr[i]) == 1) {
-				int idx = sb_arr[i][0] - '0';
-				i++;
-				drw_pic(drw, m->ww - twtmp, 2, sb_icon_wh, sb_icon_wh, None, idx);
+				int idx = sb_arr[i++][0] - '0';
+				drw_pic(drw, m->ww - twtmp, (bh - sb_icon_wh) / 2, sb_icon_wh, sb_icon_wh, None, idx);
 				twtmp -= sb_icon_wh + sb_icon_x_margin;
 				drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
 				twtmp -= TEXTW_SB(sb_arr[i]);
@@ -1121,11 +1120,11 @@ drawbar(Monitor *m, Client *cdock)
 
 			// Below draws seperators
 			if (sb_arr[i+1] != NULL) {
-				twtmp -= sb_delimiter_w;
+				twtmp -= sb_icon_x_margin;
 				drw_setscheme(drw, scheme[SchemeSel]);
 				drw_rect(drw, m->ww - twtmp + sb_delimiter_w / 4, y, sb_delimiter_w / 2, bh , 1, 0);
-				drw_rect(drw, m->ww - twtmp, y + 4, sb_delimiter_w, bh - 8, 1, 0);
-				twtmp -= 2 * sb_delimiter_w;
+				drw_rect(drw, m->ww - twtmp, y + bh/10, sb_delimiter_w, bh - 2 * bh/10, 1, 0);
+				twtmp -= sb_delimiter_w + sb_icon_x_margin;
 			}
 			i++;
 		}
@@ -1164,7 +1163,7 @@ drawbar(Monitor *m, Client *cdock)
 		drw_setscheme(drw, scheme[SchemeTagsNorm]);
 		drw_rect(drw, x, y, w + sb_icon_wh + sb_icon_x_margin, bh, 1, 1);
 		drw_text(drw, x, y, w, bh, lrpad / 2, config[i].name, 0);
-		drw_pic(drw, x + w, 2, sb_icon_wh, sb_icon_wh, None, i+1);
+		drw_pic(drw, x + w, (bh - sb_icon_wh) / 2, sb_icon_wh, sb_icon_wh, None, i+1);
 		w += sb_icon_wh + sb_icon_x_margin;
 		drw_setscheme(drw, scheme[SchemeTagsNorm]);
 		drw_rect(drw, x, y, w, bh, 0, 0);

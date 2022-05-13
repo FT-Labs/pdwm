@@ -18,10 +18,10 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const int showdock			= 1;
 static const int user_dh			= 80;
 static const int docklrmargin		= 64;
-static const int user_bh			= 36;		/* 0 means normal bar height, >1 means user bar height */
+static const int user_bh			= 40;		/* 0 means normal bar height, >1 means user bar height */
 static const char *fonts[]          = { "JetBrains Mono:style=Regular:size=16", "Symbols Nerd Font:style=2048-em:size=20","JoyPixels:size=16:antialias=true:autohint=true"};
 static char dmenufont[]             = "JetBrains Mono:style=Regular:size=16";
-static char dmenuh[] = "36";
+static char dmenuh[] = "40";
 
 #include "patches/themes/catpuccin.h"
 #define selbordercolor blue
@@ -44,19 +44,19 @@ static char dmenuh[] = "36";
 static char normbgcolor[]           = "#222222";
 static char normfgcolor[]           = "#121212";
 static char selfgcolor[]            = "#e0ffff";
-static char infobarusbgcolor[]	    = "#878787";
+// static char infobarusbgcolor[]	    = "#878787";
 
 /* Status bar left logo sizes */
 static const unsigned int sb_logo_w = 35;
 static const unsigned int sb_logo_h = 30;
-static const unsigned int sb_logo_y_margin = 3;
+static const unsigned int sb_logo_y_margin = 5;
 
 /* Default icon width, height, margin and delimiter width */
 static const unsigned int sb_icon_wh = 32;
 static const unsigned int sb_icon_x_margin = 12;
-static const unsigned int sb_delimiter_w = 8;
+static const unsigned int sb_delimiter_w = 4;
 
-/* Status bar x and y margin */
+/* Status bar x  y margin */
 static const unsigned int sb_margin = 12;
 
 /* Icon size for status text */
@@ -66,12 +66,12 @@ static const unsigned int sb_margin = 12;
 static char *colors[][3] = {
        /*               fg           bg           border   */
        [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
-       [SchemeSel]  = { selfgcolor,  green,  selbordercolor  },
+       [SchemeSel]  = { blue2,  green,  selbordercolor  },
 	   [SchemeStatus] = { statustextcolor, statusbgcolor, "#000000" },
 	   [SchemeTagsSel] = { tagbarstextcolor, tagbarsbgcolor, "#000000" },
 	   [SchemeTagsNorm] = { tagbarustextcolor, tagbarusbgcolor, "#000000" },
 	   [SchemeInfoSel] = { infobarstextcolor, infobarsbgcolor, "#000000" },
-	   [SchemeInfoNorm] = { infobarustextcolor, infobarusbgcolor, "#000000" },
+	   [SchemeInfoNorm] = { infobarustextcolor, infobarsbgcolor, "#000000" },
 	   [SchemeOptimal] = { green, statusbgcolor, "#000000" },
 	   [SchemeCritical] = { red, statusbgcolor, "#000000" },
 };
