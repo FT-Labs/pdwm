@@ -139,6 +139,18 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", "#000000", "-nf", tagbarustextcolor, "-sb", tagbarsbgcolor, "-sf", tagbarstextcolor, "-h", dmenuh,  NULL };
 static const char *termcmd[]  = { TERMINAL, NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
+// static const char *layoutmenu_cmd = "#!/bin/sh"
+// "cat <<EOF | xmenu"
+// "[]=   Tiled Layout	0"
+// "TTT   Backstack Layout	1"
+// "[M]   Monocle Layout		2"
+// "H[]   Deck Layout		3"
+// "[@]   Spiral Layout	4 "
+// "[\\]   Dwindle Layout		5"
+// "|M|   Centered Master Layout		6"
+// ">M>   Centered Floating Master Layout		7"
+// "><>   Floating Layout		8"
+// "EOF";
 
 #include <X11/XF86keysym.h>
 #include "patches/shiftview.c"
@@ -159,6 +171,7 @@ static Button buttons[] = {
 	{ ClkClientWin,         MOD2KEY,        Button3,        toggledock,		{0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
 	{ ClkClientWin,         MOD2KEY,        Button1,        hide,			{.i = -1} },
+	{ ClkRootWin,			MOD2KEY,  		Button3,		toggledock,		{0} },
 	{ ClkLtSymbol,			0,				Button3,		layoutmenu,		{0}	},
 	{ ClkRootWin,			MODKEY,			Button4,		shiftview,		{.i = +1} },
 	{ ClkRootWin,			MODKEY,			Button5,		shiftview,		{.i = -1} },
@@ -168,7 +181,6 @@ static Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkTagBar,			0,				Button4,		shiftview,		{.i = -1} },
 	{ ClkTagBar,			0,				Button5,		shiftview,		{.i = 1} },
-	{ ClkRootWin,			MODKEY,  		Button2,		toggledock,		{0} },
 };
 
 #include "keys.h"

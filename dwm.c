@@ -2465,8 +2465,6 @@ togglebar(const Arg *arg)
 void
 toggledock(const Arg *arg)
 {
-	if (!selmon->sel)
-		return;
 	selmon->showdock = (selmon->showdock ? 0 : 1);
 	if (selmon->showdock) {
 		drawdock(selmon);
