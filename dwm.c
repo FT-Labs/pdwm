@@ -2889,6 +2889,14 @@ updatetitle(Client *c)
 }
 
 void
+updatetag(Client *c)
+{
+	if (!c)
+		return;
+
+}
+
+void
 updateicon(Client *c)
 {
 	freeicon(c);
