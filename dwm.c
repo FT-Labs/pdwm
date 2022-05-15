@@ -266,6 +266,7 @@ static void scan(void);
 static int sendevent(Client *c, Atom proto);
 static void sendmon(Client *c, Monitor *m);
 static void setclientstate(Client *c, long state);
+static void setclienttagprop(Client *c);
 static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen);
 static void setlayout(const Arg *arg);
@@ -1651,6 +1652,30 @@ manage(Window w, XWindowAttributes *wa)
 			&& (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
 	}
 
+	{
+		int format;
+		unsigned long *data, n, extra;
+		Monitor *m;
+		Atom atom;
+
+		if (XGetWindowProperty(dpy, c->win, netatom[NetClientTag], 0L, 2L, False, XA_CARDINAL,
+				&atom, &format, &n, &extra, (unsigned char **)&data)  == Success && n == 2)
+		{
+
+			c->tags = *data;
+
+			for (m = mons; m; m = m->next)
+			{
+				if (m->num == *(data+1))
+				{
+					c->mon = m;
+					break;
+				}
+			}
+			XFree(data);
+		}
+	}
+	setclienttagprop(c);
 	c->bw = c->mon->borderpx;
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
@@ -2133,6 +2158,14 @@ setclientstate(Client *c, long state)
 		PropModeReplace, (unsigned char *)data, 2);
 }
 
+void
+setclienttagprop(Client *c)
+{
+	long data[] = { (long) c->tags, (long) c->mon->num };
+	XChangeProperty(dpy, c->win, netatom[NetClientTag], XA_CARDINAL, 32,
+			PropModeReplace, (unsigned char *) data, 2);
+}
+
 int
 sendevent(Client *c, Atom proto)
 {
@@ -2439,8 +2472,11 @@ spawn(const Arg *arg)
 void
 tag(const Arg *arg)
 {
+	Client *c;
 	if (selmon->sel && arg->ui & TAGMASK) {
+		c = selmon->sel;
 		selmon->sel->tags = arg->ui & TAGMASK;
+		setclienttagprop(c);
 		focus(NULL);
 		arrange(selmon);
 	}
@@ -2452,6 +2488,7 @@ tagmon(const Arg *arg)
 	if (!selmon->sel || !mons->next)
 		return;
 	sendmon(selmon->sel, dirtomon(arg->i));
+	setclienttagprop(selmon->sel);
 }
 
 void
@@ -2542,6 +2579,7 @@ toggletag(const Arg *arg)
 	newtags = selmon->sel->tags ^ (arg->ui & TAGMASK);
 	if (newtags) {
 		selmon->sel->tags = newtags;
+		setclienttagprop(selmon->sel);
 		focus(NULL);
 		arrange(selmon);
 	}
@@ -3176,6 +3214,7 @@ swaptags(const Arg *arg)
 			c->tags ^= curtag ^ newtag;
 
 		if(!c->tags) c->tags = newtag;
+		setclienttagprop(c);
 	}
 
 	selmon->tagset[selmon->seltags] = newtag;
