@@ -47,6 +47,6 @@ do
 
 	if [ "$capacity" -lt 31 ]; then
 		[ ! -f /tmp/batstat ] && touch /tmp/batstat && dunstify -r 5 -a top-center -u critical " BATTERY CRITICAL"
-		[ -z "$(find "/tmp/batstat" -mmin -5)" ] && dunstify -r 5 -a top-center -u critical " BATTERY CRITICAL"
+		[ -z "$(find "/tmp/batstat" -mmin -10)" ] && touch /tmp/batstat && dunstify -r 5 -a top-center -u critical " BATTERY CRITICAL"
 	fi
 done | sed 's/ *$//'
