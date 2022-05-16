@@ -1672,8 +1672,9 @@ manage(Window w, XWindowAttributes *wa)
 					break;
 				}
 			}
-			XFree(data);
 		}
+		if (n > 0)
+			XFree(data);
 	}
 	setclienttagprop(c);
 	c->bw = c->mon->borderpx;
