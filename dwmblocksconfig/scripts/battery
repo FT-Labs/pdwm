@@ -6,7 +6,6 @@
 
 # acpi alternative
 # acpi | sed "s/Battery [0-9]: //;s/[Dd]ischarging, /🔋/;s/[Nn]ot charging, /🛑/;s/[Cc]harging, /🔌/;s/[Uu]nknown, /♻️/;s/[Ff]ull, /⚡/;s/ \(remaining\|until charged\)//"; exit
-capacity=0
 
 # Loop through all attached batteries.
 for battery in /sys/class/power_supply/BAT?
@@ -45,9 +44,9 @@ do
 
 	printf "%s%s%s%% " "$status " "$warn" "$capacity"
 	unset warn
-done | sed 's/ *$//'
 
-if [ "$capacity" -lt 31 ]; then
-	[ ! -f /tmp/batstat ] && touch /tmp/batstat && dunstify -r 5 -a top-center -u critical " BATTERY CRITICAL"
-	[ -z "$(find "/tmp/batstat" -mmin -5)" ] && dunstify -r 5 -a top-center -u critical " BATTERY CRITICAL"
-fi
+	if [ "$capacity" -lt 31 ]; then
+		[ ! -f /tmp/batstat ] && touch /tmp/batstat && dunstify -r 5 -a top-center -u critical " BATTERY CRITICAL"
+		[ -z "$(find "/tmp/batstat" -mmin -5)" ] && dunstify -r 5 -a top-center -u critical " BATTERY CRITICAL"
+	fi
+done | sed 's/ *$//'
