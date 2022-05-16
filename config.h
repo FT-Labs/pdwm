@@ -139,18 +139,6 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", "#000000", "-nf", tagbarustextcolor, "-sb", tagbarsbgcolor, "-sf", tagbarstextcolor, "-h", dmenuh,  NULL };
 static const char *termcmd[]  = { TERMINAL, NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
-// static const char *layoutmenu_cmd = "#!/bin/sh"
-// "cat <<EOF | xmenu"
-// "[]=   Tiled Layout	0"
-// "TTT   Backstack Layout	1"
-// "[M]   Monocle Layout		2"
-// "H[]   Deck Layout		3"
-// "[@]   Spiral Layout	4 "
-// "[\\]   Dwindle Layout		5"
-// "|M|   Centered Master Layout		6"
-// ">M>   Centered Floating Master Layout		7"
-// "><>   Floating Layout		8"
-// "EOF";
 
 #include <X11/XF86keysym.h>
 #include "patches/shiftview.c"
