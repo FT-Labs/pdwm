@@ -1234,6 +1234,11 @@ drawdock(Monitor *m)
 				}
 			}
 		}
+		if (!curtagc)
+		{
+			toggledock(NULL);
+			return;
+		}
 		curdockwidth -= sb_icon_x_margin;
 		XMoveResizeWindow(dpy, m->dockwin, m->wx + (m->ww - curdockwidth)/2, y, curdockwidth, user_dh);
 		drw_map(drw, m->dockwin, 0, y, curdockwidth, user_dh);
@@ -1732,8 +1737,6 @@ motionnotify(XEvent *e)
 
 	if (ev->window == selmon->dockwin)
 		dockevent(e, 0);
-	else if (selmon->showdock)
-		toggledock(NULL);
 
 	if (ev->window != root)
 		return;
@@ -2467,6 +2470,8 @@ toggledock(const Arg *arg)
 	selmon->showdock = (selmon->showdock ? 0 : 1);
 	if (selmon->showdock) {
 		drawdock(selmon);
+		if (!curtagc)
+			return;
 		XRaiseWindow(dpy, selmon->dockwin);
 		XWarpPointer(dpy, None, selmon->dockwin, 0, 0, 0, 0, docklrmargin/2 + sb_icon_wh/2, user_dh/2);
 	}
