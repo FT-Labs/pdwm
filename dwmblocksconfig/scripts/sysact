@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+# Available Styles
+# >> Created and tested on : rofi 1.6.0-1
+#
+# column_circle     column_square     column_rounded     column_alt
+# card_circle     card_square     card_rounded     card_alt
+# dock_circle     dock_square     dock_rounded     dock_alt
+# drop_circle     drop_square     drop_rounded     drop_alt
+# full_circle     full_square     full_rounded     full_alt
+# row_circle      row_square      row_rounded      row_alt
+
+theme="card_alt"
+dir="$HOME/.config/rofi/powermenu"
+
+# random colors
+styles=($(ls -p --hide="colors.rasi" $dir/styles))
+color="${styles[$(( 2 ))]}"
+
+# comment this line to disable random colors
+#sed -i -e "s/@import .*/@import \"$color\"/g" $dir/styles/colors.rasi
+
+# comment these lines to disable random style
+#themes=($(ls -p --hide="powermenu.sh" --hide="styles" --hide="confirm.rasi" --hide="message.rasi" $dir))
+#theme="${themes[$(( $RANDOM % 24 ))]}"
+
+uptime=$(uptime -p | sed -e 's/up //g')
+
+rofi_command="rofi -theme $dir/$theme"
+
+# Options
+shutdown=""
+reboot="ﰇ"
+lock=""
+logout="﫼"
+renew_dwm=""
+
+case "$(readlink -f /sbin/init)" in
+	*systemd*) ctl='systemctl' ;;
+	*) ctl='loginctl' ;;
+esac
+
+# Variable passed to rofi
+options="$logout\n$lock\n$shutdown\n$reboot\n$renew_dwm"
+
+chosen="$(echo -e "$options" | $rofi_command -p "Uptime: $uptime" -dmenu -selected-row 2)"
+case $chosen in
+    $logout)
+		kill -TERM $(pidof -s dwm) && xdotool key Super_L ;;
+    $lock)
+		dm-tool lock ;;
+    $shutdown)
+		$ctl poweroff -i ;;
+    $reboot)
+		$ctl reboot -i ;;
+	$renew_dwm)
+		kill -HUP $(pidof -s dwm) && xdotool key Super_L ;;
+esac

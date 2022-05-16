@@ -1,0 +1,22 @@
+#!/bin/sh
+
+
+function send_notification {
+  bar=$(seq --separator="─" 0 "$(( brightness / 5 ))" | sed 's/[0-9]//g')
+  dunstify -r 3 -a top-center -u normal "$icon $bar"
+}
+
+brightness="$(light -G)"
+brightness=$(printf '%.0f' "$brightness")
+
+if [ "$brightness" -gt "80" ]; then
+	icon=""
+elif [ "$brightness" -gt "50" ]; then
+	icon=""
+elif [ "$brightness" -gt "25" ]; then
+	icon=""
+else
+	icon=""
+fi
+
+send_notification
