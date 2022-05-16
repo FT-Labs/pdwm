@@ -75,7 +75,7 @@ Append package repo end of your `/etc/pacman.conf` :
     Server = https://PhyTech-R0.github.io/$repo/$arch
 Then install necessary programs with **pacman** easily:
 
-    pacman -Sy phyOS-dwm phyOS-dunst phyOS-dwmblocks phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi picom unclutter lf ttf-joypixels light
+    pacman -Sy phyOS-dwm phyOS-dunst phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi picom unclutter lf ttf-joypixels light
 
 #### Installation for different distros then arch linux:
     git clone https://github.com/PhyTech-R0/dwm-phyOS
