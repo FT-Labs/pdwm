@@ -94,7 +94,7 @@ enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum { SchemeNorm, SchemeSel, SchemeStatus, SchemeTagsSel, SchemeTagsNorm, SchemeInfoSel, SchemeInfoNorm, SchemeOptimal, SchemeCritical }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMIcon, NetWMState, NetWMCheck,
         NetWMFullscreen, NetActiveWindow, NetWMWindowType,
-        NetWMWindowTypeDialog, NetClientList, NetClientTag, NetLast}; /* EWMH atoms */
+        NetWMWindowTypeDialog, NetClientList, NetClientInfo, NetLast}; /* EWMH atoms */
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
 enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
        ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
@@ -1663,7 +1663,7 @@ manage(Window w, XWindowAttributes *wa)
 		Monitor *m;
 		Atom atom;
 
-		if (XGetWindowProperty(dpy, c->win, netatom[NetClientTag], 0L, 2L, False, XA_CARDINAL,
+		if (XGetWindowProperty(dpy, c->win, netatom[NetClientInfo], 0L, 2L, False, XA_CARDINAL,
 				&atom, &format, &n, &extra, (unsigned char **)&data)  == Success && n == 2)
 		{
 
@@ -2166,7 +2166,7 @@ void
 setclienttagprop(Client *c)
 {
 	long data[] = { (long) c->tags, (long) c->mon->num };
-	XChangeProperty(dpy, c->win, netatom[NetClientTag], XA_CARDINAL, 32,
+	XChangeProperty(dpy, c->win, netatom[NetClientInfo], XA_CARDINAL, 32,
 			PropModeReplace, (unsigned char *) data, 2);
 }
 
@@ -2334,7 +2334,7 @@ setup(void)
 	netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
 	netatom[NetWMWindowTypeDialog] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
 	netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
-	netatom[NetClientTag] = XInternAtom(dpy, "_NET_CLIENT_TAG", False);
+	netatom[NetClientInfo] = XInternAtom(dpy, "_NET_CLIENT_TAG", False);
 	/* init cursors */
 	cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
@@ -2357,7 +2357,7 @@ setup(void)
 	/* EWMH support per view */
 	XChangeProperty(dpy, root, netatom[NetSupported], XA_ATOM, 32,
 		PropModeReplace, (unsigned char *) netatom, NetLast);
-	XDeleteProperty(dpy, root, netatom[NetClientTag]);
+	XDeleteProperty(dpy, root, netatom[NetClientInfo]);
 	XDeleteProperty(dpy, root, netatom[NetClientList]);
 	/* select events */
 	wa.cursor = cursor[CurNormal]->cursor;
