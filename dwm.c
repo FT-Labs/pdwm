@@ -2148,6 +2148,7 @@ sendmon(Client *c, Monitor *m)
 	c->tags = m->tagset[m->seltags]; /* assign tags of target monitor */
 	attach(c);
 	attachstack(c);
+	setclienttagprop(c);
 	focus(NULL);
 	arrange(NULL);
 }
@@ -2493,7 +2494,6 @@ tagmon(const Arg *arg)
 		return;
 	Client *c = selmon->sel;
 	sendmon(selmon->sel, dirtomon(arg->i));
-	setclienttagprop(c);
 }
 
 void
