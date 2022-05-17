@@ -53,8 +53,8 @@ install: all
 
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwm \
-               ${DESTDIR}${PREFIX}/bin/dwmblocks \
-	       ${DESTDIR}${MANPREFIX}/man1/dwm.1
+		${DESTDIR}${PREFIX}/bin/dwmblocks \
+		${DESTDIR}${MANPREFIX}/man1/dwm.1
 	rm -rf ${DESTDIR}${PREFIX}/share/phyos/dwm
 	rm -f ${DESTDIR}${PREFIX}/share/xsessions/dwm.desktop
 
