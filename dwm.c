@@ -2492,7 +2492,6 @@ tagmon(const Arg *arg)
 {
 	if (!selmon->sel || !mons->next)
 		return;
-	Client *c = selmon->sel;
 	sendmon(selmon->sel, dirtomon(arg->i));
 }
 
