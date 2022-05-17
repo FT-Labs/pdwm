@@ -43,7 +43,8 @@ dist: clean
 install: all
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	cp -f dwm dwmblocks ${DESTDIR}${PREFIX}/bin
-	chmod 755 ${DESTDIR}${PREFIX}/bin/{dwm,dwmblocks}
+	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
+        chmod 755 ${DESTDIR}${PREFIX}/bin/dwmblocks
 	mkdir -p ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
 	cp -f patches/icons/*.png ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
 	cp -f patches/keys-dwm.pdf ${DESTDIR}${PREFIX}/share/phyos/dwm/keys-dwm.pdf
@@ -51,8 +52,9 @@ install: all
 	cp -f patches/dwm.desktop ${DESTDIR}${PREFIX}/share/xsessions/dwm.desktop
 
 uninstall:
-	rm -f ${DESTDIR}${PREFIX}/bin/{dwm,dwmblocks} \
-		${DESTDIR}${MANPREFIX}/man1/dwm.1
+	rm -f ${DESTDIR}${PREFIX}/bin/dwm \
+               ${DESTDIR}${PREFIX}/bin/dwmblocks \
+	       ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	rm -rf ${DESTDIR}${PREFIX}/share/phyos/dwm
 	rm -f ${DESTDIR}${PREFIX}/share/xsessions/dwm.desktop
 
