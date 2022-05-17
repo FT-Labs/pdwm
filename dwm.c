@@ -1670,8 +1670,8 @@ manage(Window w, XWindowAttributes *wa)
 		if (n > 0)
 			XFree(data);
 	}
-
 	setclienttagprop(c);
+
 	if (!c->iscentered) {
 		if (c->x + WIDTH(c) > c->mon->mx + c->mon->mw)
 			c->x = c->mon->mx + c->mon->mw - WIDTH(c);
