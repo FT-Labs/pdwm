@@ -1,6 +1,6 @@
-From 916d04e83acb01c9a813973326f861a8e09f0630 Mon Sep 17 00:00:00 2001
-From: arda <phystecharda@gmail.com>
-Date: Wed, 18 May 2022 16:04:08 +0300
+From 713fa8650f5a20006451ebcccf57a4512e83bae8 Mon Sep 17 00:00:00 2001
+From: Arda Atci <arda@phytech.io>
+Date: Wed, 18 May 2022 17:23:16 +0300
 Subject: [PATCH] preserve clients on old tags when renewing dwm
 
 ---
