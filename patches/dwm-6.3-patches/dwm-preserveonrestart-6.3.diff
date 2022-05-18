@@ -1,16 +1,25 @@
-From 8c7a7124e45cf8584caa7d9df64badc570f11524 Mon Sep 17 00:00:00 2001
+From 916d04e83acb01c9a813973326f861a8e09f0630 Mon Sep 17 00:00:00 2001
 From: arda <phystecharda@gmail.com>
-Date: Wed, 18 May 2022 01:39:40 +0300
+Date: Wed, 18 May 2022 16:04:08 +0300
 Subject: [PATCH] preserve clients on old tags when renewing dwm
 
 ---
- dwm.c | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ dwm.c | 38 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 37 insertions(+), 1 deletion(-)
 
 diff --git a/dwm.c b/dwm.c
-index a96f33c..ae0d891 100644
+index a96f33c..a12e0bd 100644
 --- a/dwm.c
 +++ b/dwm.c
+@@ -62,7 +62,7 @@ enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
+ enum { SchemeNorm, SchemeSel }; /* color schemes */
+ enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
+        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
+-       NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
++       NetWMWindowTypeDialog, NetClientList, NetClientInfo, NetLast }; /* EWMH atoms */
+ enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
+ enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
+        ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
 @@ -198,6 +198,7 @@ static void scan(void);
  static int sendevent(Client *c, Atom proto);
  static void sendmon(Client *c, Monitor *m);
@@ -73,7 +82,7 @@ index a96f33c..ae0d891 100644
 @@ -1656,11 +1680,22 @@ spawn(const Arg *arg)
  	}
  }
-
+ 
 +void
 +setclienttagprop(Client *c)
 +{
@@ -101,5 +110,6 @@ index a96f33c..ae0d891 100644
  		focus(NULL);
  		arrange(selmon);
  	}
---
+-- 
 2.36.1
+
