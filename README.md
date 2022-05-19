@@ -66,7 +66,7 @@ if it is not found it will revert to default. Note that if __statusbar__ scripts
  - joypixels emoji font
  - zathura (pdf reader, used for keys)
 
-### I am currently maintaning this for arch linux only, therefore arch users can follow the below instructions to install everything easily:
+### I using this for my arch iso only, therefore arch users can follow the below instructions to install everything easily:
 
 Append package repo end of your `/etc/pacman.conf` :
 
@@ -87,7 +87,7 @@ You need to install fonts to your system first (Nerd fonts, including all glyphs
     sudo fc-cache
 
 #### For arch users (if you are using dotfiles)
-You can copy "keys.h" file to '~/.config/phyos/dwm/' to change default bindings. Change keys.h with your taste, after that run:
+You can copy "keys.h" file to '~/.config/phyos/dwm/' to change default bindings. Change keys.h with your config, after that run:
 
     phyup dwm
 
@@ -97,7 +97,9 @@ To update dwm easily. (wget required, you probably have it)
 
 	phyup dots
 
-Note that this will replace all dots with new ones, if you have your current vim configuration or etc. please move them or rename them before using this command.
+Note that this will replace all dots with new ones, if you have your current vim configuration or etc. please move them or rename them before using this command or just make them immutable with something like
+	
+	sudo chattr +i .xinitrc
 
 
 ## Default keys (same in keys.md)
