@@ -248,7 +248,7 @@ Key Combination | Action
  <kbd>Win</kbd> + <kbd>LMB</kbd>     | Move window with mouse (sets window to floating mode)
  <kbd>Win</kbd> + <kbd>RMB</kbd>     | Resize window with mouse (sets window to floating mode)
  <kbd>Alt</kbd> + <kbd>LMB</kbd> | Hide focused window (iconic state, restore it from dock)
- <kbd>Alt</kbd> + <kbd>RMB</kbd> | Toggle dock when a client is focused
+ <kbd>Alt</kbd> + <kbd>RMB</kbd> | Toggle dock (restore hidden window)
 
 </div>
 <div>
