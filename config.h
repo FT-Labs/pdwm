@@ -15,7 +15,6 @@ static const int swallowfloating    = 0;        /* 1 means swallow floating wind
 static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const int showdock           = 1;
 static const int user_dh            = 80;
 static const int docklrmargin       = 64;
 static const int user_bh            = 40;       /* 0 means normal bar height, >1 means user bar height */
@@ -24,27 +23,20 @@ static char dmenufont[]             = "JetBrains Mono:style=Regular:size=16";
 static char dmenuh[] = "40";
 
 #include "patches/themes/catpuccin.h"
-#define selbordercolor blue
-#define normbordercolor gray2
-
-#define tagbarstextcolor black
-#define tagbarsbgcolor blue
-#define tagbarustextcolor blue
-#define tagbarusbgcolor black
-
-#define statustextcolor black
-#define statusbgcolor black
-
-#define infobarstextcolor blue
-#define infobarsbgcolor black
-#define infobarustextcolor black
-
-#define selbgcolor blue2
-
-static char normbgcolor[]           = "#222222";
-static char normfgcolor[]           = "#121212";
-static char selfgcolor[]            = "#e0ffff";
-// static char infobarusbgcolor[]       = "#878787";
+#define selbordercolor      blue
+#define normbordercolor     gray2
+#define tagbarstextcolor    black
+#define tagbarsbgcolor      blue
+#define tagbarustextcolor   blue
+#define tagbarusbgcolor     black
+#define statustextcolor     black
+#define statusbgcolor       black
+#define infobarstextcolor   blue
+#define infobarsbgcolor     black
+#define infobarustextcolor  black
+#define selbgcolor          blue2
+#define normbgcolor         black
+#define normfgcolor         black
 
 /* Status bar left logo sizes */
 static const unsigned int sb_logo_w = 35;
@@ -58,10 +50,6 @@ static const unsigned int sb_delimiter_w = 4;
 
 /* Status bar x  y margin */
 static const unsigned int sb_margin = 12;
-
-/* Icon size for status text */
-#define ICONSIZE sb_icon_wh
-#define ICONSPACING sb_icon_x_margin
 
 static char *colors[][3] = {
        /*               fg           bg           border   */

@@ -1175,7 +1175,7 @@ drawbar(Monitor *m, Client *cdock)
 		if (m->sel || cdock) {
 			c = cdock ? cdock : m->sel;
 			drw_setscheme(drw, scheme[m == selmon ? SchemeInfoSel : SchemeInfoNorm]);
-			drw_text(drw, x, 0, w, bh, lrpad / 2 + (c->icon ? c->icw + ICONSPACING : 0), c->name, HIDDEN(c) ? 1 : 0);
+			drw_text(drw, x, 0, w, bh, lrpad / 2 + (c->icon ? c->icw + sb_icon_x_margin : 0), c->name, HIDDEN(c) ? 1 : 0);
 			if (c->icon) drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon, -1);
 			if (c->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
@@ -1606,7 +1606,7 @@ loadxrdb()
         XRDB_LOAD_COLOR("dwm.color8", selbordercolor);
         XRDB_LOAD_COLOR("dwm.color0", normbgcolor);
         XRDB_LOAD_COLOR("dwm.color4", normfgcolor);
-        XRDB_LOAD_COLOR("dwm.color0", selfgcolor);
+        XRDB_LOAD_COLOR("dwm.color0", normfgcolor);
         XRDB_LOAD_COLOR("dwm.color4", selbgcolor);
       }
     }
@@ -1900,13 +1900,13 @@ geticonprop(Window win, unsigned int *picw, unsigned int *pich)
 		for (i = p; i < end - 1; i += sz) {
 			if ((w = *i++) >= 16384 || (h = *i++) >= 16384) { XFree(p); return None; }
 			if ((sz = w * h) > end - i) break;
-			if ((m = w > h ? w : h) >= ICONSIZE && (d = m - ICONSIZE) < bstd) { bstd = d; bstp = i; }
+			if ((m = w > h ? w : h) >= sb_icon_wh && (d = m - sb_icon_wh) < bstd) { bstd = d; bstp = i; }
 		}
 		if (!bstp) {
 			for (i = p; i < end - 1; i += sz) {
 				if ((w = *i++) >= 16384 || (h = *i++) >= 16384) { XFree(p); return None; }
 				if ((sz = w * h) > end - i) break;
-				if ((d = ICONSIZE - (w > h ? w : h)) < bstd) { bstd = d; bstp = i; }
+				if ((d = sb_icon_wh - (w > h ? w : h)) < bstd) { bstd = d; bstp = i; }
 			}
 		}
 		if (!bstp) { XFree(p); return None; }
@@ -1916,11 +1916,11 @@ geticonprop(Window win, unsigned int *picw, unsigned int *pich)
 
 	uint32_t icw, ich;
 	if (w <= h) {
-		ich = ICONSIZE; icw = w * ICONSIZE / h;
+		ich = sb_icon_wh; icw = w * sb_icon_wh / h;
 		if (icw == 0) icw = 1;
 	}
 	else {
-		icw = ICONSIZE; ich = h * ICONSIZE / w;
+		icw = sb_icon_wh; ich = h * sb_icon_wh / w;
 		if (ich == 0) ich = 1;
 	}
 	*picw = icw; *pich = ich;
