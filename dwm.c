@@ -596,20 +596,20 @@ processrawtext(char* text) {
 		if (text[i] == '|') {
 			// If seperator and next char is not icon (between |0-9|, just 1 character)
 			if (!BETWEEN(text[i+1], '0', '9') || i+2 < s || text[i+2] != '|') {
-				x += (sb_delimiter_w + sb_icon_x_margin * 2) / 2;
+				x += (sb_delimiter_w + sb_icon_margin_x * 2) / 2;
 			}
 			x -= TEXTW_SB("|");
 		}
 		else if (BETWEEN(text[i], '0', '9') && text[i+1] == '|' && (i == 0 || text[i-1] == '|' )) {
 			// If icon, delete seperator margin and add icon size + icon_x_margin
-			x += sb_icon_wh + sb_icon_x_margin;
-			x -= (sb_delimiter_w + 2 * sb_icon_x_margin)/2;
+			x += sb_icon_wh + sb_icon_margin_x;
+			x -= (sb_delimiter_w + 2 * sb_icon_margin_x)/2;
 			char tmp[] = {text[i], '\0'};
 			x -= TEXTW_SB(tmp);
 		}
 		else if (text[i+1] == '|') {
 			// If next element is seperator add half width
-			x += (2 * sb_icon_x_margin + sb_delimiter_w) / 2;
+			x += (2 * sb_icon_margin_x + sb_delimiter_w) / 2;
 		}
 	}
 
@@ -662,7 +662,7 @@ buttonpress(XEvent *e)
 		x += blw;
 
 		for (i=0; i<LENGTH(config); i++) {
-			x += TEXTW(config[i].name) + sb_icon_wh + sb_icon_x_margin;
+			x += TEXTW(config[i].name) + sb_icon_wh + sb_icon_margin_x;
 
 			if (ev->x < x) {
 				Arg a;
@@ -834,7 +834,7 @@ configurenotify(XEvent *e)
 				for (c = m->clients; c; c = c->next)
 					if (c->isfullscreen)
 						resizeclient(c, m->mx, m->my, m->mw, m->mh);
-				XMoveResizeWindow(dpy, m->barwin, m->wx, m->by, m->ww, bh);
+				XMoveResizeWindow(dpy, m->barwin, m->wx + sb_padding_x, m->by, m->ww - 2 * sb_padding_x, bh);
 			}
 			focus(NULL);
 			arrange(NULL);
@@ -1038,7 +1038,7 @@ dockevent(XEvent *e, int evtype)
 			}
 			return;
 		}
-		x += (c->icon ? sb_icon_wh + sb_icon_x_margin : TEXTW_SB(c->name) + sb_icon_x_margin);
+		x += (c->icon ? sb_icon_wh + sb_icon_margin_x : TEXTW_SB(c->name) + sb_icon_margin_x);
 		c = c->curtagnext;
 	}
 }
@@ -1066,22 +1066,23 @@ drawbar(Monitor *m, Client *cdock)
 		{
 			if (strlen(sb_arr[i]) != 1) {
 				tw += TEXTW_SB(sb_arr[i]);
-				tw += sb_delimiter_w + 2 * sb_icon_x_margin;
+				tw += sb_delimiter_w + 2 * sb_icon_margin_x;
 			}
 			else
-				tw += sb_icon_wh + sb_icon_x_margin;
+				tw += sb_icon_wh + sb_icon_margin_x;
 			sb_arr[++i] = strtok(NULL, "|");
 		}
 
 
 		i = 0;
+        tw += 2 * sb_padding_x;
 		sb_tw = tw;
 		twtmp = tw;
 
 		// Fill all bar with colorscheme first, some png might have empty locations
 		drw_setscheme(drw, scheme[SchemeInfoSel]);
 		drw_rect(drw, m->ww - twtmp, y, twtmp, bh, 1, 1);
-		twtmp -= sb_icon_x_margin;
+		twtmp -= sb_icon_margin_x;
 
 		while (sb_arr[i] != NULL) {
 			drw_setscheme(drw, scheme[SchemeInfoSel]);
@@ -1089,7 +1090,7 @@ drawbar(Monitor *m, Client *cdock)
 			if (strlen(sb_arr[i]) == 1) {
 				int idx = sb_arr[i++][0] - '0';
 				drw_pic(drw, m->ww - twtmp, (bh - sb_icon_wh) / 2, sb_icon_wh, sb_icon_wh, None, idx);
-				twtmp -= sb_icon_wh + sb_icon_x_margin;
+				twtmp -= sb_icon_wh + sb_icon_margin_x;
 				drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
 				twtmp -= TEXTW_SB(sb_arr[i]);
 			}
@@ -1121,11 +1122,11 @@ drawbar(Monitor *m, Client *cdock)
 
 			// Below draws seperators
 			if (sb_arr[i+1] != NULL) {
-				twtmp -= sb_icon_x_margin;
+				twtmp -= sb_icon_margin_x;
 				drw_setscheme(drw, scheme[SchemeSel]);
 				drw_rect(drw, m->ww - twtmp + sb_delimiter_w / 4, y, sb_delimiter_w / 2, bh , 1, 0);
 				drw_rect(drw, m->ww - twtmp, y + bh/10, sb_delimiter_w, bh - 2 * bh/10, 1, 0);
-				twtmp -= sb_delimiter_w + sb_icon_x_margin;
+				twtmp -= sb_delimiter_w + sb_icon_margin_x;
 			}
 			i++;
 		}
@@ -1136,8 +1137,8 @@ drawbar(Monitor *m, Client *cdock)
 		if (c->isurgent)
 			urg |= c->tags;
 	}
-	x = 0;
 
+    x = 0;
 	// Draw logo offset with margin
 	drw_setscheme(drw, scheme[SchemeTagsSel]);
 	drw_rect(drw, 0, y, 2 * sb_delimiter_w + sb_logo_w, bh, 1, 0);
@@ -1162,10 +1163,10 @@ drawbar(Monitor *m, Client *cdock)
 	for (i=0; i<LENGTH(config); i++) {
 		w = TEXTW(config[i].name);
 		drw_setscheme(drw, scheme[SchemeTagsNorm]);
-		drw_rect(drw, x, y, w + sb_icon_wh + sb_icon_x_margin, bh, 1, 1);
+		drw_rect(drw, x, y, w + sb_icon_wh + sb_icon_margin_x, bh, 1, 1);
 		drw_text(drw, x, y, w, bh, lrpad / 2, config[i].name, 0);
 		drw_pic(drw, x + w, (bh - sb_icon_wh) / 2, sb_icon_wh, sb_icon_wh, None, i+1);
-		w += sb_icon_wh + sb_icon_x_margin;
+		w += sb_icon_wh + sb_icon_margin_x;
 		drw_setscheme(drw, scheme[SchemeTagsNorm]);
 		drw_rect(drw, x, y, w, bh, 0, 0);
 		x += w;
@@ -1175,7 +1176,7 @@ drawbar(Monitor *m, Client *cdock)
 		if (m->sel || cdock) {
 			c = cdock ? cdock : m->sel;
 			drw_setscheme(drw, scheme[m == selmon ? SchemeInfoSel : SchemeInfoNorm]);
-			drw_text(drw, x, 0, w, bh, lrpad / 2 + (c->icon ? c->icw + sb_icon_x_margin : 0), c->name, HIDDEN(c) ? 1 : 0);
+			drw_text(drw, x, 0, w, bh, lrpad / 2 + (c->icon ? c->icw + sb_icon_margin_x : 0), c->name, HIDDEN(c) ? 1 : 0);
 			if (c->icon) drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon, -1);
 			if (c->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
@@ -1222,16 +1223,16 @@ drawdock(Monitor *m)
 					drawbar(m, c);
 
 				if (c->icon) {
-					curdockwidth += c->icw + sb_icon_x_margin;
+					curdockwidth += c->icw + sb_icon_margin_x;
 					drw_pic(drw, x, icon_y, c->icw, c->ich, c->icon, -1);
-					x += c->icw + sb_icon_x_margin;
+					x += c->icw + sb_icon_margin_x;
 				}
 				else
 				{
 					drw_setscheme(drw, scheme[SchemeInfoNorm]);
 					drw_text(drw, x, icon_y, TEXTW_SB(c->name), c->icw, 0, c->name, 0);
-					x += TEXTW_SB(c->name) + sb_icon_x_margin;
-					curdockwidth += TEXTW_SB(c->name) + sb_icon_x_margin;
+					x += TEXTW_SB(c->name) + sb_icon_margin_x;
+					curdockwidth += TEXTW_SB(c->name) + sb_icon_margin_x;
 				}
 			}
 		}
@@ -1240,7 +1241,7 @@ drawdock(Monitor *m)
 			toggledock(NULL);
 			return;
 		}
-		curdockwidth -= sb_icon_x_margin;
+		curdockwidth -= sb_icon_margin_x;
 		XMoveResizeWindow(dpy, m->dockwin, m->wx + (m->ww - curdockwidth)/2, y, curdockwidth, user_dh);
 		drw_map(drw, m->dockwin, 0, y, curdockwidth, user_dh);
 	}
@@ -2500,7 +2501,7 @@ togglebar(const Arg *arg)
 {
 	selmon->showbar = selmon->pertag->showbars[selmon->pertag->curtag] = !selmon->showbar;
 	updatebarpos(selmon);
-	XMoveResizeWindow(dpy, selmon->barwin, selmon->wx, selmon->by, selmon->ww, bh);
+	XMoveResizeWindow(dpy, selmon->barwin, selmon->wx + sb_padding_x, selmon->by, selmon->ww - 2 * sb_padding_x, bh);
 	arrange(selmon);
 }
 
@@ -2720,7 +2721,7 @@ updatebars(void)
 	for (m = mons; m; m = m->next) {
 		if (!m->barwin)
 		{
-			m->barwin = XCreateWindow(dpy, root, m->wx , m->by, m->ww, bh, 0, DefaultDepth(dpy, screen),
+			m->barwin = XCreateWindow(dpy, root, m->wx + sb_padding_x, m->by, m->ww - 2 * sb_padding_x, bh, 0, DefaultDepth(dpy, screen),
 					CopyFromParent, DefaultVisual(dpy, screen),
 					CWColormap|CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
 			XDefineCursor(dpy, m->barwin, cursor[CurNormal]->cursor);
@@ -2744,20 +2745,16 @@ updatebars(void)
 void
 updatebarpos(Monitor *m)
 {
-	m->wy = m->my + sb_margin;
+	m->wy = m->my + sb_padding_y;
 	m->wh = m->mh;
 	if (m->showbar) {
 		m->wh -= bh;
 		m->by = m->topbar ? m->wy : m->wy + m->wh;
 		m->wy = m->topbar ? m->wy + bh : m->wy;
-		m->ww -= 2 * sb_margin;
-		m->wx += sb_margin;
 	} else {
 		m->by = -bh;
-		m->wy -= sb_margin;
-		m->wh += sb_margin;
-		m->ww += 2 * sb_margin;
-		m->wx -= sb_margin;
+		m->wy -= sb_padding_y;
+		m->wh += sb_padding_y;
 	}
 }
 
@@ -2814,7 +2811,7 @@ updategeom(void)
 					m->mx = m->wx = unique[i].x_org;
 					m->my = m->wy = unique[i].y_org ;
 					m->mw = m->ww = unique[i].width;
-					m->mh = unique[i].height - sb_margin;
+					m->mh = unique[i].height - sb_padding_y;
 					m->wh = unique[i].height;
 					updatebarpos(m);
 				}

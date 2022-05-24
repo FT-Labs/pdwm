@@ -45,11 +45,12 @@ static const unsigned int sb_logo_y_margin = 5;
 
 /* Default icon width, height, margin and delimiter width */
 static const unsigned int sb_icon_wh = 32;
-static const unsigned int sb_icon_x_margin = 12;
+static const unsigned int sb_icon_margin_x = 12;
 static const unsigned int sb_delimiter_w = 4;
 
 /* Status bar x  y margin */
-static const unsigned int sb_margin = 12;
+static const unsigned int sb_padding_x = 12;
+static const unsigned int sb_padding_y = 12;
 
 static char *colors[][3] = {
        /*               fg           bg           border   */
