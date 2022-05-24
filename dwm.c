@@ -2811,7 +2811,7 @@ updategeom(void)
 					m->mx = m->wx = unique[i].x_org;
 					m->my = m->wy = unique[i].y_org ;
 					m->mw = m->ww = unique[i].width;
-					m->mh = unique[i].height - sb_padding_y;
+					m->mh = unique[i].height;
 					m->wh = unique[i].height;
 					updatebarpos(m);
 				}

@@ -201,7 +201,7 @@ bstack(Monitor *m)
 
 	sx = mx = m->wx + ov;
 	sy = my = m->wy + oh;
-	sh = mh = m->wh - 2*oh;
+	sh = mh = (m->wh - sb_padding_y) - 2*oh;
 	mw = m->ww - 2*ov - iv * (MIN(n, m->nmaster) - 1);
 	sw = m->ww - 2*ov - iv * (n - m->nmaster - 1);
 
@@ -251,10 +251,10 @@ centeredmaster(Monitor *m)
 	/* initialize areas */
 	mx = m->wx + ov;
 	my = m->wy + oh;
-	mh = m->wh - 2*oh - ih * ((!m->nmaster ? n : MIN(n, m->nmaster)) - 1);
+	mh = (m->wh - sb_padding_y) - 2*oh - ih * ((!m->nmaster ? n : MIN(n, m->nmaster)) - 1);
 	mw = m->ww - 2*ov;
-	lh = m->wh - 2*oh - ih * (((n - m->nmaster) / 2) - 1);
-	rh = m->wh - 2*oh - ih * (((n - m->nmaster) / 2) - ((n - m->nmaster) % 2 ? 0 : 1));
+	lh = (m->wh - sb_padding_y) - 2*oh - ih * (((n - m->nmaster) / 2) - 1);
+	rh = (m->wh - sb_padding_y) - 2*oh - ih * (((n - m->nmaster) / 2) - ((n - m->nmaster) % 2 ? 0 : 1));
 
 	if (m->nmaster && n > m->nmaster) {
 		/* go mfact box in the center if more than nmaster clients */
@@ -334,26 +334,26 @@ centeredfloatingmaster(Monitor *m)
 
 	sx = mx = m->wx + ov;
 	sy = my = m->wy + oh;
-	sh = mh = m->wh - 2*oh;
+	sh = mh = (m->wh - sb_padding_y) - 2*oh;
 	mw = m->ww - 2*ov - iv*(n - 1);
 	sw = m->ww - 2*ov - iv*(n - m->nmaster - 1);
 
 	if (m->nmaster && n > m->nmaster) {
 		mivf = 0.8;
 		/* go mfact box in the center if more than nmaster clients */
-		if (m->ww > m->wh) {
+		if (m->ww > (m->wh - sb_padding_y)) {
 			mw = m->ww * m->mfact - iv*mivf*(MIN(n, m->nmaster) - 1);
-			mh = m->wh * 0.9 - 2*oh;
+			mh = (m->wh - sb_padding_y) * 0.9 - 2*oh;
 		} else {
 			mw = m->ww * 0.9 - iv*mivf*(MIN(n, m->nmaster) - 1);
-			mh = m->wh * m->mfact;
+			mh = (m->wh - sb_padding_y) * m->mfact;
 		}
 		mx = m->wx + (m->ww - mw) / 2;
-		my = m->wy + (m->wh - mh) / 2;
+		my = m->wy + ((m->wh - sb_padding_y) - mh) / 2;
 
 		sx = m->wx + ov;
 		sy = m->wy + oh;
-		sh = m->wh - 2*oh;
+		sh = (m->wh - sb_padding_y) - 2*oh;
 	}
 
 	getfacts(m, mw, sw, &mfacts, &sfacts, &mrest, &srest);
@@ -393,14 +393,14 @@ deck(Monitor *m)
 
 	sx = mx = m->wx + ov;
 	sy = my = m->wy + oh;
-	sh = mh = m->wh - 2*oh - ih * (MIN(n, m->nmaster) - 1);
+	sh = mh = (m->wh - sb_padding_y) - 2*oh - ih * (MIN(n, m->nmaster) - 1);
 	sw = mw = m->ww - 2*ov;
 
 	if (m->nmaster && n > m->nmaster) {
 		sw = (mw - iv) * (1 - m->mfact);
 		mw = (mw - iv) * m->mfact;
 		sx = mx + mw + iv;
-		sh = m->wh - 2*oh;
+		sh = (m->wh - sb_padding_y) - 2*oh;
 	}
 
 	getfacts(m, mh, sh, &mfacts, &sfacts, &mrest, &srest);
@@ -438,7 +438,7 @@ fibonacci(Monitor *m, int s)
 	nx = m->wx + ov;
 	ny = oh;
 	nw = m->ww - 2*ov;
-	nh = m->wh - 2*oh;
+	nh = (m->wh - sb_padding_y) - 2*oh;
 
 	for (i = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next)) {
 		if ((i % 2 && nh / 2 > 2*c->bw)
@@ -519,8 +519,8 @@ tile(Monitor *m)
 
 	sx = mx = m->wx + ov;
 	sy = my = m->wy + oh;
-	mh = m->wh - 2*oh - ih * (MIN(n, m->nmaster) - 1);
-	sh = m->wh - 2*oh - ih * (n - m->nmaster - 1);
+	mh = (m->wh - sb_padding_y) - 2*oh - ih * (MIN(n, m->nmaster) - 1);
+	sh = (m->wh - sb_padding_y) - 2*oh - ih * (n - m->nmaster - 1);
 	sw = mw = m->ww - 2*ov;
 
 	if (m->nmaster && n > m->nmaster) {
