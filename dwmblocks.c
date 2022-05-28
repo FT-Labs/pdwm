@@ -44,7 +44,8 @@ static const char *delim = "|";
 static int block_size = 0;
 static Block *blocks;
 
-const char *xdg_config_home(void) {
+const char *xdg_config_home(void)
+{
 	char *xdgh = getenv("XDG_CONFIG_HOME");
 	char *home = getenv("HOME");
 	const char *default_dir = "/.config";
@@ -181,8 +182,10 @@ void replace(char *str, char old, char new)
 void remove_all(char *str, char to_remove) {
 	char *read = str;
 	char *write = str;
-	while (*read) {
-		if (*read == to_remove) {
+	while (*read)
+    {
+		if (*read == to_remove)
+        {
 			read++;
 			*write = *read;
 		}
@@ -265,7 +268,8 @@ int get_status(char *str, char *last)
 {
 	strcpy(last, str);
 	str[0] = '\0';
-    for(int i = 0; i < block_size; i++) {
+    for(int i = 0; i < block_size; i++)
+    {
 		strcat(str, statusbar[i]);
         if (i == block_size - 1)
             strcat(str, " ");
