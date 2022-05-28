@@ -6,6 +6,8 @@
 #include <X11/Xlib.h>
 #include <libconfig.h>
 #define CMDLENGTH		50
+#define ALLOC_BLOCKS blocks = malloc(BLOCK_SIZE * sizeof(Block)); statusbar = calloc(BLOCK_SIZE, sizeof(*statusbar));
+
 
 typedef struct {
 	char cmd[CMDLENGTH];
@@ -381,4 +383,3 @@ int main(int argc, char** argv)
 	signal(SIGINT, term_handler);
 	status_loop();
 }
-

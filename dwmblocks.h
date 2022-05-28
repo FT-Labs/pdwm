@@ -3,8 +3,7 @@
 *  just use the configuration file.
 */
 #define BLOCK_SIZE 7 /* Change this block size according to your bottom blocks */
-blocks = malloc(BLOCK_SIZE * sizeof(Block));
-statusbar = calloc(BLOCK_SIZE, sizeof(*statusbar));
+ALLOC_BLOCKS /* DON'T DELETE THIS LINE */
                     /*Command*/     /*Update Interval*/ /*Update Signal*/
 blocks[0] = (Block) {"cat /tmp/recordingicon 2>/dev/null",  0,  9};
 blocks[1] = (Block) {"crypto",  360,    6};
