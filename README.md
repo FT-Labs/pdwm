@@ -98,7 +98,7 @@ To update dwm easily. (wget required, you probably have it)
 	phyup dots
 
 Note that this will replace all dots with new ones, if you have your current vim configuration or etc. please move them or rename them before using this command or just make them immutable with something like
-	
+
 	sudo chattr +i .xinitrc
 
 
@@ -123,8 +123,7 @@ Key Combination | Action
  <kbd>Win</kbd> + <kbd>d</kbd>   | Execute Applications (rofi)
  <kbd>Win</kbd> + <kbd>b</kbd>   | Toggle status bar (hide)
  <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>d</kbd>   | Execute Any Runnable (dmenu)
- <kbd>Win</kbd> + <kbd>p</kbd>   | gotop (System monitor)
- <kbd>Win</kbd> + <kbd>Alt</kbd> + <kbd>p</kbd>   | gpu monitor (nvidia)
+ <kbd>Win</kbd> + <kbd>p</kbd>   | passmenu (pass password manager with rofi)
  <kbd>Alt</kbd> + <kbd>p</kbd>   | stress test and monitor (s-tui)
  <kbd>Win</kbd> + <kbd>F4</kbd>   | pulsemixer (audio input)
  <kbd>Win</kbd> + <kbd>F5</kbd>   | set multiple monitors and choose refresh rate

@@ -43,15 +43,16 @@ static Key keys[] = {
     { MOD2KEY,          XK_6,       setlayout,  {.v = &layouts[5]} }, /* dwindle */
     { MOD2KEY,          XK_7,       setlayout,  {.v = &layouts[6]} }, /* centeredmaster */
     { MOD2KEY,          XK_8,       setlayout,  {.v = &layouts[7]} }, /* centeredfloatingmaster */
-    { MOD2KEY,          XK_9,       setlayout, {.v = &layouts[8]} },      /* Floating layout */
+    { MOD2KEY,          XK_9,       setlayout,  {.v = &layouts[8]} },      /* Floating layout */
     { MODKEY,           XK_Escape,  spawn,      SHCMD("sysact") },
+    { MODKEY,           XK_BackSpace,  spawn,   SHCMD("sysact") },
     { MOD2KEY,          XK_Tab,     spawn,      SHCMD("rofi -show window") },
     { MODKEY,           XK_q,       killclient, {0} },
     { MODKEY,           XK_w,       spawn,      SHCMD("$BROWSER") },
     { MODKEY,           XK_t,       spawn,      SHCMD("pidof -s $COMPOSITOR && killall -9 $COMPOSITOR || $COMPOSITOR --experimental-backends --backend glx &") },
     { MODKEY,           XK_r,       spawn,      SHCMD(TERMINAL " -e lf") },
-    { MODKEY,           XK_p,       spawn,      SHCMD(TERMINAL " -e gotop") },
-    { MODKEY|MOD2KEY,   XK_p,       spawn,      SHCMD(TERMINAL " -e nvtop") },
+    { MODKEY,           XK_p,       spawn,      SHCMD("passmenu") },
+    { MODKEY|MOD2KEY,   XK_p,       spawn,      SHCMD(TERMINAL " -e htop") },
     { MOD2KEY,          XK_p,       spawn,      SHCMD(TERMINAL " -e s-tui") },
     { MODKEY,           XK_s,       togglesticky,   {0} },
     { MODKEY,           XK_d,       spawn,      SHCMD("rofi -show drun") },
