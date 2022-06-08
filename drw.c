@@ -545,12 +545,7 @@ load_png_icons(Drw* drw, unsigned int w, unsigned int h)
 			imlib_image_set_has_alpha(1);
 			data = imlib_image_get_data_for_reading_only();
 
-			if (idx == 0) {
-				pic = drw_picture_create_resized(drw, (char*)data, 35, 30, 35, 30);
-			}
-			else {
-				pic = drw_picture_create_resized(drw, (char*)data, w, h, w, h);
-			}
+            pic = drw_picture_create_resized(drw, (char*)data, w, h, w, h);
 
 			icon_ximg[idx] = pic;
 			imlib_free_image();

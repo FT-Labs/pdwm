@@ -645,7 +645,7 @@ buttonpress(XEvent *e)
 
     if (ev->window == selmon->barwin) {
         i = 0;
-        x = sb_logo_w + 2 * sb_delimiter_w;
+        x = sb_icon_wh + 2 * sb_delimiter_w;
         for (c = m->clients; c; c = c->next)
             occ |= c->tags == 255 ? 0 : c->tags;
         do {
@@ -1147,9 +1147,9 @@ drawbar(Monitor *m, Client *cdock)
     x = 0;
     // Draw logo offset with margin
     drw_setscheme(drw, scheme[SchemeTagsSel]);
-    drw_rect(drw, 0, y, 2 * sb_delimiter_w + sb_logo_w, bh, 1, 0);
-    drw_pic(drw, sb_delimiter_w, y + sb_logo_y_margin, sb_logo_w, sb_logo_h, None, 0);
-    x += sb_logo_w + 2 * sb_delimiter_w;
+    drw_rect(drw, 0, y, 2 * sb_delimiter_w + sb_icon_wh, bh, 1, 0);
+    drw_pic(drw, sb_delimiter_w, y + (bh - sb_icon_wh) / 2, sb_icon_wh, sb_icon_wh, None, 0);
+    x += sb_icon_wh + 2 * sb_delimiter_w;
 
 
     for (i = 0; i < LENGTH(tags); i++) {

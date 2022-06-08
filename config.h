@@ -38,11 +38,6 @@ static char dmenuh[] = "40";
 #define normbgcolor         black
 #define normfgcolor         black
 
-/* Status bar left logo sizes */
-static const unsigned int sb_logo_w = 35;
-static const unsigned int sb_logo_h = 30;
-static const unsigned int sb_logo_y_margin = 5;
-
 /* Default icon width, height, margin and delimiter width */
 static const unsigned int sb_icon_wh = 32;
 static const unsigned int sb_icon_margin_x = 12;
