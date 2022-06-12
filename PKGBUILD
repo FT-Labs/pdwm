@@ -15,13 +15,9 @@ options=('zipman')
 source=('git+https://github.com/PhyTech-R0/dwm-phyOS')
 md5sums=('SKIP')
 
-build() {
+package() {
 	cd "$pkgname"
 	[ -f "$HOME/.config/phyos/dwm/keys.h" ] && yes | cp -f "$HOME/.config/phyos/dwm/keys.h" ./keys.h
 	make
-}
-
-package() {
-	cd "$pkgname"
 	make PREFIX=/usr DESTDIR="$pkgdir/" install
 }
