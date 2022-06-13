@@ -1,0 +1,86 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-std=c99",
+      "-pedantic",
+      "-Wall",
+      "-Wno-deprecated-declarations",
+      "-Os",
+      "-I/usr/X11R6/include",
+      "-I/usr/include/freetype2",
+      "-D_DEFAULT_SOURCE",
+      "-D_BSD_SOURCE",
+      "-D_POSIX_C_SOURCE=200809L",
+      "-DVERSION=\"6.2\"",
+      "-DXINERAMA",
+      "util.c"
+    ],
+    "directory": "/home/rzero/.local/src/dwm-phyOS",
+    "file": "/home/rzero/.local/src/dwm-phyOS/util.c"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-std=c99",
+      "-pedantic",
+      "-Wall",
+      "-Wno-deprecated-declarations",
+      "-Os",
+      "-I/usr/X11R6/include",
+      "-I/usr/include/freetype2",
+      "-D_DEFAULT_SOURCE",
+      "-D_BSD_SOURCE",
+      "-D_POSIX_C_SOURCE=200809L",
+      "-DVERSION=\"6.2\"",
+      "-DXINERAMA",
+      "dwmblocks.c"
+    ],
+    "directory": "/home/rzero/.local/src/dwm-phyOS",
+    "file": "/home/rzero/.local/src/dwm-phyOS/dwmblocks.c"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-std=c99",
+      "-pedantic",
+      "-Wall",
+      "-Wno-deprecated-declarations",
+      "-Os",
+      "-I/usr/X11R6/include",
+      "-I/usr/include/freetype2",
+      "-D_DEFAULT_SOURCE",
+      "-D_BSD_SOURCE",
+      "-D_POSIX_C_SOURCE=200809L",
+      "-DVERSION=\"6.2\"",
+      "-DXINERAMA",
+      "dwm.c"
+    ],
+    "directory": "/home/rzero/.local/src/dwm-phyOS",
+    "file": "/home/rzero/.local/src/dwm-phyOS/dwm.c"
+  },
+  {
+    "arguments": [
+      "/usr/bin/cc",
+      "-c",
+      "-std=c99",
+      "-pedantic",
+      "-Wall",
+      "-Wno-deprecated-declarations",
+      "-Os",
+      "-I/usr/X11R6/include",
+      "-I/usr/include/freetype2",
+      "-D_DEFAULT_SOURCE",
+      "-D_BSD_SOURCE",
+      "-D_POSIX_C_SOURCE=200809L",
+      "-DVERSION=\"6.2\"",
+      "-DXINERAMA",
+      "drw.c"
+    ],
+    "directory": "/home/rzero/.local/src/dwm-phyOS",
+    "file": "/home/rzero/.local/src/dwm-phyOS/drw.c"
+  }
+]
