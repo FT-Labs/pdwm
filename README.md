@@ -58,7 +58,6 @@ if it is not found it will revert to default. Note that if __statusbar__ scripts
  - xmenu
  - s-tui (stress test)
  - cointop (terminal crypto prices)
- - nvtop (nvidia gpu monitor)
  - pamixer
  - pulsemixer
  - imlib2
@@ -66,7 +65,7 @@ if it is not found it will revert to default. Note that if __statusbar__ scripts
  - joypixels emoji font
  - zathura (pdf reader, used for keys)
 
-### I using this for my arch iso only, therefore arch users can follow the below instructions to install everything easily:
+### I am using this for phyOS arch iso only, therefore arch users can follow the below instructions to install everything easily:
 
 Append package repo end of your `/etc/pacman.conf` :
 
@@ -85,13 +84,6 @@ You need to install fonts to your system first (Nerd fonts, including all glyphs
     git clone github.com/phytech-r0/fonts-phyOS
     cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/ttf
     sudo fc-cache
-
-#### For arch users (if you are using dotfiles)
-You can copy "keys.h" file to '~/.config/phyos/dwm/' to change default bindings. Change keys.h with your config, after that run:
-
-    phyup dwm
-
-To update dwm easily. (wget required, you probably have it)
 
 #### For non-arch and arch users (updating dotfiles and configs)
 
