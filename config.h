@@ -126,33 +126,4 @@ static const char *layoutmenu_cmd = "layoutmenu.sh";
 
 #include <X11/XF86keysym.h>
 #include "patches/shiftview.c"
-
-/* button definitions */
-/* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
-static Button buttons[] = {
-    /* click                event mask      button          function        argument */
-#ifndef __OpenBSD__
-    { ClkWinTitle,          0,              Button2,        zoom,           {0} },
-    { ClkStatusText,        0,              Button1,        sigdwmblocks,   {.i = 1} },
-    { ClkStatusText,        0,              Button2,        sigdwmblocks,   {.i = 2} },
-    { ClkStatusText,        0,              Button3,        sigdwmblocks,   {.i = 3} },
-    { ClkStatusText,        0,              Button4,        sigdwmblocks,   {.i = 4} },
-    { ClkStatusText,        0,              Button5,        sigdwmblocks,   {.i = 5} },
-#endif
-    { ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
-    { ClkClientWin,         MOD2KEY,        Button3,        toggledock,     {0} },
-    { ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
-    { ClkClientWin,         MOD2KEY,        Button1,        hide,           {.i = -1} },
-    { ClkRootWin,           MOD2KEY,        Button3,        toggledock,     {0} },
-    { ClkLtSymbol,          0,              Button3,        layoutmenu,     {0} },
-    { ClkRootWin,           MODKEY,         Button4,        shiftview,      {.i = +1} },
-    { ClkRootWin,           MODKEY,         Button5,        shiftview,      {.i = -1} },
-    { ClkTagBar,            0,              Button1,        view,           {0} },
-    { ClkTagBar,            0,              Button3,        toggleview,     {0} },
-    { ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
-    { ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
-    { ClkTagBar,            0,              Button4,        shiftview,      {.i = -1} },
-    { ClkTagBar,            0,              Button5,        shiftview,      {.i = 1} },
-};
-
 #include "keys.h"
