@@ -4,16 +4,16 @@
 ### Screenshots
 
 (Alt + Tab to switch windows)
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s1.png">
+<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s1.png">
 (Hide and restore windows from bottom dock (Check keys for how to do this))
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s7.png">
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s2.png">
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s3.png">
+<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s7.png">
+<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s2.png">
+<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s3.png">
 (catppuccin & tokyo night theme)
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s4.png">
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s5.png">
+<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s4.png">
+<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s5.png">
 (Power menu 'right one is to renew dwm without restart')
-<img src="https://github.com/PhyTech-R0/dwm-phyOS/blob/screenshots/screenshots/s6.png">
+<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s6.png">
 
  This modified suckless **dwm** window manager is built for arch based _phyOS_ distro but can be installed with following for any linux OS.
  - Beta version iso has been released on gitlab. It will automatically install everything and clean up bloat packages with calamares.
@@ -28,9 +28,9 @@ Programs below are all **source code modified** programs therefore all of them a
 
 Main account : **https://github.com/PhyTech-R0**
 
- - https://github.com/PhyTech-R0/dunst-phyOS
- - https://github.com/PhyTech-R0/fonts-phyOS
- - https://github.com/PhyTech-R0/st-phyOS
+ - https://github.com/PhyTech-R0/phyOS-dunst
+ - https://github.com/PhyTech-R0/phyOS-fonts
+ - https://github.com/PhyTech-R0/phyOS-st
 
 ### IMPORTANT!! READ BELOW (If you just want statusbar scripts, you can omit this just read below)
 Make sure to use my dotfiles, all of the **scripts** and path variables need to be set correctly for full functionality.
@@ -77,12 +77,12 @@ Then install necessary programs with **pacman** easily:
     pacman -Sy phyOS-dwm phyOS-dunst phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi picom unclutter lf ttf-joypixels light
 
 #### Installation for different distros then arch linux:
-    git clone https://github.com/PhyTech-R0/dwm-phyOS
+    git clone https://github.com/PhyTech-R0/phyOS-dwm
     cd dwm-phyOS && make && sudo make install
 You need to install fonts to your system first (Nerd fonts, including all glyphs etc.):
 
-    git clone github.com/phytech-r0/fonts-phyOS
-    cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/ttf
+    git clone github.com/phytech-r0/phyOS-fonts
+    cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/
     sudo fc-cache
 
 #### For non-arch and arch users (updating dotfiles and configs)
