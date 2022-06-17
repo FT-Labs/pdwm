@@ -47,11 +47,11 @@ static Key keys[] = {
     { MODKEY,           XK_F2,      spawn,      SHCMD("")},
     { MODKEY,           XK_F3,      spawn,      SHCMD(TERMINAL "")  },*/
     { MODKEY,           XK_F4,      spawn,      SHCMD(TERMINAL " -e pulsemixer; kill -44 $(pidof dwmblocks)") },
-    { MODKEY,           XK_F5,      spawn,      SHCMD("displayselect") },
+    { MODKEY,           XK_F5,      spawn,      SHCMD("pOS-displayselect") },
     /*{ MODKEY,         XK_F6,      spawn,      SHCMD("") },
     { MODKEY,           XK_F7,      spawn,      SHCMD("") },*/
-    { MODKEY,           XK_F9,      spawn,      SHCMD("dmenumount") },
-    { MODKEY,           XK_F10,     spawn,      SHCMD("dmenuumount") },
+    { MODKEY,           XK_F9,      spawn,      SHCMD("pOS-mount") },
+    { MODKEY,           XK_F10,     spawn,      SHCMD("pOS-umount") },
     { MODKEY,           XK_F11,     spawn,      SHCMD("mpv --no-cache --no-osc --no-input-default-bindings --profile=low-latency --input-conf=/dev/null --title=webcam $(ls /dev/video[0,2,4,6,8] | tail -n 1)") },
     TAGKEYS(            XK_1,       0)
     TAGKEYS(            XK_2,       1)
@@ -63,7 +63,7 @@ static Key keys[] = {
     TAGKEYS(            XK_8,       7)
     TAGKEYS(            XK_9,       8)
     { MODKEY,           XK_0,       view,       {.ui = ~0 } },
-    { MODKEY,           XK_grave,   spawn,  SHCMD("dmenuunicode") },
+    { MODKEY,           XK_grave,   spawn,  SHCMD("pOS-unicode") },
     { MOD2KEY,          XK_1,       setlayout,  {.v = &layouts[0]} }, /* tile */
     { MOD2KEY,          XK_2,       setlayout,  {.v = &layouts[1]} }, /* bstack */
     { MOD2KEY,          XK_3,       setlayout,  {.v = &layouts[2]} }, /* monocle */
@@ -73,14 +73,14 @@ static Key keys[] = {
     { MOD2KEY,          XK_7,       setlayout,  {.v = &layouts[6]} }, /* centeredmaster */
     { MOD2KEY,          XK_8,       setlayout,  {.v = &layouts[7]} }, /* centeredfloatingmaster */
     { MOD2KEY,          XK_9,       setlayout,  {.v = &layouts[8]} },      /* Floating layout */
-    { MODKEY,           XK_Escape,  spawn,      SHCMD("sysact") },
-    { MODKEY,           XK_BackSpace,  spawn,   SHCMD("sysact") },
+    { MODKEY,           XK_Escape,  spawn,      SHCMD("pOS-powermenu") },
+    { MODKEY,           XK_BackSpace,  spawn,   SHCMD("pOS-powermenu") },
     { MOD2KEY,          XK_Tab,     spawn,      SHCMD("rofi -show window") },
     { MODKEY,           XK_q,       killclient, {0} },
     { MODKEY,           XK_w,       spawn,      SHCMD("$BROWSER") },
     { MODKEY,           XK_t,       spawn,      SHCMD("pidof -s $COMPOSITOR && killall -9 $COMPOSITOR || $COMPOSITOR --experimental-backends --backend glx &") },
     { MODKEY,           XK_r,       spawn,      SHCMD(TERMINAL " -e lf") },
-    { MODKEY,           XK_p,       spawn,      SHCMD("passmenu") },
+    { MODKEY,           XK_p,       spawn,      SHCMD("pass_menu") },
     { MODKEY|MOD2KEY,   XK_p,       spawn,      SHCMD(TERMINAL " -e htop") },
     { MOD2KEY,          XK_p,       spawn,      SHCMD(TERMINAL " -e s-tui") },
     { MODKEY,           XK_s,       togglesticky,   {0} },
@@ -105,9 +105,9 @@ static Key keys[] = {
     { MODKEY,           XK_space,   zoom,       {0} },
     { MODKEY|ShiftMask, XK_space,   togglefloating, {0} },
     { 0,                XK_Print,   spawn,      SHCMD("maim ~/Pictures/pic-full-$(date '+%y%m%d-%H%M-%S').png") },
-    { ShiftMask,        XK_Print,   spawn,      SHCMD("maimpick ~/Pictures/") },
-    { MODKEY,           XK_Print,   spawn,      SHCMD("dmenurecord") },
-    { MODKEY|ShiftMask, XK_Print,   spawn,      SHCMD("dmenurecord kill") },
+    { ShiftMask,        XK_Print,   spawn,      SHCMD("pOS-maimpick ~/Pictures/") },
+    { MODKEY,           XK_Print,   spawn,      SHCMD("pOS-record") },
+    { MODKEY|ShiftMask, XK_Print,   spawn,      SHCMD("pOS-record kill") },
     { MODKEY,           XK_Left,                cyclelayout, {.i = -1} },
     { MODKEY,           XK_Right,               cyclelayout, {.i = +1} },
     { 0, XF86XK_AudioMute,          spawn,      SHCMD("pamixer -t; kill -44 $(pidof dwmblocks)") },
@@ -122,13 +122,13 @@ static Key keys[] = {
     { 0, XF86XK_AudioForward,       spawn,      SHCMD("mpc seek +10") },
     { 0, XF86XK_AudioMedia,         spawn,      SHCMD(TERMINAL " -e ncmpcpp") },
     { 0, XF86XK_AudioMicMute,       spawn,      SHCMD("pactl set-source-mute @DEFAULT_SOURCE@ toggle") },
-    { 0, XF86XK_PowerOff,           spawn,      SHCMD("sysact") },
+    { 0, XF86XK_PowerOff,           spawn,      SHCMD("pOS-powermenu") },
     { 0, XF86XK_Calculator,         spawn,      SHCMD(TERMINAL " -e bc -l") },
     { 0, XF86XK_WWW,                spawn,      SHCMD("$BROWSER") },
     { 0, XF86XK_DOS,                spawn,      SHCMD(TERMINAL) },
-    { 0, XF86XK_TouchpadToggle,     spawn,      SHCMD("touchpadtap") },
-    { 0, XF86XK_MonBrightnessUp,    spawn,      SHCMD("light -A 2 && brightness") },
-    { 0, XF86XK_MonBrightnessDown,  spawn,      SHCMD("light -U 2 && brightness") },
+    { 0, XF86XK_TouchpadToggle,     spawn,      SHCMD("pOS-touchpadtoggle") },
+    { 0, XF86XK_MonBrightnessUp,    spawn,      SHCMD("light -A 2 && pOS-brightness") },
+    { 0, XF86XK_MonBrightnessDown,  spawn,      SHCMD("light -U 2 && pOS-brightness") },
     { 0, XF86XK_KbdBrightnessDown,  spawn,      SHCMD("var=$( ls /sys/class/leds/ | grep kbd_backlight ); light -s sysfs/leds/$var -r -U 1")},
     { 0, XF86XK_KbdBrightnessUp,    spawn,      SHCMD("var=$( ls /sys/class/leds/ | grep kbd_backlight ); light -s sysfs/leds/$var -r -A 1")},
 };
