@@ -96,7 +96,6 @@ Note that this will replace all dots with new ones, if you have your current vim
 
 ## Default keys (same in keys.md)
 
-
 ### NOTE: <kbd>Caps Lock</kbd> == <kbd>Win</kbd>
 ### NOTE: <kbd>Caps Lock</kbd> is also equal to <kbd>ESC</kbd> in terminal (vim etc..)
 
@@ -115,7 +114,7 @@ Key Combination | Action
  <kbd>Win</kbd> + <kbd>d</kbd>   | Execute Applications (rofi)
  <kbd>Win</kbd> + <kbd>b</kbd>   | Toggle status bar (hide)
  <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>d</kbd>   | Execute Any Runnable (dmenu)
- <kbd>Win</kbd> + <kbd>p</kbd>   | passmenu (pass password manager with rofi)
+ <kbd>Win</kbd> + <kbd>p</kbd>   | passmenu (pass password manager)
  <kbd>Alt</kbd> + <kbd>p</kbd>   | stress test and monitor (s-tui)
  <kbd>Win</kbd> + <kbd>F4</kbd>   | pulsemixer (audio input)
  <kbd>Win</kbd> + <kbd>F5</kbd>   | set multiple monitors and choose refresh rate
@@ -156,7 +155,9 @@ Key Combination | Action
  <kbd>Win</kbd> + <kbd>k</kbd>          | Focus previous
  <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd>          | Move focused to previous
  <kbd>Win</kbd> + <kbd>l</kbd>          | Resize master +
+ <kbd>Win</kbd> + <kbd>Shift<\kb> + <kbd>h</kbd>          | Next Tag
  <kbd>Win</kbd> + <kbd>h</kbd>          | Resize master -
+ <kbd>Win</kbd> + <kbd>Shift<\kb> + <kbd>h</kbd>          | Previous Tag
  <kbd>Win</kbd> + <kbd>s</kbd>          | Sticky window toggle (show window in all tags)
  <kbd>Win</kbd> + <kbd>f</kbd>          | Fullscreen (toggle)
  <kbd>Win</kbd> + <kbd>g</kbd>          | Toggle gaps
@@ -239,7 +240,7 @@ Key Combination | Action
  <kbd>Win</kbd> + <kbd>LMB</kbd>     | Move window with mouse (sets window to floating mode)
  <kbd>Win</kbd> + <kbd>RMB</kbd>     | Resize window with mouse (sets window to floating mode)
  <kbd>Alt</kbd> + <kbd>LMB</kbd> | Hide focused window (iconic state, restore it from dock)
- <kbd>Alt</kbd> + <kbd>RMB</kbd> | Toggle dock (restore hidden window)
+ <kbd>Alt</kbd> + <kbd>RMB</kbd> | Toggle dock when a client is focused
 
 </div>
 <div>
