@@ -36,7 +36,7 @@ static const Rule rules[] = {
     { NULL,       NULL,       "Event Tester",   0,            0,           0,         0,         1,        -1 },
     { NULL,      "spterm",     NULL,            SPTAG(0),     1,           1,         0,         0,        -1 },
     { NULL,      "key_pdf",    NULL,            0,            1,           1,         1,         0,        -1 },
-    { NULL,      "phyOS-welcome-app",    NULL,            0,            0,           1,         1,         0,        -1 },
+    { NULL,      "phyOS-welcome-app",    NULL,            0,            0,           1,         1,         1,        -1 },
 };
 
 static Key keys[] = {
