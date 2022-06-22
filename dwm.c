@@ -1292,7 +1292,7 @@ focus(Client *c)
         for (c = selmon->stack; c && (!ISVISIBLE(c) || (c->issticky && !selmon->sel->issticky)); c = c->snext);
         /* No windows found; check for available stickies */
         if (!c)
-			for (c = selmon->stack; c && !ISVISIBLE(c); c = c->snext);
+            for (c = selmon->stack; c && !ISVISIBLE(c); c = c->snext);
     }
     if (selmon->sel && selmon->sel != c)
         unfocus(selmon->sel, 0);
