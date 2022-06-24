@@ -23,20 +23,6 @@ static char dmenufont[]             = "JetBrains Mono:style=Regular:size=16";
 static char dmenuh[] = "40";
 
 #include "patches/themes/catpuccin.h"
-#define selbordercolor      blue
-#define normbordercolor     gray2
-#define tagbarstextcolor    black
-#define tagbarsbgcolor      blue
-#define tagbarustextcolor   blue
-#define tagbarusbgcolor     black
-#define statustextcolor     black
-#define statusbgcolor       black
-#define infobarstextcolor   blue
-#define infobarsbgcolor     black
-#define infobarustextcolor  black
-#define selbgcolor          blue2
-#define normbgcolor         black
-#define normfgcolor         black
 
 /* Default icon width, height, margin and delimiter width */
 static const unsigned int sb_icon_wh = 32;
@@ -49,15 +35,15 @@ static const unsigned int sb_padding_y = 12;
 
 static char *colors[][3] = {
        /*               fg           bg           border   */
-       [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
-       [SchemeSel]  = { blue2,  green,  selbordercolor  },
-       [SchemeStatus] = { statustextcolor, statusbgcolor, "#000000" },
-       [SchemeTagsSel] = { tagbarstextcolor, tagbarsbgcolor, "#000000" },
-       [SchemeTagsNorm] = { tagbarustextcolor, tagbarusbgcolor, "#000000" },
-       [SchemeInfoSel] = { infobarstextcolor, infobarsbgcolor, "#000000" },
-       [SchemeInfoNorm] = { infobarustextcolor, infobarsbgcolor, "#000000" },
-       [SchemeOptimal] = { green, statusbgcolor, "#000000" },
-       [SchemeCritical] = { red, statusbgcolor, "#000000" },
+       [SchemeNorm] = { black, black, gray2 },
+       [SchemeSel]  = { blue2,  green,  blue  },
+       [SchemeStatus] = { black, black, "#000000" },
+       [SchemeTagsSel] = { black, blue, "#000000" },
+       [SchemeTagsNorm] = { blue, black, "#000000" },
+       [SchemeInfoSel] = { blue, black, "#000000" },
+       [SchemeInfoNorm] = { black, black, "#000000" },
+       [SchemeOptimal] = { green, black, "#000000" },
+       [SchemeCritical] = { red, black, "#000000" },
 };
 
 const char *key_pdf[] = {TERMINAL, "-n", "key_pdf", "-g", "120x34", "-e", "zathura", "/usr/share/phyos/dwm/keys-dwm.pdf", NULL };
@@ -120,7 +106,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", "#000000", "-nf", tagbarustextcolor, "-sb", tagbarsbgcolor, "-sf", tagbarstextcolor, "-h", dmenuh,  NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", "#000000", "-nf", blue, "-sb", blue, "-sf", black, "-h", dmenuh,  NULL };
 static const char *termcmd[]  = { TERMINAL, NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
 

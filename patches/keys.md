@@ -102,6 +102,7 @@ Key Combination | Action
 ## Tag operations
 
 ### You can Left Click <kbd>LMB</kbd> on 1-9 in status bar to focus tag
+### You can Right Click <kbd>RMB</kbd> on 1-9 in status bar to select multiple tags
 
 <div align="center">
 
