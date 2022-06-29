@@ -178,7 +178,7 @@ drw_pic(Drw *drw, int x, int y, unsigned int w, unsigned int h, Picture pic, int
 		return;
 	if (idx == -1)
 		XRenderComposite(drw->dpy, PictOpOver, pic, None, drw->picture, 0, 0, 0, 0, x, y, w, h);
-	else
+	else if (icon_ximg[idx])
 		XRenderComposite(drw->dpy, PictOpOver, icon_ximg[idx], None, drw->picture, 0, 0, 0, 0, x, y, w, h);
 }
 
