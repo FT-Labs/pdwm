@@ -425,11 +425,6 @@ applyrules(Client *c)
                 c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
             }
 
-            if (c->iscentered) {
-                c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
-                c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
-            }
-
             for (m = mons; m && m->num != r->monitor; m = m->next);
             if (m)
                 c->mon = m;
@@ -1645,7 +1640,6 @@ manage(Window w, XWindowAttributes *wa)
 
     updateicon(c);
     updatetitle(c);
-    updatewindowtype(c);
     updatesizehints(c);
     updatewmhints(c);
     if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
@@ -1656,6 +1650,7 @@ manage(Window w, XWindowAttributes *wa)
         applyrules(c);
         term = termforwin(c);
     }
+    updatewindowtype(c);
 
     {
         int format;
@@ -1692,6 +1687,9 @@ manage(Window w, XWindowAttributes *wa)
         /* only fix client y-offset, if the client center might cover the bar */
         c->y = MAX(c->y, ((c->mon->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
             && (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
+    } else {
+            c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
+            c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
     }
     c->bw = c->mon->borderpx;
     wc.border_width = c->bw;
