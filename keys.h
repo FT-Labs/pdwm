@@ -14,6 +14,7 @@ static Button buttons[] = {
     { ClkClientWin,         MOD2KEY,        Button3,        toggledock,     {0} },
     { ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
     { ClkClientWin,         MOD2KEY,        Button1,        hide,           {.i = -1} },
+    { ClkClientWin,         MODKEY,         Button2,        spawn,          SHCMD("jgmenu_run") },
     { ClkRootWin,           0,              Button3,        spawn,          SHCMD("jgmenu_run") },
     { ClkRootWin,           MOD2KEY,        Button3,        toggledock,     {0} },
     { ClkLtSymbol,          0,              Button3,        layoutmenu,     {0} },
