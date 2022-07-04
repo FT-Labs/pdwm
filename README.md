@@ -155,9 +155,9 @@ Key Combination | Action
  <kbd>Win</kbd> + <kbd>k</kbd>          | Focus previous
  <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>k</kbd>          | Move focused to previous
  <kbd>Win</kbd> + <kbd>l</kbd>          | Resize master +
- <kbd>Win</kbd> + <kbd>Shift<\kb> + <kbd>h</kbd>          | Next Tag
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>h</kbd>          | Next Tag
  <kbd>Win</kbd> + <kbd>h</kbd>          | Resize master -
- <kbd>Win</kbd> + <kbd>Shift<\kb> + <kbd>h</kbd>          | Previous Tag
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>h</kbd>          | Previous Tag
  <kbd>Win</kbd> + <kbd>s</kbd>          | Sticky window toggle (show window in all tags)
  <kbd>Win</kbd> + <kbd>f</kbd>          | Fullscreen (toggle)
  <kbd>Win</kbd> + <kbd>g</kbd>          | Toggle gaps
