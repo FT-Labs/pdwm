@@ -49,7 +49,7 @@ static char *colors[][3] = {
 const char *key_pdf[] = {TERMINAL, "-n", "key_pdf", "-g", "120x34", "-e", "zathura", "/usr/share/phyos/dwm/keys-dwm.pdf", NULL };
 
 const Config config[] = {
-    {key_pdf, "Keys"},
+    {key_pdf, ""},
 };
 
 typedef struct {

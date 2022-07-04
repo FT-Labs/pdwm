@@ -62,4 +62,3 @@ void load_png_icons(Drw* drw, unsigned int w, unsigned int h);
 void clear_png_icons(Drw* drw);
 void drw_pic(Drw *drw, int x, int y, unsigned int w, unsigned int h, Picture pic, int idx);
 Picture drw_picture_create_resized(Drw *drw, char *src, unsigned int srcw, unsigned int srch, unsigned int dstw, unsigned int dsth);
-
