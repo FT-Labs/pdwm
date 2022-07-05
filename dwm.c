@@ -1062,84 +1062,81 @@ drawbar(Monitor *m, Client *cdock)
 
 
     /* draw status first so it can be overdrawn by tags later */
-    if (m == selmon) { /* status is only drawn on selected monitor */
+    load_png_icons(drw, sb_icon_wh, sb_icon_wh);
 
-        load_png_icons(drw, sb_icon_wh, sb_icon_wh);
+    char stextcpy[256];
+    strcpy(stextcpy, stext);
+    sb_arr[i] = strtok(stextcpy, "|");
 
-        char stextcpy[256];
-        strcpy(stextcpy, stext);
-        sb_arr[i] = strtok(stextcpy, "|");
-
-        while (sb_arr[i] != NULL)
-        {
-            if (strlen(sb_arr[i]) != 1) {
-                tw += TEXTW_SB(sb_arr[i]);
-                tw += sb_delimiter_w + 2 * sb_icon_margin_x;
-            }
-            else
-                tw += sb_icon_wh + sb_icon_margin_x;
-            sb_arr[++i] = strtok(NULL, "|");
+    while (sb_arr[i] != NULL)
+    {
+        if (strlen(sb_arr[i]) != 1) {
+            tw += TEXTW_SB(sb_arr[i]);
+            tw += sb_delimiter_w + 2 * sb_icon_margin_x;
         }
+        else
+            tw += sb_icon_wh + sb_icon_margin_x;
+        sb_arr[++i] = strtok(NULL, "|");
+    }
 
 
-        i = 0;
-        tw += 2 * sb_padding_x;
-        sb_tw = twtmp = tw;
-        m->brightstart = m->ww - twtmp;
-        XMoveResizeWindow(dpy, m->barwin[2], m->brightstart + sb_padding_x, m->by, twtmp - 2 * sb_padding_x, bh);
+    i = 0;
+    tw += 2 * sb_padding_x;
+    sb_tw = twtmp = tw;
+    m->brightstart = m->ww - twtmp;
+    XMoveResizeWindow(dpy, m->barwin[2], m->wx + m->brightstart + sb_padding_x, m->by, twtmp - 2 * sb_padding_x, bh);
 
 
-        // Fill all bar with colorscheme first, some png might have empty locations
+    // Fill all bar with colorscheme first, some png might have empty locations
+    drw_setscheme(drw, scheme[SchemeInfoSel]);
+    drw_rect(drw, m->ww - twtmp, y, twtmp, bh, 1, 1);
+    twtmp -= sb_icon_margin_x;
+
+    while (sb_arr[i] != NULL) {
         drw_setscheme(drw, scheme[SchemeInfoSel]);
-        drw_rect(drw, m->ww - twtmp, y, twtmp, bh, 1, 1);
-        twtmp -= sb_icon_margin_x;
 
-        while (sb_arr[i] != NULL) {
-            drw_setscheme(drw, scheme[SchemeInfoSel]);
-
-            if (strlen(sb_arr[i]) == 1) {
-                int idx = sb_arr[i++][0] - '0';
-                drw_pic(drw, m->ww - twtmp, (bh - sb_icon_wh) / 2, sb_icon_wh, sb_icon_wh, None, idx);
-                twtmp -= sb_icon_wh + sb_icon_margin_x;
-                drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
-                twtmp -= TEXTW_SB(sb_arr[i]);
-            }
-            else {
-                if (sb_arr[i][strlen(sb_arr[i]) - 1] == '%') {
-                    char buf[3];
-                    char* tmp;
-                    int x = 0;
-
-                    strncpy(buf, sb_arr[i] + strlen(sb_arr[i]) - 5, strlen(sb_arr[i]) - 1);
-                    tmp = buf;
-                    x = atoi(tmp);
-
-                    while (!x && strlen(tmp) > 0) {
-                        tmp++;
-                        x = atoi(tmp);
-                    }
-
-                    if (x <= 30) {
-                        drw_setscheme(drw, scheme[SchemeCritical]);
-                    }
-                    else {
-                        drw_setscheme(drw, scheme[SchemeOptimal]);
-                    }
-                }
-                drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
-                twtmp -= TEXTW_SB(sb_arr[i]);
-            }
-
-            // Below draws seperators
-            if (sb_arr[i+1] != NULL) {
-                twtmp -= sb_icon_margin_x;
-                drw_setscheme(drw, scheme[SchemeSel]);
-                drw_rect(drw, m->ww - twtmp + sb_delimiter_w / 4, y, sb_delimiter_w / 2, bh , 1, 0);
-                drw_rect(drw, m->ww - twtmp, y + bh/10, sb_delimiter_w, bh - 2 * bh/10, 1, 0);
-                twtmp -= sb_delimiter_w + sb_icon_margin_x;
-            }
-            i++;
+        if (strlen(sb_arr[i]) == 1) {
+            int idx = sb_arr[i++][0] - '0';
+            drw_pic(drw, m->ww - twtmp, (bh - sb_icon_wh) / 2, sb_icon_wh, sb_icon_wh, None, idx);
+            twtmp -= sb_icon_wh + sb_icon_margin_x;
+            drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
+            twtmp -= TEXTW_SB(sb_arr[i]);
         }
+        else {
+            if (sb_arr[i][strlen(sb_arr[i]) - 1] == '%') {
+                char buf[3];
+                char* tmp;
+                int x = 0;
+
+                strncpy(buf, sb_arr[i] + strlen(sb_arr[i]) - 5, strlen(sb_arr[i]) - 1);
+                tmp = buf;
+                x = atoi(tmp);
+
+                while (!x && strlen(tmp) > 0) {
+                    tmp++;
+                    x = atoi(tmp);
+                }
+
+                if (x <= 30) {
+                    drw_setscheme(drw, scheme[SchemeCritical]);
+                }
+                else {
+                    drw_setscheme(drw, scheme[SchemeOptimal]);
+                }
+            }
+            drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
+            twtmp -= TEXTW_SB(sb_arr[i]);
+        }
+
+        // Below draws seperators
+        if (sb_arr[i+1] != NULL) {
+            twtmp -= sb_icon_margin_x;
+            drw_setscheme(drw, scheme[SchemeSel]);
+            drw_rect(drw, m->ww - twtmp + sb_delimiter_w / 4, y, sb_delimiter_w / 2, bh , 1, 0);
+            drw_rect(drw, m->ww - twtmp, y + bh/10, sb_delimiter_w, bh - 2 * bh/10, 1, 0);
+            twtmp -= sb_delimiter_w + sb_icon_margin_x;
+        }
+        i++;
     }
 
     for (c = m->clients; c; c = c->next) {
@@ -1180,7 +1177,7 @@ drawbar(Monitor *m, Client *cdock)
         x += w;
     }
 
-    XMoveResizeWindow(dpy, m->barwin[0], sb_padding_x, m->by, x, bh);
+    XMoveResizeWindow(dpy, m->barwin[0], m->wx + sb_padding_x, m->by, x, bh);
     m->bleftend = x;
 
     if ((w = m->ww - tw - x) > bh) {
@@ -1192,10 +1189,10 @@ drawbar(Monitor *m, Client *cdock)
             if (c->icon) drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon, -1);
             if (c->isfloating)
                 drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
-            XMoveResizeWindow(dpy, m->barwin[1], (m->bleftend + m->brightstart - s) / 2 + 2 * sb_padding_x, m->by, s - 2 * sb_padding_x, bh);
+            XMoveResizeWindow(dpy, m->barwin[1], m->wx + (m->bleftend + m->brightstart - s) / 2 + 2 * sb_padding_x, m->by, s - 2 * sb_padding_x, bh);
             drw_map(drw, m->barwin[1], m->bleftend, 0, m->ww, bh);
         } else {
-            XMoveResizeWindow(dpy, m->barwin[1], (m->wx + m->ww) / 2, -2 * bh -2 * sb_padding_y, 100, 100);
+            XMoveResizeWindow(dpy, m->barwin[1], m->wx + (m->ww) / 2, -2 * bh + -2 * sb_padding_y, 100, 100);
         }
     }
     drw_map(drw, m->barwin[0], 0, 0, m->ww, bh);
