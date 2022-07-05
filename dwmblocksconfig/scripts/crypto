@@ -42,7 +42,6 @@ case $BLOCK_BUTTON in
 	2) getprices ;;
 	3) notify-send "💸 Crypto-currency module" "\- Left click for exact prices.
 - Middle click to update.
-- Shows 🔃 if updating prices.
 - Manually add/remove currencies to list in the script." ;;
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac

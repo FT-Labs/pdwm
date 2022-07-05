@@ -21,7 +21,7 @@ function send_notification {
 
 vol="$(pamixer --get-volume)"
 
-[ $(pamixer --get-mute) = true ] && send_notification && echo 🔇 && exit
+[ $(pamixer --get-mute) = true ] && send_notification && echo ﱝ && exit
 
 if [ "$vol" -gt "70" ]; then
 	icon="🔊"
