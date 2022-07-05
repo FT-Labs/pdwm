@@ -42,6 +42,7 @@ static char *colors[][3] = {
        [SchemeTagsNorm] = { blue, black, "#000000" },
        [SchemeInfoSel] = { blue, black, "#000000" },
        [SchemeInfoNorm] = { black, black, "#000000" },
+       [SchemeStatus] = { white, black, "#000000" };
        [SchemeOptimal] = { green, black, "#000000" },
        [SchemeCritical] = { red, black, "#000000" },
 };
