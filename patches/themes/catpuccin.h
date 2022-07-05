@@ -4,4 +4,4 @@ static char blue[]        = "#96CDFB";  // focused window border
 static char blue2[]       = "#c9cbff";
 static char green[]       = "#ABE9B3";
 static char red[]         = "#F28FAD";
-static char white[]       = "#eff1f5"
+static char white[]       = "#eff1f5";

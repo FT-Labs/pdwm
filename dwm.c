@@ -1117,12 +1117,10 @@ drawbar(Monitor *m, Client *cdock)
                     x = atoi(tmp);
                 }
 
-                if (x <= 30) {
+                if (x <= 30)
                     drw_setscheme(drw, scheme[SchemeCritical]);
-                }
-                else {
+                else
                     drw_setscheme(drw, scheme[SchemeOptimal]);
-                }
             }
             drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
             twtmp -= TEXTW_SB(sb_arr[i]);
@@ -1184,7 +1182,7 @@ drawbar(Monitor *m, Client *cdock)
         int s;
         if ((m->sel && m == selmon) || cdock) {
             c = cdock ? cdock : m->sel;
-            drw_setscheme(drw, scheme[SchemeOptimal]);
+            drw_setscheme(drw, scheme[SchemeStatus]);
             s = drw_text(drw, x, 0, MIN(w, TEXTW(c->name) + (c->icon ? c->icw + sb_icon_margin_x : 0) + lrpad), bh, lrpad / 2 + (c->icon ? c->icw + sb_icon_margin_x : 0), c->name, HIDDEN(c) ? 1 : 0) - x;
             if (c->icon) drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon, -1);
             if (c->isfloating)
