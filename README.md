@@ -1,6 +1,8 @@
 ## dwm-phyOS (dwm and dwmblocks in one)
 ## Clickable and modifiable dwmblocks without compiling, all editing can be done from configuration files
 
+### DO NOT USE GITLAB ISO FOR NOW, IT IS OLD. LINK WILL BE HERE WHEN IT IS AVAILABLE.
+
 ### Gifs
 
 ![alt text](https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/g1.gif)
