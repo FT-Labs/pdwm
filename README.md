@@ -10,7 +10,6 @@
 (Alt + Tab to switch windows)
 <img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s1.png">
 (Hide and restore windows from bottom dock (Check keys for how to do this))
-<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s7.png">
 <img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s2.png">
 <img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s3.png">
 (catppuccin & tokyo night theme)
