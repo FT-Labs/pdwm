@@ -1190,7 +1190,7 @@ drawbar(Monitor *m, Client *cdock)
             XMoveResizeWindow(dpy, m->barwin[1], m->wx + (m->bleftend + m->brightstart - s) / 2 + 2 * sb_padding_x, m->by, s - 2 * sb_padding_x, bh);
             drw_map(drw, m->barwin[1], m->bleftend, 0, m->ww, bh);
         } else {
-            XMoveResizeWindow(dpy, m->barwin[1], m->wx + (m->ww) / 2, -2 * bh + -2 * sb_padding_y, 100, 100);
+            XMoveResizeWindow(dpy, m->barwin[1], m->wx + (m->bleftend + m->brightstart) / 2, -2 * bh + -2 * sb_padding_y, 100, 100);
         }
     }
     drw_map(drw, m->barwin[0], 0, 0, m->ww, bh);
@@ -1525,6 +1525,7 @@ hidewin(Client *c)
     XSelectInput(dpy, root, ra.your_event_mask);
     XSelectInput(dpy, w, ca.your_event_mask);
     XUngrabServer(dpy);
+    updateclientlist();
 }
 
 
@@ -2787,10 +2788,12 @@ updateclientlist()
 
     XDeleteProperty(dpy, root, netatom[NetClientList]);
     for (m = mons; m; m = m->next)
-        for (c = m->clients; c; c = c->next)
-            XChangeProperty(dpy, root, netatom[NetClientList],
-                XA_WINDOW, 32, PropModeAppend,
-                (unsigned char *) &(c->win), 1);
+        for (c = m->clients; c; c = c->next) {
+            if (!HIDDEN(c))
+                XChangeProperty(dpy, root, netatom[NetClientList],
+                    XA_WINDOW, 32, PropModeAppend,
+                    (unsigned char *) &(c->win), 1);
+        }
 }
 
 int
