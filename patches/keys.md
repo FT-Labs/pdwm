@@ -141,8 +141,9 @@ Key Combination | Action
 Key Combination | Action
 ----------------- | ----------
  <kbd>RMB</kbd>                      | Open Dropdown Menu (On Root Window)
+ <kbd>Win</kbd> + <kbd>RMB</kbd>     | Open Dropdown Menu (On Any Client)
  <kbd>Win</kbd> + <kbd>LMB</kbd>     | Move window with mouse (sets window to floating mode)
- <kbd>Win</kbd> + <kbd>RMB</kbd>     | Resize window with mouse (sets window to floating mode)
+ <kbd>Win</kbd> + <kbd>MMB</kbd>     | Resize window with mouse (sets window to floating mode)
  <kbd>Alt</kbd> + <kbd>LMB</kbd> | Hide focused window (iconic state, restore it from dock)
  <kbd>Alt</kbd> + <kbd>RMB</kbd> | Toggle dock
 
