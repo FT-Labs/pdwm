@@ -22,12 +22,12 @@
 
  This modified suckless **dwm** window manager is built for arch based _phyOS_ distro but can be installed with following for any linux OS.
  - Beta version iso has been released on gitlab. It will automatically install everything and clean up bloat packages with calamares.
- - https://gitlab.com/phytech/phyos-iso
+ - LINK IS OLD, NEW ISO WILL BE AVAILABLE SOON
 
 ### Click on 'Keys' button on top left in status bar to check out keybindings.
 #### Non-arch users need to install all of them seperately from links below:
 Programs below are all **source code modified** programs therefore all of them are needed to download from:
- - Simple installation would work for all repos other than fonts-phyOS, clone the repo and:
+ - Simple installation would work for all repos other than phyOS-fonts, clone the repo and:
 
      `make && sudo make install`
 
@@ -55,12 +55,13 @@ if it is not found it will revert to default. Note that if __statusbar__ scripts
 ### Requirement for total functionality:
 
  - light
- - picom
+ - picom-animations-git
  - unclutter
  - rofi
  - dmenu
+ - conky
+ - jgmenu
  - lf
- - xmenu
  - s-tui (stress test)
  - cointop (terminal crypto prices)
  - pamixer
@@ -79,7 +80,7 @@ Append package repo end of your `/etc/pacman.conf` :
     Server = https://PhyTech-R0.github.io/$repo/$arch
 Then install necessary programs with **pacman** easily:
 
-    pacman -Sy phyOS-dwm phyOS-dunst phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi picom unclutter lf ttf-joypixels light
+    pacman -Sy phyOS-dwm phyOS-dunst phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi unclutter lf ttf-joypixels light picom-animations-git
 
 #### Installation for different distros then arch linux:
     git clone https://github.com/PhyTech-R0/phyOS-dwm
@@ -243,8 +244,9 @@ Key Combination | Action
 Key Combination | Action
 ----------------- | ----------
  <kbd>RMB</kbd>                      | Open Dropdown Menu (On Root Window)
+ <kbd>Win</kbd> + <kbd>RMB</kbd>     | Open Dropdown Menu (On Any Client)
  <kbd>Win</kbd> + <kbd>LMB</kbd>     | Move window with mouse (sets window to floating mode)
- <kbd>Win</kbd> + <kbd>RMB</kbd>     | Resize window with mouse (sets window to floating mode)
+ <kbd>Win</kbd> + <kbd>MMB</kbd>     | Resize window with mouse (sets window to floating mode)
  <kbd>Alt</kbd> + <kbd>LMB</kbd> | Hide focused window (iconic state, restore it from dock)
  <kbd>Alt</kbd> + <kbd>RMB</kbd> | Toggle dock
 
