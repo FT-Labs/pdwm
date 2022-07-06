@@ -1,8 +1,12 @@
 ## dwm-phyOS (dwm and dwmblocks in one)
 ## Clickable and modifiable dwmblocks without compiling, all editing can be done from configuration files
 
-### Screenshots
+### Gifs
 
+![alt text](https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/g1.gif)
+![alt text](https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/g2.gif)
+
+### Screenshots
 (Alt + Tab to switch windows)
 <img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s1.png">
 (Hide and restore windows from bottom dock (Check keys for how to do this))
