@@ -76,7 +76,8 @@ if it is not found it will revert to default. Note that if __statusbar__ scripts
 Append package repo end of your `/etc/pacman.conf` :
 
     [phyOS-repo]
-    SigLevel = Required DatabaseOptional
+    #SigLevel = Required DatabaseOptional
+    SigLevel = Optional TrustAll
     Server = https://PhyTech-R0.github.io/$repo/$arch
 
 After adding the repo, install keyring first:
@@ -84,6 +85,8 @@ After adding the repo, install keyring first:
     pacman -Syy phyOS-keyring
     pacman-key --init
     pacman-key --populate phyOS
+
+### !! Please delete `SigLevel = Optional TrustAll` from your `/etc/pacman.conf` after installing keyring package. Then uncomment `SigLevel = Required DatabaseOptional`
 
 Then install necessary programs with **pacman** easily:
 
