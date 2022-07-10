@@ -76,11 +76,18 @@ if it is not found it will revert to default. Note that if __statusbar__ scripts
 Append package repo end of your `/etc/pacman.conf` :
 
     [phyOS-repo]
-    SigLevel = Optional TrustedOnly
+    SigLevel = Required DatabaseOptional
     Server = https://PhyTech-R0.github.io/$repo/$arch
+
+After adding the repo, install keyring first:
+
+    pacman -Syy phyOS-keyring
+    pacman-key --init
+    pacman-key --populate phyOS
+
 Then install necessary programs with **pacman** easily:
 
-    pacman -Sy phyOS-dwm phyOS-dunst phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi unclutter lf ttf-joypixels light picom-animations-git
+    pacman -S phyOS-dwm phyOS-dunst phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi unclutter lf-png ttf-joypixels light picom-animations-git
 
 #### Installation for different distros then arch linux:
     git clone https://github.com/PhyTech-R0/phyOS-dwm
@@ -91,14 +98,21 @@ You need to install fonts to your system first (Nerd fonts, including all glyphs
     cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/
     sudo fc-cache
 
+
 #### For non-arch and arch users (updating dotfiles and configs)
 
-	phyup dots
+
+#### To pull newest dotfiles, just write `phyup dots`
+
+Note that this just pulls newest config from github repo. If any conflict happens, this will give error and won't replace current dotfiles. Just move them elsewhere if you prefer not to change them.
+
+#### If you want to force install dotfiles, write the command below:
+
+	phyup dots --force
 
 Note that this will replace all dots with new ones, if you have your current vim configuration or etc. please move them or rename them before using this command or just make them immutable with something like
 
 	sudo chattr +i .xinitrc
-
 
 ## Default keys (same in keys.md)
 
