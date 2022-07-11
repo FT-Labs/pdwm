@@ -5,20 +5,20 @@
 
 ### Gifs
 
-![alt text](https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/g1.gif)
-![alt text](https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/g2.gif)
+![alt text](https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/g1.gif)
+![alt text](https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/g2.gif)
 
 ### Screenshots
 (Alt + Tab to switch windows)
-<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s1.png">
+<img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/s1.png">
 (Hide and restore windows from bottom dock (Check keys for how to do this))
-<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s2.png">
-<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s3.png">
+<img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/s2.png">
+<img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/s3.png">
 (catppuccin & tokyo night theme)
-<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s4.png">
-<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s5.png">
+<img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/s4.png">
+<img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/s5.png">
 (Power menu 'right one is to renew dwm without restart')
-<img src="https://github.com/PhyTech-R0/phyOS-dwm/blob/screenshots/screenshots/s6.png">
+<img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/s6.png">
 
  This modified suckless **dwm** window manager is built for arch based _phyOS_ distro but can be installed with following for any linux OS.
  - Beta version iso has been released on gitlab. It will automatically install everything and clean up bloat packages with calamares.
@@ -31,15 +31,15 @@ Programs below are all **source code modified** programs therefore all of them a
 
      `make && sudo make install`
 
-Main account : **https://github.com/PhyTech-R0**
+Main account : **https://github.com/FT-Labs**
 
- - https://github.com/PhyTech-R0/phyOS-dunst
- - https://github.com/PhyTech-R0/phyOS-fonts
- - https://github.com/PhyTech-R0/phyOS-st
+ - https://github.com/FT-Labs/phyOS-dunst
+ - https://github.com/FT-Labs/phyOS-fonts
+ - https://github.com/FT-Labs/phyOS-st
 
 ### IMPORTANT!! READ BELOW (If you just want statusbar scripts, you can omit this just read below)
 Make sure to use my dotfiles, all of the **scripts** and path variables need to be set correctly for full functionality.
- - https://github.com/PhyTech-R0/dotfiles
+ - https://github.com/FT-Labs/dotfiles
 
 ### ABOUT DWMBLOCKS AND SCRIPTS
 All dwmblocks and scripts are in **dwmblocksconfig** directory. All configuration files can be read from single path only,
@@ -77,7 +77,7 @@ Append package repo end of your `/etc/pacman.conf` :
 
     [phyOS-repo]
     SigLevel = Required DatabaseOptional
-    Server = https://PhyTech-R0.github.io/$repo/$arch
+    Server = https://FT-Labs.github.io/$repo/$arch
 
 After adding the repo, install keyring first:
 
@@ -93,11 +93,11 @@ Then install necessary programs with **pacman** easily:
 
 #### Installation for different distros then arch linux:
 
-    git clone https://github.com/PhyTech-R0/phyOS-dwm
+    git clone https://github.com/FT-Labs/phyOS-dwm
     cd dwm-phyOS && make && sudo make install
 You need to install fonts to your system first (Nerd fonts, including all glyphs etc.):
 
-    git clone github.com/phytech-r0/phyOS-fonts
+    git clone github.com/FT-Labs/phyOS-fonts
     cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/
     sudo fc-cache
 
