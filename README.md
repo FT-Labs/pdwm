@@ -81,10 +81,10 @@ Append package repo end of your `/etc/pacman.conf` :
 
 After adding the repo, install keyring first:
 
-    pacman-key --lsign-key 964FD85861C858D7
-    pacman -Syy phyOS-keyring
-    pacman-key --init
-    pacman-key --populate phyOS
+    sudo pacman-key --recv-key 964FD85861C858D7 && sudo pacman-key --lsign-key $_
+    sudo pacman -Syy phyOS-keyring
+    sudo pacman-key --init
+    sudo pacman-key --populate phyOS
 
 
 Then install necessary programs with **pacman** easily:
