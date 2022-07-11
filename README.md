@@ -76,23 +76,23 @@ if it is not found it will revert to default. Note that if __statusbar__ scripts
 Append package repo end of your `/etc/pacman.conf` :
 
     [phyOS-repo]
-    #SigLevel = Required DatabaseOptional
-    SigLevel = Optional TrustAll
+    SigLevel = Required DatabaseOptional
     Server = https://PhyTech-R0.github.io/$repo/$arch
 
 After adding the repo, install keyring first:
 
+    pacman-key --lsign-key 964FD85861C858D7
     pacman -Syy phyOS-keyring
     pacman-key --init
     pacman-key --populate phyOS
 
-### !! Please delete `SigLevel = Optional TrustAll` from your `/etc/pacman.conf` after installing keyring package. Then uncomment `SigLevel = Required DatabaseOptional`
 
 Then install necessary programs with **pacman** easily:
 
     pacman -S phyOS-dwm phyOS-dunst phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi unclutter lf-png ttf-joypixels light picom-animations-git
 
 #### Installation for different distros then arch linux:
+
     git clone https://github.com/PhyTech-R0/phyOS-dwm
     cd dwm-phyOS && make && sudo make install
 You need to install fonts to your system first (Nerd fonts, including all glyphs etc.):
