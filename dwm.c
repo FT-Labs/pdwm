@@ -1697,7 +1697,7 @@ manage(Window w, XWindowAttributes *wa)
         /* only fix client y-offset, if the client center might cover the bar */
         c->y = MAX(c->y, ((c->mon->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
             && (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
-    } else {
+    } else if (c->iscentered) {
             c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
             c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
     }
