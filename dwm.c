@@ -1055,8 +1055,6 @@ dockevent(XEvent *e, int evtype)
 void
 drawbar(Monitor *m, Client *cdock)
 {
-    if (m != selmon)
-        return;
     int x, w, y = 0, tw = 0, twtmp = 0;
     int boxs = drw->fonts->h / 9;
     int boxw = drw->fonts->h / 6 + 2;
