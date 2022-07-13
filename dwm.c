@@ -400,8 +400,8 @@ applyrules(Client *c)
     XClassHint ch = { NULL, NULL };
 
     /* rule matching */
-    c->iscentered = 0;
-    c->isfloating = 0;
+    c->iscentered = c->iscentered ? 1 : 0;
+    c->isfloating = c->isfloating ? 1 : 0;
     c->tags = 0;
     XGetClassHint(dpy, c->win, &ch);
     class    = ch.res_class ? ch.res_class : broken;
@@ -672,11 +672,6 @@ buttonpress(XEvent *e)
             }
         }
 
-    } else if ((c = wintoclient(ev->window))) {
-        focus(c);
-        restack(selmon);
-        XAllowEvents(dpy, ReplayPointer, CurrentTime);
-        click = ClkClientWin;
     } else if (ev->window == selmon->barwin[2]) {
         if (ev->x > (x = 0)) {
             click = ClkStatusText;
@@ -700,7 +695,13 @@ buttonpress(XEvent *e)
             }
         } else
             click = ClkWinTitle;
+    } else if ((c = wintoclient(ev->window))) {
+            focus(c);
+            restack(selmon);
+            XAllowEvents(dpy, ReplayPointer, CurrentTime);
+            click = ClkClientWin;
     }
+
 execute_handler:
     for (i = 0; i < LENGTH(buttons); i++)
         if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button
@@ -1292,7 +1293,7 @@ void
 focus(Client *c)
 {
     if (!c || !ISVISIBLE(c)) {
-        for (c = selmon->stack; c && (!ISVISIBLE(c) || (c->issticky && !selmon->sel->issticky)); c = c->snext);
+        for (c = selmon->stack; c && (!ISVISIBLE(c) || (c->issticky && selmon->sel && !selmon->sel->issticky)); c = c->snext);
         /* No windows found; check for available stickies */
         if (!c)
             for (c = selmon->stack; c && !ISVISIBLE(c); c = c->snext);
@@ -1649,6 +1650,7 @@ manage(Window w, XWindowAttributes *wa)
 
     updateicon(c);
     updatetitle(c);
+    updatewindowtype(c);
     updatesizehints(c);
     updatewmhints(c);
     if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
@@ -1659,7 +1661,6 @@ manage(Window w, XWindowAttributes *wa)
         applyrules(c);
         term = termforwin(c);
     }
-    updatewindowtype(c);
 
     {
         int format;
@@ -2938,7 +2939,7 @@ void
 updatestatus(void)
 {
     if (!gettextprop(root, XA_WM_NAME, rawstext, sizeof(rawstext)))
-        strcpy(stext, "dwm-"VERSION);
+        strcpy(stext, "phyOS-dwm-"VERSION);
     else
         copyvalidchars(stext, rawstext);
     drawbar(selmon, NULL);
@@ -3167,7 +3168,7 @@ wintomon(Window w)
     if (w == root && getrootptr(&x, &y))
         return recttomon(x, y, 1, 1);
     for (m = mons; m; m = m->next)
-        if (w == m->barwin[0])
+        if (w == m->barwin[0] || w == m->barwin[1] || w == m->barwin[2])
             return m;
     if ((c = wintoclient(w)))
         return c->mon;
