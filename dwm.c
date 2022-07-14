@@ -2740,9 +2740,8 @@ updatebars(void)
     };
     XClassHint ch = {"dwm", "dwm"};
     for (m = mons; m; m = m->next) {
-        if (!m->barwin[0])
-        {
-            for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
+            if (!m->barwin[i]) {
                 m->barwin[i] = XCreateWindow(dpy, root, m->wx + sb_padding_x, m->by, m->ww - 2 * sb_padding_x, bh, 0, DefaultDepth(dpy, screen),
                         CopyFromParent, DefaultVisual(dpy, screen),
                         CWColormap|CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
