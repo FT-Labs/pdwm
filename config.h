@@ -99,7 +99,7 @@ static const Layout layouts[] = {
     { MODKEY|MOD2KEY,               KEY,      swaptags,       {.ui = 1 << TAG} },
 #define STACKKEYS(MOD,ACTION) \
     { MOD,  XK_j,   ACTION##stack,  {.i = INC(+1) } }, \
-    { MOD,  XK_k,   ACTION##stack,  {.i = INC(-1) } }, \
+    { MOD,  XK_k,   ACTION##stack,  {.i = 0 } }, \
     { MOD,  XK_v,   ACTION##stack,  {.i = 0 } }, \
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
