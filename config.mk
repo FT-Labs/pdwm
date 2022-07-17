@@ -11,8 +11,8 @@ X11INC = /usr/X11R6/include
 X11LIB = /usr/X11R6/lib
 
 # Xinerama, comment if you don't want it
-#XINERAMALIBS  = -lXinerama
-#XINERAMAFLAGS = -DXINERAMA
+XINERAMALIBS  = -lXinerama
+XINERAMAFLAGS = -DXINERAMA
 
 # Imlib2 for png support
 IMLIB2 = -lImlib2
