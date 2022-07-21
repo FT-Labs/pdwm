@@ -94,7 +94,7 @@ enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum { SchemeNorm, SchemeSel, SchemeStatus, SchemeTagsSel, SchemeTagsNorm, SchemeInfoSel, SchemeInfoNorm, SchemeOptimal, SchemeCritical }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMIcon, NetWMState, NetWMCheck,
         NetWMFullscreen, NetActiveWindow, NetWMWindowType,
-        NetWMWindowTypeDialog, NetClientList, NetClientInfo, NetLast}; /* EWMH atoms */
+        NetWMWindowTypeDialog, NetClientList, NetWMDesktop, NetCurrentDesktop, NetLast}; /* EWMH atoms */
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
 enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
        ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
@@ -301,6 +301,7 @@ static void unmanage(Client *c, int destroyed);
 static void unmapnotify(XEvent *e);
 static void updatebarpos(Monitor *m);
 static void updatebars(void);
+static void updatecurrentdesktop(Monitor *m);
 static void updateclientlist(void);
 static int updategeom(void);
 static void updateicon(Client *c);
@@ -507,8 +508,10 @@ applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact)
 void
 arrange(Monitor *m)
 {
-    if (m)
+    if (m) {
         showhide(m->stack);
+        updatecurrentdesktop(m);
+    }
     else for (m = mons; m; m = m->next)
         showhide(m->stack);
     if (m) {
@@ -790,6 +793,7 @@ clientmessage(XEvent *e)
                 if (selmon->sel != c) {
                     selmon = c->mon;
                     view(&a);
+                    showwin(c);
                     focus(c);
                     if (!c->isfloating)
                         XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w/2, c->h/2);
@@ -1670,7 +1674,7 @@ manage(Window w, XWindowAttributes *wa)
         Monitor *m;
         Atom atom;
 
-        if (XGetWindowProperty(dpy, c->win, netatom[NetClientInfo], 0L, 2L, False, XA_CARDINAL,
+        if (XGetWindowProperty(dpy, c->win, netatom[NetWMDesktop], 0L, 2L, False, XA_CARDINAL,
                 &atom, &format, &n, &extra, (unsigned char **)&data) == Success && n == 2)
         {
 
@@ -2188,7 +2192,7 @@ void
 setclienttagprop(Client *c)
 {
     long data[] = { (long) c->tags, (long) c->mon->num };
-    XChangeProperty(dpy, c->win, netatom[NetClientInfo], XA_CARDINAL, 32,
+    XChangeProperty(dpy, c->win, netatom[NetWMDesktop], XA_CARDINAL, 32,
             PropModeReplace, (unsigned char *) data, 2);
 }
 
@@ -2354,11 +2358,12 @@ setup(void)
     netatom[NetWMName] = XInternAtom(dpy, "_NET_WM_NAME", False);
     netatom[NetWMState] = XInternAtom(dpy, "_NET_WM_STATE", False);
     netatom[NetWMCheck] = XInternAtom(dpy, "_NET_SUPPORTING_WM_CHECK", False);
+    netatom[NetWMDesktop] = XInternAtom(dpy, "_NET_WM_DESKTOP", False);
     netatom[NetWMFullscreen] = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
     netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
     netatom[NetWMWindowTypeDialog] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
     netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
-    netatom[NetClientInfo] = XInternAtom(dpy, "_NET_CLIENT_INFO", False);
+    netatom[NetCurrentDesktop] = XInternAtom(dpy, "_NET_CURRENT_DESKTOP", False);
     /* init cursors */
     cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
     cursor[CurResize] = drw_cur_create(drw, XC_sizing);
@@ -2381,7 +2386,7 @@ setup(void)
     /* EWMH support per view */
     XChangeProperty(dpy, root, netatom[NetSupported], XA_ATOM, 32,
         PropModeReplace, (unsigned char *) netatom, NetLast);
-    XDeleteProperty(dpy, root, netatom[NetClientInfo]);
+    XDeleteProperty(dpy, root, netatom[NetWMDesktop]);
     XDeleteProperty(dpy, root, netatom[NetClientList]);
     /* select events */
     wa.cursor = cursor[CurNormal]->cursor;
@@ -2713,7 +2718,6 @@ unmanage(Client *c, int destroyed)
     if (!s) {
         arrange(m);
         focus(NULL);
-        updateclientlist();
     }
 }
 
@@ -2783,6 +2787,15 @@ updatebarpos(Monitor *m)
 }
 
 void
+updatecurrentdesktop(Monitor *m)
+{
+    long data[] = { (long) m->tagset[m->seltags] };
+    XChangeProperty(dpy, root, netatom[NetCurrentDesktop],
+        XA_CARDINAL, 32, PropModeReplace,
+        (unsigned char *) data, 1);
+}
+
+void
 updateclientlist()
 {
     Client *c;
@@ -2791,10 +2804,9 @@ updateclientlist()
     XDeleteProperty(dpy, root, netatom[NetClientList]);
     for (m = mons; m; m = m->next)
         for (c = m->clients; c; c = c->next) {
-            if (!HIDDEN(c))
-                XChangeProperty(dpy, root, netatom[NetClientList],
-                    XA_WINDOW, 32, PropModeAppend,
-                    (unsigned char *) &(c->win), 1);
+            XChangeProperty(dpy, root, netatom[NetClientList],
+                XA_WINDOW, 32, PropModeAppend,
+                (unsigned char *) &(c->win), 1);
         }
 }
 

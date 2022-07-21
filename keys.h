@@ -78,6 +78,7 @@ static Key keys[] = {
     { MOD2KEY,          XK_9,       setlayout,  {.v = &layouts[8]} },      /* Floating layout */
     { MODKEY,           XK_Escape,  spawn,      SHCMD("pOS-powermenu") },
     { MODKEY,           XK_BackSpace,  spawn,   SHCMD("pOS-powermenu") },
+    { MODKEY,           XK_Tab,     spawn,      SHCMD("pOS-windowswitchcurtag") },
     { MOD2KEY,          XK_Tab,     spawn,      SHCMD("pOS-windowswitch") },
     { MODKEY,           XK_q,       killclient, {0} },
     { MODKEY,           XK_w,       spawn,      SHCMD("$BROWSER") },

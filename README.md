@@ -172,7 +172,8 @@ Key Combination | Action
 
 Key Combination | Action
 ----------------- | ----------
- <kbd>Alt</kbd> + <kbd>Tab</kbd>          | Choose window and focus
+ <kbd>Win</kbd> + <kbd>Tab</kbd>          | Choose window from current desktop
+ <kbd>Alt</kbd> + <kbd>Tab</kbd>          | Choose any window and focus
  <kbd>Win</kbd> + <kbd>j</kbd>          | Focus next
  <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>j</kbd>          | Move focused to next
  <kbd>Win</kbd> + <kbd>k</kbd>          | Focus previous
