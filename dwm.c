@@ -1519,8 +1519,11 @@ hidewin(Client *c)
     if (!c || HIDDEN(c))
         return;
     Window w = c->win;
+    char name[264] = "[HIDDEN]";
+    strcpy((name+8), c->name);
+    XChangeProperty(dpy, w, netatom[NetWMName], XInternAtom(dpy, "UTF8_STRING", False), 8,
+        PropModeReplace, (unsigned char *) name, strlen(name));
     static XWindowAttributes ra, ca;
-
     XGrabServer(dpy);
     XGetWindowAttributes(dpy, root, &ra);
     XGetWindowAttributes(dpy, w, &ca);
@@ -1532,7 +1535,6 @@ hidewin(Client *c)
     XSelectInput(dpy, root, ra.your_event_mask);
     XSelectInput(dpy, w, ca.your_event_mask);
     XUngrabServer(dpy);
-    updateclientlist();
 }
 
 
@@ -2442,6 +2444,8 @@ showwin(Client *c)
         return;
     XMapWindow(dpy, c->win);
     setclientstate(c, NormalState);
+    XChangeProperty(dpy, c->win, netatom[NetWMName], XInternAtom(dpy, "UTF8_STRING", False), 8,
+        PropModeReplace, (unsigned char *) (c->name+8), strlen(c->name+8));
     arrange(c->mon);
 }
 
