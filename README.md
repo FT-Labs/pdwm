@@ -1,8 +1,6 @@
 ## dwm-phyOS (dwm and dwmblocks in one)
 ## Clickable and modifiable dwmblocks without compiling, all editing can be done from configuration files
 
-### DO NOT USE GITLAB ISO FOR NOW, IT IS OLD. LINK WILL BE HERE WHEN IT IS AVAILABLE.
-
 ### Gifs
 
 ![alt text](https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/g1.gif)
@@ -21,8 +19,6 @@
 <img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/s6.png">
 
  This modified suckless **dwm** window manager is built for arch based _phyOS_ distro but can be installed with following for any linux OS.
- - Beta version iso has been released on gitlab. It will automatically install everything and clean up bloat packages with calamares.
- - LINK IS OLD, NEW ISO WILL BE AVAILABLE SOON
 
 ### Click on 'Keys' button on top left in status bar to check out keybindings.
 #### Non-arch users need to install all of them seperately from links below:
