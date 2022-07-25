@@ -50,6 +50,9 @@
 #include "drw.h"
 #include "util.h"
 
+/* helper for spawning shell commands in the pre dwm-5.0 fashion */
+#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+
 /* macros */
 #define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)
 #define CLEANMASK(mask)         (mask & ~(numlockmask|LockMask) & (ShiftMask|ControlMask|Mod1Mask|Mod2Mask|Mod3Mask|Mod4Mask|Mod5Mask))
@@ -645,6 +648,12 @@ buttonpress(XEvent *e)
     if (ev->window == selmon->barwin[0]) {
         i = 0;
         x = sb_icon_wh + 2 * sb_delimiter_w;
+        if (ev->x <= x) {
+            Arg a = SHCMD("rofi -show drun");
+            spawn(&a);
+            return;
+        }
+
         for (c = m->clients; c; c = c->next)
             occ |= c->tags == 255 ? 0 : c->tags;
         do {
@@ -1036,16 +1045,13 @@ dockevent(XEvent *e, int evtype)
     {
         if (BETWEEN(e->xmotion.x, x, x + sb_icon_wh) || (!c->icon && BETWEEN(e->xmotion.x, x, x + TEXTW_SB(c->name))))
         {
-            if (evtype)
-            {
+            if (evtype) {
                 showwin(c);
                 focus(c);
                 restack(selmon);
                 XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
                 toggledock(NULL);
-            }
-            else
-            {
+            } else {
                 drawbar(selmon, c);
                 XSync(dpy, True);
             }
@@ -1059,8 +1065,6 @@ dockevent(XEvent *e, int evtype)
 void
 drawbar(Monitor *m, Client *cdock)
 {
-    if (m != selmon)
-        return;
     int x, w, y = 0, tw = 0, twtmp = 0;
     int boxs = drw->fonts->h / 9;
     int boxw = drw->fonts->h / 6 + 2;
@@ -1243,8 +1247,7 @@ drawdock(Monitor *m)
                     drw_pic(drw, x, icon_y, c->icw, c->ich, c->icon, -1);
                     x += c->icw + sb_icon_margin_x;
                 }
-                else
-                {
+                else {
                     drw_setscheme(drw, scheme[SchemeInfoNorm]);
                     drw_text(drw, x, icon_y, TEXTW_SB(c->name), c->icw, 0, c->name, 0);
                     x += TEXTW_SB(c->name) + sb_icon_margin_x;
@@ -1252,8 +1255,7 @@ drawdock(Monitor *m)
                 }
             }
         }
-        if (!curtagc)
-        {
+        if (!curtagc) {
             toggledock(NULL);
             return;
         }
