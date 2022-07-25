@@ -85,7 +85,7 @@ After adding the repo, install keyring first:
 
 Then install necessary programs with **pacman** easily:
 
-    pacman -S phyOS-dwm phyOS-dunst phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi unclutter lf-png ttf-joypixels light picom-animations-git
+    sudo pacman -S phyOS-dwm phyOS-dunst phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi unclutter lf-png ttf-joypixels light picom-animations-git
 
 #### Installation for different distros then arch linux:
 
