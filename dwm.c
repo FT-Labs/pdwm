@@ -1112,14 +1112,13 @@ drawbar(Monitor *m, Client *cdock)
             twtmp -= sb_icon_wh + sb_icon_margin_x;
             drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
             twtmp -= TEXTW_SB(sb_arr[i]);
-        }
-        else {
+        } else {
             if (sb_arr[i][strlen(sb_arr[i]) - 1] == '%') {
-                char buf[3];
+                char buf[strlen(sb_arr[i])];
                 char* tmp;
                 int x = 0;
 
-                strncpy(buf, sb_arr[i] + strlen(sb_arr[i]) - 5, strlen(sb_arr[i]) - 1);
+                strncpy(buf, sb_arr[i], strlen(sb_arr[i]) - 1);
                 tmp = buf;
                 x = atoi(tmp);
 
