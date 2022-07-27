@@ -683,8 +683,12 @@ buttonpress(XEvent *e)
                 return;
             }
         }
-
-    } else if (ev->window == selmon->barwin[2]) {
+    } else if ((c = wintoclient(ev->window))) {
+            focus(c);
+            restack(selmon);
+            XAllowEvents(dpy, ReplayPointer, CurrentTime);
+            click = ClkClientWin;
+    }  else if (ev->window == selmon->barwin[2]) {
         if (ev->x > (x = 0)) {
             click = ClkStatusText;
 
@@ -707,11 +711,6 @@ buttonpress(XEvent *e)
             }
         } else
             click = ClkWinTitle;
-    } else if ((c = wintoclient(ev->window))) {
-            focus(c);
-            restack(selmon);
-            XAllowEvents(dpy, ReplayPointer, CurrentTime);
-            click = ClkClientWin;
     }
 
 execute_handler:
@@ -1065,6 +1064,8 @@ dockevent(XEvent *e, int evtype)
 void
 drawbar(Monitor *m, Client *cdock)
 {
+    if (!m->barwin[0] || !m->barwin[1] || !m->barwin[2])
+        return;
     int x, w, y = 0, tw = 0, twtmp = 0;
     int boxs = drw->fonts->h / 9;
     int boxw = drw->fonts->h / 6 + 2;
@@ -1300,7 +1301,7 @@ void
 focus(Client *c)
 {
     if (!c || !ISVISIBLE(c)) {
-        for (c = selmon->stack; c && (!ISVISIBLE(c) || (c->issticky && selmon->sel && !selmon->sel->issticky)); c = c->snext);
+        for (c = selmon->stack; c && (!ISVISIBLE(c) || (c->issticky && !selmon->sel->issticky)); c = c->snext);
         /* No windows found; check for available stickies */
         if (!c)
             for (c = selmon->stack; c && !ISVISIBLE(c); c = c->snext);
@@ -1659,7 +1660,6 @@ manage(Window w, XWindowAttributes *wa)
 
     updateicon(c);
     updatetitle(c);
-    updatewindowtype(c);
     updatesizehints(c);
     updatewmhints(c);
     if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
@@ -1670,6 +1670,7 @@ manage(Window w, XWindowAttributes *wa)
         applyrules(c);
         term = termforwin(c);
     }
+    updatewindowtype(c);
 
     {
         int format;
@@ -1706,12 +1707,18 @@ manage(Window w, XWindowAttributes *wa)
         /* only fix client y-offset, if the client center might cover the bar */
         c->y = MAX(c->y, ((c->mon->by == c->mon->my) && (c->x + (c->w / 2) >= c->mon->wx)
             && (c->x + (c->w / 2) < c->mon->wx + c->mon->ww)) ? bh : c->mon->my);
-    } else if (c->iscentered) {
+    } else {
             c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) / 2;
             c->y = c->mon->wy + (c->mon->wh - HEIGHT(c)) / 2;
     }
-    c->bw = c->mon->borderpx;
-    wc.border_width = c->bw;
+
+    if (!c->isfullscreen) {
+        c->bw = c->mon->borderpx;
+        wc.border_width = c->bw;
+    } else {
+        c->bw = 0;
+        wc.border_width = 0;
+    }
     XConfigureWindow(dpy, w, CWBorderWidth, &wc);
     XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
     configure(c); /* propagates border_width, if size doesn't change */
@@ -2723,6 +2730,7 @@ unmanage(Client *c, int destroyed)
     if (!s) {
         arrange(m);
         focus(NULL);
+        updateclientlist();
     }
 }
 
@@ -2973,14 +2981,6 @@ updatetitle(Client *c)
 }
 
 void
-updatetag(Client *c)
-{
-    if (!c)
-        return;
-
-}
-
-void
 updateicon(Client *c)
 {
     freeicon(c);
@@ -3186,7 +3186,7 @@ wintomon(Window w)
     if (w == root && getrootptr(&x, &y))
         return recttomon(x, y, 1, 1);
     for (m = mons; m; m = m->next)
-        if (w == m->barwin[0] || w == m->barwin[1] || w == m->barwin[2])
+        if (w == m->barwin[0])
             return m;
     if ((c = wintoclient(w)))
         return c->mon;
