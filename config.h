@@ -18,7 +18,7 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const int user_dh            = 80;
 static const int docklrmargin       = 64;
 static const int user_bh            = 40;       /* 0 means normal bar height, >1 means user bar height */
-static const char *fonts[]          = { "JetBrains Mono:style=Regular:size=16", "Symbols Nerd Font:style=2048-em:size=20","JoyPixels:size=16:antialias=true:autohint=true"};
+static const char *fonts[]          = { "JetBrains Mono:style=Regular:size=16", "Symbols Nerd Font:style=2048-em:size=23","JoyPixels:size=16:antialias=true:autohint=true"};
 static char dmenufont[]             = "JetBrains Mono:style=Regular:size=16";
 static char dmenuh[] = "40";
 
