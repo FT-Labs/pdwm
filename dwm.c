@@ -167,7 +167,7 @@ struct Monitor {
     int bleftend, brightstart; /* left bar end, right bar start pos */
     int mx, my, mw, mh;   /* screen size */
     int wx, wy, ww, wh;   /* window area  */
-    unsigned int borderpx; //Set border pixel
+    unsigned int borderpx; /* Set border pixel */
     int gappih;           /* horizontal gap between windows */
     int gappiv;           /* vertical gap between windows */
     int gappoh;           /* horizontal outer gaps */
@@ -600,21 +600,21 @@ processrawtext(char* text) {
 
     for (i = 0; i<s && text[i] != '\0'; i++) {
         if (text[i] == '|') {
-            // If seperator and next char is not icon (between |0-9|, just 1 character)
+            /* If seperator and next char is not icon (between |0-9|, just 1 character) */
             if (!BETWEEN(text[i+1], '0', '9') || i+2 < s || text[i+2] != '|') {
                 x += (sb_delimiter_w + sb_icon_margin_x * 2) / 2;
             }
             x -= TEXTW_SB("|");
         }
         else if (BETWEEN(text[i], '0', '9') && text[i+1] == '|' && (i == 0 || text[i-1] == '|' )) {
-            // If icon, delete seperator margin and add icon size + icon_x_margin
+            /* If icon, delete seperator margin and add icon size + icon_x_margin */
             x += sb_icon_wh + sb_icon_margin_x;
             x -= (sb_delimiter_w + 2 * sb_icon_margin_x)/2;
             char tmp[] = {text[i], '\0'};
             x -= TEXTW_SB(tmp);
         }
         else if (text[i+1] == '|') {
-            // If next element is seperator add half width
+            /* If next element is seperator add half width */
             x += (2 * sb_icon_margin_x + sb_delimiter_w) / 2;
         }
     }
@@ -1099,7 +1099,7 @@ drawbar(Monitor *m, Client *cdock)
     XMoveResizeWindow(dpy, m->barwin[2], m->wx + m->brightstart + sb_padding_x, m->by, twtmp - 2 * sb_padding_x, bh);
 
 
-    // Fill all bar with colorscheme first, some png might have empty locations
+    /* Fill all bar with colorscheme first, some png might have empty locations */
     drw_setscheme(drw, scheme[SchemeInfoSel]);
     drw_rect(drw, m->ww - twtmp, y, twtmp, bh, 1, 1);
     twtmp -= sb_icon_margin_x;
@@ -1115,18 +1115,11 @@ drawbar(Monitor *m, Client *cdock)
             twtmp -= TEXTW_SB(sb_arr[i]);
         } else {
             if (sb_arr[i][strlen(sb_arr[i]) - 1] == '%') {
-                char buf[strlen(sb_arr[i])];
-                char* tmp;
-                int x = 0;
+                char *start = sb_arr[i];
 
-                strncpy(buf, sb_arr[i], strlen(sb_arr[i]) - 1);
-                tmp = buf;
-                x = atoi(tmp);
-
-                while (!x && strlen(tmp) > 0) {
-                    tmp++;
-                    x = atoi(tmp);
-                }
+                while (*start < 0)
+                    start++;
+                int x = atoi(start);
 
                 if (x <= 30)
                     drw_setscheme(drw, scheme[SchemeCritical]);
@@ -1137,7 +1130,7 @@ drawbar(Monitor *m, Client *cdock)
             twtmp -= TEXTW_SB(sb_arr[i]);
         }
 
-        // Below draws seperators
+        /* Below draws seperators */
         if (sb_arr[i+1] != NULL) {
             twtmp -= sb_icon_margin_x;
             drw_setscheme(drw, scheme[SchemeSel]);
@@ -1155,7 +1148,7 @@ drawbar(Monitor *m, Client *cdock)
     }
 
     x = 0;
-    // Draw logo offset with margin
+    /* Draw logo offset with margin */
     drw_setscheme(drw, scheme[SchemeTagsSel]);
     drw_rect(drw, 0, y, 2 * sb_delimiter_w + sb_icon_wh, bh, 1, 0);
     drw_pic(drw, sb_delimiter_w, y + (bh - sb_icon_wh) / 2, sb_icon_wh, sb_icon_wh, None, 0);
@@ -1836,6 +1829,8 @@ movemouse(const Arg *arg)
         case ConfigureRequest:
         case Expose:
         case MapRequest:
+            if ((ev.xmotion.time - lasttime) <= (1000 / 280))
+                continue;
             handler[ev.type](&ev);
             break;
         case MotionNotify:
@@ -1862,6 +1857,7 @@ movemouse(const Arg *arg)
         }
     } while (ev.type != ButtonRelease);
     XUngrabPointer(dpy, CurrentTime);
+    lasttime = ev.xmotion.time;
     if ((m = recttomon(c->x, c->y, c->w, c->h)) != selmon) {
         sendmon(c, m);
         selmon = m;
@@ -2540,7 +2536,6 @@ togglebar(const Arg *arg)
 {
     selmon->showbar = selmon->pertag->showbars[selmon->pertag->curtag] = !selmon->showbar;
     updatebarpos(selmon);
-    //XMoveResizeWindow(dpy, selmon->barwin, selmon->wx + sb_padding_x, selmon->by, selmon->ww - 2 * sb_padding_x, bh);
     drawbar(selmon, NULL);
     arrange(selmon);
 }
