@@ -798,7 +798,7 @@ clientmessage(XEvent *e)
         do {
             if ((1 << i) & c->tags) {
                 const Arg a = {.ui = (1 << i) };
-                if (selmon->sel != c) {
+                if (selmon->sel != c || HIDDEN(c)) {
                     selmon = c->mon;
                     view(&a);
                     showwin(c);
