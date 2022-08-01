@@ -13,9 +13,10 @@ Key Combination | Action
  <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>Return</kbd>  | Scratchpad (Terminal) [Press again to toggle]
  <kbd>Win</kbd> + <kbd>w</kbd>   | $BROWSER(default ungoogled chromium)
  <kbd>Win</kbd> + <kbd>r</kbd>   | File Browser (lf)
- <kbd>Win</kbd> + <kbd>d</kbd>   | Execute Applications (rofi)
+ <kbd>Win</kbd> + <kbd>a</kbd>   | Execute Applications (rofi)
  <kbd>Win</kbd> + <kbd>b</kbd>   | Toggle status bar (hide)
- <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>d</kbd>   | Execute Any Runnable (dmenu)
+ <kbd>Win</kbd> + <kbd>d</kbd>   | Jump to directory with terminal (check 'bm' script to add bookmarks)
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>a</kbd>   | Execute Any Runnable (dmenu)
  <kbd>Win</kbd> + <kbd>p</kbd>   | passmenu (pass password manager)
  <kbd>Alt</kbd> + <kbd>p</kbd>   | stress test and monitor (s-tui)
  <kbd>Win</kbd> + <kbd>F4</kbd>   | pulsemixer (audio input)
@@ -23,6 +24,7 @@ Key Combination | Action
  <kbd>Win</kbd> + <kbd>F9</kbd>   | mount drive
  <kbd>Win</kbd> + <kbd>F10</kbd>   | unmount drive
  <kbd>Win</kbd> + <kbd>F11</kbd>   | Camera
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>s</kbd>  | Screenshot (choose area or screen)
  <kbd>Printscreen</kbd>   | Screenshot fullscreen
  <kbd>Shift</kbd> + <kbd>Printscreen</kbd>   | Screenshot (choose area or screen)
  <kbd>Win</kbd> + <kbd>\`</kbd>   | Choose emoji and copy

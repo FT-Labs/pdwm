@@ -77,7 +77,8 @@ Append package repo end of your `/etc/pacman.conf` :
 
 After adding the repo, install keyring first:
 
-    sudo pacman-key --recv-key 964FD85861C858D7 && sudo pacman-key --lsign-key $_
+    sudo pacman-key --recv-key 964FD85861C858D7
+    sudo pacman-key --lsign-key 964FD85861C858D7
     sudo pacman -Syy phyOS-keyring
     sudo pacman-key --init
     sudo pacman-key --populate phyOS
@@ -85,7 +86,7 @@ After adding the repo, install keyring first:
 
 Then install necessary programs with **pacman** easily:
 
-    sudo pacman -S phyOS-dwm phyOS-dunst phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi unclutter lf-png ttf-joypixels light picom-animations-git
+    sudo pacman -S phyOS-dwm phyOS-dunst phyOS-systemd-services phyOS-system-scripts phyOS-sysconf phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi unclutter lf-png ttf-joypixels light picom-animations-git
 
 #### Installation for different distros then arch linux:
 
@@ -113,8 +114,6 @@ Note that this will replace all dots with new ones, if you have your current vim
 
 	sudo chattr +i .xinitrc
 
-## Default keys (same in keys.md)
-
 ### NOTE: <kbd>Caps Lock</kbd> == <kbd>Win</kbd>
 ### NOTE: <kbd>Caps Lock</kbd> is also equal to <kbd>ESC</kbd> in terminal (vim etc..)
 
@@ -130,9 +129,10 @@ Key Combination | Action
  <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>Return</kbd>  | Scratchpad (Terminal) [Press again to toggle]
  <kbd>Win</kbd> + <kbd>w</kbd>   | $BROWSER(default ungoogled chromium)
  <kbd>Win</kbd> + <kbd>r</kbd>   | File Browser (lf)
- <kbd>Win</kbd> + <kbd>d</kbd>   | Execute Applications (rofi)
+ <kbd>Win</kbd> + <kbd>a</kbd>   | Execute Applications (rofi)
  <kbd>Win</kbd> + <kbd>b</kbd>   | Toggle status bar (hide)
- <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>d</kbd>   | Execute Any Runnable (dmenu)
+ <kbd>Win</kbd> + <kbd>d</kbd>   | Jump to directory with terminal (check 'bm' script to add bookmarks)
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>a</kbd>   | Execute Any Runnable (dmenu)
  <kbd>Win</kbd> + <kbd>p</kbd>   | passmenu (pass password manager)
  <kbd>Alt</kbd> + <kbd>p</kbd>   | stress test and monitor (s-tui)
  <kbd>Win</kbd> + <kbd>F4</kbd>   | pulsemixer (audio input)
@@ -140,6 +140,7 @@ Key Combination | Action
  <kbd>Win</kbd> + <kbd>F9</kbd>   | mount drive
  <kbd>Win</kbd> + <kbd>F10</kbd>   | unmount drive
  <kbd>Win</kbd> + <kbd>F11</kbd>   | Camera
+ <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>s</kbd>  | Screenshot (choose area or screen)
  <kbd>Printscreen</kbd>   | Screenshot fullscreen
  <kbd>Shift</kbd> + <kbd>Printscreen</kbd>   | Screenshot (choose area or screen)
  <kbd>Win</kbd> + <kbd>\`</kbd>   | Choose emoji and copy
@@ -220,6 +221,7 @@ Key Combination | Action
 ## Tag operations
 
 ### You can Left Click <kbd>LMB</kbd> on 1-9 in status bar to focus tag
+### You can Right Click <kbd>RMB</kbd> on 1-9 in status bar to select multiple tags
 
 <div align="center">
 
