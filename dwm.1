@@ -1,11 +1,11 @@
 .TH DWM 1 dwm\-VERSION
 .SH NAME
-dwm \- dynamic window manager (Luke Smith <https://lukesmith.xyz>'s build)
+phyOS\-dwm \- dynamic window manager
 .SH SYNOPSIS
 .B dwm
 .RB [ \-v ]
 .SH DESCRIPTION
-dwm is a dynamic window manager for X.
+phyOS-dwm is a fork of dwm for phyOS
 .P
 dwm "orders" windows based on recency and primacy, while dwm layouts may
 change, the most recent "master" window is shown in the most prominent
@@ -14,26 +14,6 @@ master position.
 .P
 Windows are grouped by tags. Each window can be tagged with one or multiple
 tags. Selecting certain tags displays all windows with these tags.
-.P
-Each screen contains a small status bar which displays all available tags, the
-layout, the title of the focused window, and the text read from the root window
-name property, if the screen is focused. A floating window is indicated with an
-empty square and a maximised floating window is indicated with a filled square
-before the windows title.  The selected tags are indicated with a different
-color. The tags of the focused window are indicated with a filled square in the
-top left corner.  The tags which are applied to one or more windows are
-indicated with an empty square in the top left corner.
-.P
-dwm draws a small border around windows to indicate the focus state.
-.P
-.I
-libxft-bgra
-should be installed for this build of dwm. Arch users may install it via the
-AUR. Color characters and emoji are enabled, but these will cause crashes
-without the fix
-.I
-libxft-bgra
-offers.
 .SH OPTIONS
 .TP
 .B \-v
@@ -41,151 +21,164 @@ prints version information to standard output, then exits.
 .SH USAGE
 .SS Status bar
 .TP
-.B X root window name
-is read and displayed in the status text area. It can be set with the
-.BR xsetroot (1)
-command.
+.B pOS-make-bar
+Run this script to make your own statusbar.
 .TP
-.B Left click
-click on a tag label to display all windows with that tag, click on the layout
-label toggles between tiled and floating layout.
+.B There are some actions when bar blocks are clicked.
+ Action keys are, Left Click, Right Click, Middle Click.
+.SS KEYBINDINGS
 .TP
-.B Right click
-click on a tag label adds/removes all windows with that tag to/from the view.
+.B Caps Lock is equal to Win button. Also works as escape in terminal (vim).
 .TP
-.B Super\-Left click
-click on a tag label applies that tag to the focused window.
+.B Alt+Left Click
+Hide clicked window
 .TP
-.B Super\-Right click
-click on a tag label adds/removes that tag to/from the focused window.
-.SS Keyboard commands
+.B Alt+Tab
+Navigate through all windows and focus selected (also maximize window)
 .TP
-.B Super\-Return
-Start terminal,
-.BR st(1).
+.B Win+Tab
+Navigate through current tag and focus selected (also maximize window)
 .TP
-.B Super\-d
-Spawn
-.BR dmenu(1)
-for launching other programs.
+.B Win+[0 .. 9]
+Go to tag (0 and 9 inclusive, 0 shows all tags)
 .TP
-.B Super\-b
-Toggles bar on and off.
+.B Win+Shift+[0 .. 9]
+Send focused window to chosen tag
 .TP
-.B Super\-q
-Close focused window.
+.B Win+[h, l]
+Increase - decrease window size
 .TP
-.B Super\-t/T
-Sets tiled/bstack layouts.
+.B Win+Shift+[h, l]
+Go to previous tag - go to next tag
 .TP
-.B Super\-f
-Toggle fullscreen window.
+.B Win+[j, k]
+Focus previous - focus next
 .TP
-.B Super\-F
-Toggle floating layout.
+.B Win+Shift+[j, k]
+Move focused previous - move focused next
 .TP
-.B Super\-y/Y
-Sets Fibonacci spiral/dwinde layouts.
+.B Alt+[h, l]
+Send focused to previous monitor - send focused to next monitor
 .TP
-.B Super\-u/U
-Sets centered master layout.
+.B Alt+[j, k]
+Focus previous monitor - focus next monitor
 .TP
-.B Super\-i/I
-Sets centered master or floating master layouts.
+.B Win+s
+Toggle sticky (show window on all tags)
 .TP
-.B Super\-space
-Zooms/cycles focused window to/from master area.
+.B Win+f
+Toggle fullscreen
 .TP
-.B Super\-j/k
-Focus next/previous window.
+.B Win+q
+Quit focused window
 .TP
-.B Super\-Shift\-j/k
-Move selected window down/up in stack.
+.B Win+Return
+Spawn $TERMINAL
 .TP
-.B Super\-o/O
-Increase/decrease number of windows in master area.
+.B Win+[Esc, BackSpace]
+Shutdown menu
 .TP
-.B Super\-l
-Increase master area size.
+.B Win+Shift+Return
+Toggle scratchpad
 .TP
-.B Super\-h
-Decrease master area size.
+.B Win+w
+Spawn $BROWSER
 .TP
-.B Super\-Shift\-space
-Toggle focused window between tiled and floating state.
+.B Win+r
+Spawn lf (file manager)
 .TP
-.B Super\-Tab
-Toggles to the previously selected tags.
+.B Win+a
+Spawn applications menu
 .TP
-.B Super\-g
-Moves to the previous tag.
+.B Win+b
+Toggle - hide statusbar
 .TP
-.B Super\-Shift\-g
-Moves selected window to the previous tag.
+.B Win+d
+Jump to bookmarked directory
 .TP
-.B Super\-;
-Moves to the next tag.
+.B Win+Shift+a
+Spawn dmenu (execute any runnable)
 .TP
-.B Super\-Shift\-;
-Moves selected window to the next tag.
+.B Win+p
+Spawn password manager (pass)
 .TP
-.B Super\-PageUp
-Moves to the previous tag.
+.B Win+Shift+p
+Stress monitor (s-tui)
 .TP
-.B Super\-Shift\-PageUp
-Moves selected window to the previous tag.
+.B Win+F4
+Spawn sound options
 .TP
-.B Super\-Pagedown
-Moves to the next tag.
+.B Win+F5
+Open display select (set resolution, refresh rate)
 .TP
-.B Super\-Shift\-PageDown
-Moves selected window to the next tag.
+.B Win+F9
+Mount drive
 .TP
-.B Super\-a
-Toggle gaps.
+.B Win+F10
+Unmount drive
 .TP
-.B Super\-z
-Increase gaps between windows.
+.B Win+F11
+Open camera
 .TP
-.B Super\-x
-Decrease gaps between windows.
+.B Printscreen
+Screenshow full screen
 .TP
-.B Super\-Shift\-[1..n]
-Apply nth tag to focused window.
+.B Shift+Printscreen - Win+Shift+s
+Screenshot (selected area, choose a window, full screen)
 .TP
-.B Super\-Shift\-0
-Apply all tags to focused window.
+.B Win+`
+Choose emoji and copy
 .TP
-.B Super\-Control\-Shift\-[1..n]
-Add/remove nth tag to/from focused window.
+.B Win+g
+Toggle gaps
 .TP
-.B Super\-[1..n]
-View all windows with nth tag.
+.B Win+x
+Increase gaps
 .TP
-.B Super\-0
-View all windows with any tag.
+.B Win+Shift+x
+Decrease gaps
 .TP
-.B Super\-Control\-[1..n]
-Add/remove all windows with nth tag to/from the view.
+.B Win+Shift+g
+Toggle default gaps
 .TP
-.B Super\-Shift\-q
-Quit dwm.
+.B Win+m
+Increase master window count by 1
 .TP
-.B Mod1\-Control\-Shift\-q
-Menu to refresh/quit/reboot/shutdown.
-.SS Mouse commands
+.B Win+Shift+m
+Decrease master window count by 1
 .TP
-.B Super\-Left click
-Move focused window while dragging. Tiled windows will be toggled to the floating state.
+.B Win+Space
+Set focused as master
 .TP
-.B Super\-Middle click
-Toggles focused window between floating and tiled state.
+.B Win+Shift+Space
+Toggle floating
 .TP
-.B Super\-Right click
-Resize focused window while dragging. Tiled windows will be toggled to the floating state.
-.SH CUSTOMIZATION
-dwm is customized by creating a custom config.h and (re)compiling the source
-code. This keeps it fast, secure and simple.
+.B Alt+1
+Tiling layout mode
+.TP
+.B Alt+2
+Backstack layout mode
+.TP
+.B Alt+3
+Monocle layout mode (windows on top of another)
+.TP
+.B Alt+4
+Deck layout mode
+.TP
+.B Alt+5
+Spiral (fibonacci) layout mode
+.TP
+.B Alt+6
+Dwindle layout mode
+.TP
+.B Alt+7
+Centered master layout mode
+.TP
+.B Alt+8
+Centered floating master layout mode
+.TP
+.B Alt+9
+Floating layaout mode
 .SH SIGNALS
 .TP
 .B SIGHUP - 1
@@ -211,4 +204,4 @@ or
 XToolkit/XAWT backend can recognize) or when using OpenJDK setting the environment variable
 .BR _JAVA_AWT_WM_NONREPARENTING=1 .
 .SH BUGS
-Send all bug reports with a patch to hackers@suckless.org.
+Reach out to maintainer Arda Atci <arda@ftlabs.tech>
