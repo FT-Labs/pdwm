@@ -1073,72 +1073,76 @@ drawbar(Monitor *m, Client *cdock)
     Client *c;
 
 
-    /* draw status first so it can be overdrawn by tags later */
-    load_png_icons(drw, sb_icon_wh, sb_icon_wh);
+    /* Status bar is only drawn on selected monitor */
+    if (m == selmon) {
+        load_png_icons(drw, sb_icon_wh, sb_icon_wh);
 
-    char stextcpy[256];
-    strcpy(stextcpy, stext);
-    sb_arr[i] = strtok(stextcpy, "|");
+        char stextcpy[256];
+        strcpy(stextcpy, stext);
+        sb_arr[i] = strtok(stextcpy, "|");
 
-    while (sb_arr[i] != NULL)
-    {
-        if (strlen(sb_arr[i]) != 1) {
-            tw += TEXTW_SB(sb_arr[i]);
-            tw += sb_delimiter_w + 2 * sb_icon_margin_x;
-        }
-        else
-            tw += sb_icon_wh + sb_icon_margin_x;
-        sb_arr[++i] = strtok(NULL, "|");
-    }
-
-
-    i = 0;
-    tw += 2 * sb_padding_x;
-    sb_tw = twtmp = tw;
-    m->brightstart = m->ww - twtmp;
-    XMoveResizeWindow(dpy, m->barwin[2], m->wx + m->brightstart + sb_padding_x, m->by, twtmp - 2 * sb_padding_x, bh);
-
-
-    /* Fill all bar with colorscheme first, some png might have empty locations */
-    drw_setscheme(drw, scheme[SchemeInfoSel]);
-    drw_rect(drw, m->ww - twtmp, y, twtmp, bh, 1, 1);
-    twtmp -= sb_icon_margin_x;
-
-    while (sb_arr[i] != NULL) {
-        drw_setscheme(drw, scheme[SchemeInfoSel]);
-
-        if (strlen(sb_arr[i]) == 1) {
-            int idx = sb_arr[i++][0] - '0';
-            drw_pic(drw, m->ww - twtmp, (bh - sb_icon_wh) / 2, sb_icon_wh, sb_icon_wh, None, idx);
-            twtmp -= sb_icon_wh + sb_icon_margin_x;
-            drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
-            twtmp -= TEXTW_SB(sb_arr[i]);
-        } else {
-            if (sb_arr[i][strlen(sb_arr[i]) - 1] == '%') {
-                char *start = sb_arr[i];
-
-                while (*start < 0)
-                    start++;
-                int x = atoi(start);
-
-                if (x <= 30)
-                    drw_setscheme(drw, scheme[SchemeCritical]);
-                else
-                    drw_setscheme(drw, scheme[SchemeOptimal]);
+        while (sb_arr[i] != NULL)
+        {
+            if (strlen(sb_arr[i]) != 1) {
+                tw += TEXTW_SB(sb_arr[i]);
+                tw += sb_delimiter_w + 2 * sb_icon_margin_x;
             }
-            drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
-            twtmp -= TEXTW_SB(sb_arr[i]);
+            else
+                tw += sb_icon_wh + sb_icon_margin_x;
+            sb_arr[++i] = strtok(NULL, "|");
         }
 
-        /* Below draws seperators */
-        if (sb_arr[i+1] != NULL) {
-            twtmp -= sb_icon_margin_x;
-            drw_setscheme(drw, scheme[SchemeSel]);
-            drw_rect(drw, m->ww - twtmp + sb_delimiter_w / 4, y, sb_delimiter_w / 2, bh , 1, 0);
-            drw_rect(drw, m->ww - twtmp, y + bh/10, sb_delimiter_w, bh - 2 * bh/10, 1, 0);
-            twtmp -= sb_delimiter_w + sb_icon_margin_x;
+
+        i = 0;
+        tw += 2 * sb_padding_x;
+        sb_tw = twtmp = tw;
+        m->brightstart = m->ww - twtmp;
+        XMoveResizeWindow(dpy, m->barwin[2], m->wx + m->brightstart + sb_padding_x, m->by, twtmp - 2 * sb_padding_x, bh);
+
+
+        /* Fill all bar with colorscheme first, some png might have empty locations */
+        drw_setscheme(drw, scheme[SchemeInfoSel]);
+        drw_rect(drw, m->ww - twtmp, y, twtmp, bh, 1, 1);
+        twtmp -= sb_icon_margin_x;
+
+        while (sb_arr[i] != NULL) {
+            drw_setscheme(drw, scheme[SchemeInfoSel]);
+
+            if (strlen(sb_arr[i]) == 1) {
+                int idx = sb_arr[i++][0] - '0';
+                drw_pic(drw, m->ww - twtmp, (bh - sb_icon_wh) / 2, sb_icon_wh, sb_icon_wh, None, idx);
+                twtmp -= sb_icon_wh + sb_icon_margin_x;
+                drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
+                twtmp -= TEXTW_SB(sb_arr[i]);
+            } else {
+                if (sb_arr[i][strlen(sb_arr[i]) - 1] == '%') {
+                    char *start = sb_arr[i];
+
+                    while (*start < 0)
+                        start++;
+                    int x = atoi(start);
+
+                    if (x <= 30)
+                        drw_setscheme(drw, scheme[SchemeCritical]);
+                    else
+                        drw_setscheme(drw, scheme[SchemeOptimal]);
+                }
+                drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
+                twtmp -= TEXTW_SB(sb_arr[i]);
+            }
+
+            /* Below draws seperators */
+            if (sb_arr[i+1] != NULL) {
+                twtmp -= sb_icon_margin_x;
+                drw_setscheme(drw, scheme[SchemeSel]);
+                drw_rect(drw, m->ww - twtmp + sb_delimiter_w / 4, y, sb_delimiter_w / 2, bh , 1, 0);
+                drw_rect(drw, m->ww - twtmp, y + bh/10, sb_delimiter_w, bh - 2 * bh/10, 1, 0);
+                twtmp -= sb_delimiter_w + sb_icon_margin_x;
+            }
+            i++;
         }
-        i++;
+    } else {
+        XMoveWindow(dpy, m->barwin[2], m->brightstart, -bh * 2);
     }
 
     for (c = m->clients; c; c = c->next) {
