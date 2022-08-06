@@ -47,7 +47,7 @@ static char *colors[][3] = {
        [SchemeCritical] = { red, black, "#000000" } ,
 };
 
-const char *key_pdf[] = {TERMINAL, "-n", "key_pdf", "-g", "120x34", "-e", "zathura", "/usr/share/phyos/dwm/keys-dwm.pdf", NULL };
+const char *key_pdf[] = {TERMINAL, "-n", "key_pdf", "-g", "120x34", "-e", "mandwmtui", "dwm", NULL};
 
 const Config config[] = {
     {key_pdf, ""},
