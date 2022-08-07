@@ -182,11 +182,12 @@ struct Monitor {
     Client *sel;
     Client *stack;
     Monitor *next;
-    Window barwin[3];
+    Window barwin;
     Window dockwin;
     const Layout *lt[2];
     Pertag *pertag;
 };
+Window allbarwin[2];
 
 typedef struct {
     const char *class;
@@ -652,7 +653,7 @@ buttonpress(XEvent *e)
         return;
     }
 
-    if (ev->window == selmon->barwin[0]) {
+    if (ev->window == selmon->barwin) {
         i = 0;
         x = sb_icon_wh + 2 * sb_delimiter_w;
         if (ev->x <= x) {
@@ -695,7 +696,7 @@ buttonpress(XEvent *e)
             restack(selmon);
             XAllowEvents(dpy, ReplayPointer, CurrentTime);
             click = ClkClientWin;
-    }  else if (ev->window == selmon->barwin[2]) {
+    }  else if (ev->window == allbarwin[1]) {
         if (ev->x > (x = 0)) {
             click = ClkStatusText;
 
@@ -754,6 +755,10 @@ cleanup(void)
     XUngrabKey(dpy, AnyKey, AnyModifier, root);
     while (mons)
         cleanupmon(mons);
+    XUnmapWindow(dpy, allbarwin[0]);
+    XUnmapWindow(dpy, allbarwin[1]);
+    XDestroyWindow(dpy, allbarwin[0]);
+    XDestroyWindow(dpy, allbarwin[1]);
     for (i = 0; i < CurLast; i++)
         drw_cur_free(drw, cursor[i]);
     for (i = 0; i < LENGTH(colors); i++)
@@ -777,10 +782,8 @@ cleanupmon(Monitor *mon)
         m->next = mon->next;
     }
 
-    for (int i = 0; i < 3; i++) {
-        XUnmapWindow(dpy, mon->barwin[i]);
-        XDestroyWindow(dpy, mon->barwin[i]);
-    }
+    XUnmapWindow(dpy, mon->barwin);
+    XDestroyWindow(dpy, mon->barwin);
     XUnmapWindow(dpy, mon->dockwin);
     XDestroyWindow(dpy, mon->dockwin);
     free(mon);
@@ -858,9 +861,7 @@ configurenotify(XEvent *e)
                 for (c = m->clients; c; c = c->next)
                     if (c->isfullscreen)
                         resizeclient(c, m->mx, m->my, m->mw, m->mh);
-                XMoveResizeWindow(dpy, m->barwin[0], m->wx + sb_padding_x, m->by, m->ww - 2 * sb_padding_x, bh);
-                XMoveResizeWindow(dpy, m->barwin[1], m->wx + sb_padding_x, m->by, m->ww - 2 * sb_padding_x, bh);
-                XMoveResizeWindow(dpy, m->barwin[2], m->wx + sb_padding_x, m->by, m->ww - 2 * sb_padding_x, bh);
+                XMoveResizeWindow(dpy, m->barwin, m->wx + sb_padding_x, m->by, m->ww - 2 * sb_padding_x, bh);
             }
             focus(NULL);
             arrange(NULL);
@@ -1071,7 +1072,7 @@ dockevent(XEvent *e, int evtype)
 void
 drawbar(Monitor *m, Client *cdock)
 {
-    if (!m->barwin[0] || !m->barwin[1] || !m->barwin[2])
+    if (!m->barwin || !allbarwin[0] || !allbarwin[1])
         return;
     int x, w, y = 0, tw = 0, twtmp = 0;
     int boxs = drw->fonts->h / 9;
@@ -1104,7 +1105,7 @@ drawbar(Monitor *m, Client *cdock)
         tw += 2 * sb_padding_x;
         sb_tw = twtmp = tw;
         m->brightstart = m->ww - twtmp;
-        XMoveResizeWindow(dpy, m->barwin[2], m->wx + m->brightstart + sb_padding_x, m->by, twtmp - 2 * sb_padding_x, bh);
+        XMoveResizeWindow(dpy, allbarwin[1], m->wx + m->brightstart + sb_padding_x, m->by, twtmp - 2 * sb_padding_x, bh);
 
 
         /* Fill all bar with colorscheme first, some png might have empty locations */
@@ -1148,8 +1149,6 @@ drawbar(Monitor *m, Client *cdock)
             }
             i++;
         }
-    } else {
-        XMoveWindow(dpy, m->barwin[2], m->brightstart, -bh * 2);
     }
 
     for (c = m->clients; c; c = c->next) {
@@ -1190,7 +1189,7 @@ drawbar(Monitor *m, Client *cdock)
         x += w;
     }
 
-    XMoveResizeWindow(dpy, m->barwin[0], m->wx + sb_padding_x, m->by, x, bh);
+    XMoveResizeWindow(dpy, m->barwin, m->wx + sb_padding_x, m->by, x, bh);
     m->bleftend = x;
 
     if ((w = m->ww - tw - x) > bh) {
@@ -1202,14 +1201,13 @@ drawbar(Monitor *m, Client *cdock)
             if (c->icon) drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon, -1);
             if (c->isfloating)
                 drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
-            XMoveResizeWindow(dpy, m->barwin[1], m->wx + (m->bleftend + m->brightstart - s) / 2 + 2 * sb_padding_x, m->by, s - 2 * sb_padding_x, bh);
-            drw_map(drw, m->barwin[1], m->bleftend, 0, m->ww, bh);
-        } else {
-            XMoveResizeWindow(dpy, m->barwin[1], m->wx + (m->bleftend + m->brightstart) / 2, -2 * bh + -2 * sb_padding_y, 100, 100);
+            XMoveResizeWindow(dpy, allbarwin[0], m->wx + (m->bleftend + m->brightstart - s) / 2 + 2 * sb_padding_x, m->by, s - 2 * sb_padding_x, bh);
+            drw_map(drw, allbarwin[0], m->bleftend, 0, m->ww, bh);
         }
     }
-    drw_map(drw, m->barwin[0], 0, 0, m->ww, bh);
-    drw_map(drw, m->barwin[2], m->brightstart, 0, m->ww, bh);
+    drw_map(drw, m->barwin, 0, 0, m->ww, bh);
+    if (m == selmon)
+        drw_map(drw, allbarwin[1], m->brightstart, 0, m->ww, bh);
 }
 
 void
@@ -2129,7 +2127,7 @@ restack(Monitor *m)
         XRaiseWindow(dpy, m->sel->win);
     if (m->lt[m->sellt]->arrange) {
         wc.stack_mode = Below;
-        wc.sibling = m->barwin[0];
+        wc.sibling = m->barwin;
         for (c = m->stack; c; c = c->snext)
             if (!c->isfloating && ISVISIBLE(c) && !HIDDEN(c)) {
                 XConfigureWindow(dpy, c->win, CWSibling|CWStackMode, &wc);
@@ -2764,16 +2762,24 @@ updatebars(void)
         .event_mask = ButtonPressMask|ExposureMask,
     };
     XClassHint ch = {"dwm", "dwm"};
+    for (int i = 0; i < 2; i++) {
+        if (!allbarwin[i]) {
+            allbarwin[i] = XCreateWindow(dpy, root, 0, 0, bh, bh, 0, DefaultDepth(dpy, screen),
+                    CopyFromParent, DefaultVisual(dpy, screen),
+                    CWColormap|CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
+            XDefineCursor(dpy, allbarwin[i], cursor[CurNormal]->cursor);
+            XMapRaised(dpy, allbarwin[i]);
+            XSetClassHint(dpy, allbarwin[i], &ch);
+        }
+    }
     for (m = mons; m; m = m->next) {
-        for (int i = 0; i < 3; i++) {
-            if (!m->barwin[i]) {
-                m->barwin[i] = XCreateWindow(dpy, root, m->wx + sb_padding_x, m->by, m->ww - 2 * sb_padding_x, bh, 0, DefaultDepth(dpy, screen),
-                        CopyFromParent, DefaultVisual(dpy, screen),
-                        CWColormap|CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
-                XDefineCursor(dpy, m->barwin[i], cursor[CurNormal]->cursor);
-                XMapRaised(dpy, m->barwin[i]);
-                XSetClassHint(dpy, m->barwin[i], &ch);
-            }
+        if (!m->barwin) {
+            m->barwin = XCreateWindow(dpy, root, m->wx + sb_padding_x, m->by, m->ww - 2 * sb_padding_x, bh, 0, DefaultDepth(dpy, screen),
+                    CopyFromParent, DefaultVisual(dpy, screen),
+                    CWColormap|CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
+            XDefineCursor(dpy, m->barwin, cursor[CurNormal]->cursor);
+            XMapRaised(dpy, m->barwin);
+            XSetClassHint(dpy, m->barwin, &ch);
         }
         if (!m->dockwin)
         {
@@ -3192,7 +3198,7 @@ wintomon(Window w)
     if (w == root && getrootptr(&x, &y))
         return recttomon(x, y, 1, 1);
     for (m = mons; m; m = m->next)
-        if (w == m->barwin[0])
+        if (w == m->barwin)
             return m;
     if ((c = wintoclient(w)))
         return c->mon;
