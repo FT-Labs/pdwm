@@ -1203,6 +1203,8 @@ drawbar(Monitor *m, Client *cdock)
                 drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
             XMoveResizeWindow(dpy, allbarwin[0], m->wx + (m->bleftend + m->brightstart - s) / 2 + 2 * sb_padding_x, m->by, s - 2 * sb_padding_x, bh);
             drw_map(drw, allbarwin[0], m->bleftend, 0, m->ww, bh);
+        } else if (!m->sel && m == selmon) {
+            XMoveWindow(dpy, allbarwin[0], m->wx + m->ww / 2, -2 * (bh + sb_padding_y));
         }
     }
     drw_map(drw, m->barwin, 0, 0, m->ww, bh);
