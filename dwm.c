@@ -129,7 +129,7 @@ struct Client {
     int issteam;
     unsigned int icw, ich; Picture icon;
     unsigned int tags;
-    int isfixed, iscentered, isfloating, isurgent, neverfocus, oldstate, isfullscreen, isterminal, noswallow, issticky;
+    int isfixed, iscentered, isfloating, isurgent, neverfocus, oldstate, isfullscreen, isterminal, noswallow, managedsize, issticky;
     pid_t pid;
     Client *next;
     Client *snext;
@@ -197,6 +197,7 @@ typedef struct {
     int isterminal;
     int iscentered;
     int noswallow;
+    int managedsize;
     int monitor;
 } Rule;
 
@@ -424,10 +425,16 @@ applyrules(Client *c)
             c->isterminal = r->isterminal;
             c->isfloating = r->isfloating;
             c->noswallow  = r->noswallow;
+            c->managedsize = r->managedsize;
             c->tags |= r->tags;
             if ((r->tags & SPTAGMASK) && r->isfloating) {
                 c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
                 c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
+            }
+
+            if (c->managedsize) {
+                c->w = c->mon->ww / 2;
+                c->h = c->mon->wh / 2;
             }
 
             for (m = mons; m && m->num != r->monitor; m = m->next);

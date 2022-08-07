@@ -33,13 +33,13 @@ static const Rule rules[] = {
      *  WM_CLASS(STRING) = instance, class
      *  WM_NAME(STRING) = title
     */
-    /* class    instance                 title          tags          mask    isfloating   isterminal  iscentered, noswallow  monitor */
-    { TERMCLASS,  NULL,                  NULL,            0,            0,           1,         0,         0,        -1 },
-    { NULL,       NULL,                  "Event Tester",  0,            0,           0,         0,         1,        -1 },
-    { NULL,      "spterm",               NULL,            SPTAG(0),     1,           1,         0,         0,        -1 },
-    { NULL,      "key_pdf",              NULL,            0,            1,           1,         1,         0,        -1 },
-    { NULL,       NULL,                  "pulsemixer",    0,            1,           1,         1,         1,        -1 },
-    { NULL,       NULL,                  "nmtui",         0,            1,           1,         1,         1,        -1 },
+    /* class    instance        title          tagsmask    isfloating   isterminal  iscentered  noswallow  managedsize  monitor */
+    { TERMCLASS,  NULL,          NULL,            0,            0,           1,         0,         0,         0,         -1 },
+    { NULL,       NULL,          "Event Tester",  0,            0,           0,         0,         1,         0,         -1 },
+    { NULL,      "spterm",       NULL,            SPTAG(0),     1,           1,         0,         0,         0,         -1 },
+    { NULL,      "key_tui",      NULL,            0,            1,           1,         1,         0,         0,         -1 },
+    { NULL,      "pavucontrol",  NULL,            0,            1,           0,         1,         1,         1,         -1 },
+    { NULL,       NULL,          "nmtui",         0,            1,           1,         1,         1,         0,         -1 },
 };
 
 static Key keys[] = {
@@ -49,7 +49,7 @@ static Key keys[] = {
     /*{ MODKEY,         XK_F1,      spawn,      SHCMD("") },
     { MODKEY,           XK_F2,      spawn,      SHCMD("")},
     { MODKEY,           XK_F3,      spawn,      SHCMD(TERMINAL "")  },*/
-    { MODKEY,           XK_F4,      spawn,      SHCMD(TERMINAL " -e pulsemixer; kill -44 $(pidof dwmblocks)") },
+    { MODKEY,           XK_F4,      spawn,      SHCMD("pavucontrol; kill -44 $(pidof dwmblocks)") },
     { MODKEY,           XK_F5,      spawn,      SHCMD("pOS-displayselect") },
     /*{ MODKEY,         XK_F6,      spawn,      SHCMD("") },
     { MODKEY,           XK_F7,      spawn,      SHCMD("") },*/
