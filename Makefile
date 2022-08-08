@@ -49,7 +49,6 @@ install: all
 	cp -f dwm.1 ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	mkdir -p ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
 	cp -f patches/icons/*.png ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
-	cp -f patches/keys-dwm.pdf ${DESTDIR}${PREFIX}/share/phyos/dwm/keys-dwm.pdf
 	mkdir -p $(DESTDIR)${PREFIX}/share/xsessions
 	cp -f patches/dwm.desktop ${DESTDIR}${PREFIX}/share/xsessions/dwm.desktop
 
