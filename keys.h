@@ -1,3 +1,10 @@
+
+/* Set your default terminal here */
+#define TERMINAL "st"
+#define TERMCLASS "St"
+
+static const char *termcmd[]  = { TERMINAL, NULL };
+
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
