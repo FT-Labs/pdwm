@@ -662,8 +662,13 @@ buttonpress(XEvent *e)
         i = 0;
         x = sb_icon_wh + 2 * sb_delimiter_w;
         if (ev->x <= x) {
-            Arg a = SHCMD("rofi -show drun");
-            spawn(&a);
+            if (ev->button == Button1) {
+                Arg a = SHCMD("rofi -show drun");
+                spawn(&a);
+            } else if (ev->button == Button3) {
+                Arg a = SHCMD("pOS-powermenu");
+                spawn(&a);
+            }
             return;
         }
 
@@ -1842,11 +1847,11 @@ manage(Window w, XWindowAttributes *wa)
     if (c->mon == selmon)
         unfocus(selmon->sel, 0);
     c->mon->sel = c;
-    arrange(c->mon);
     if (!HIDDEN(c))
         XMapWindow(dpy, c->win);
     if (term)
         swallow(term, c);
+    arrange(c->mon);
     focus(NULL);
 }
 
@@ -2545,7 +2550,7 @@ showhide(Client *c)
     } else {
         /* hide clients bottom up */
         showhide(c->snext);
-        XMoveWindow(dpy, c->win, c->mon->wx + c->mon->ww / 2 - WIDTH(c) / 2, HEIGHT(c) * -2);
+        XMoveWindow(dpy, c->win, c->mon->wx + c->mon->ww / 2 - WIDTH(c) / 2, - (HEIGHT(c) * 3) / 2);
     }
 }
 
