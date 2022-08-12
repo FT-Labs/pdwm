@@ -97,7 +97,7 @@ enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum { SchemeNorm, SchemeSel, SchemeStatus, SchemeTagsSel, SchemeTagsNorm, SchemeInfoSel, SchemeInfoNorm, SchemeOptimal, SchemeCritical }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMIcon, NetWMState, NetWMCheck,
         NetWMFullscreen, NetActiveWindow, NetWMWindowType,
-        NetWMWindowTypeDialog, NetClientList, NetWMDesktop, NetCurrentDesktop, NetLast}; /* EWMH atoms */
+        NetWMWindowTypeDialog, NetClientList, NetWMDesktop, NetCurrentDesktop, NetCurrentMonCenter, NetLast}; /* EWMH atoms */
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
 enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
        ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
@@ -279,6 +279,7 @@ static int sendevent(Client *c, Atom proto);
 static void sendmon(Client *c, Monitor *m);
 static void setclientstate(Client *c, long state);
 static void setclienttagprop(Client *c);
+static void setmonposcenter(Monitor *m);
 static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen);
 static void setlayout(const Arg *arg);
@@ -525,8 +526,8 @@ void
 arrange(Monitor *m)
 {
     if (m) {
-        showhide(m->stack);
         updatecurrentdesktop(m);
+        showhide(m->stack);
     }
     else for (m = mons; m; m = m->next)
         showhide(m->stack);
@@ -651,6 +652,7 @@ buttonpress(XEvent *e)
     if ((m = wintomon(ev->window)) && m != selmon) {
         unfocus(selmon->sel, 1);
         selmon = m;
+        setmonposcenter(selmon);
         focus(NULL);
     }
     if (ev->window == selmon->dockwin && c) {
@@ -821,6 +823,7 @@ clientmessage(XEvent *e)
                 const Arg a = {.ui = (1 << i) };
                 if (selmon->sel != c || HIDDEN(c)) {
                     selmon = c->mon;
+                    setmonposcenter(selmon);
                     view(&a);
                     showwin(c);
                     focus(c);
@@ -1297,6 +1300,7 @@ enternotify(XEvent *e)
     if (m != selmon) {
         unfocus(selmon->sel, 1);
         selmon = m;
+        setmonposcenter(selmon);
     } else if (!c || c == selmon->sel)
         return;
     focus(c);
@@ -1414,8 +1418,10 @@ focus(Client *c)
     if (selmon->sel && selmon->sel != c)
         unfocus(selmon->sel, 0);
     if (c) {
-        if (c->mon != selmon)
+        if (c->mon != selmon) {
             selmon = c->mon;
+            setmonposcenter(selmon);
+        }
         if (c->isurgent)
             seturgent(c, 0);
         detachstack(c);
@@ -1428,6 +1434,7 @@ focus(Client *c)
         XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
     }
     selmon->sel = c;
+    setmonposcenter(selmon);
     drawbars();
 }
 
@@ -1453,6 +1460,7 @@ focusmon(const Arg *arg)
         return;
     unfocus(selmon->sel, 0);
     selmon = m;
+    setmonposcenter(selmon);
     focus(NULL);
 
     if(selmon->sel)
@@ -1688,10 +1696,11 @@ killclient(const Arg *arg)
     if (!sendevent(selmon->sel, wmatom[WMDelete])) {
         XGrabServer(dpy);
         XSetErrorHandler(xerrordummy);
+        XUnmapWindow(dpy, selmon->sel->win);
         XSetCloseDownMode(dpy, DestroyAll);
         freeicon(selmon->sel);
         XKillClient(dpy, selmon->sel->win);
-        XSync(dpy, False);
+        XSync(dpy, True);
         XSetErrorHandler(xerror);
         XUngrabServer(dpy);
     }
@@ -2314,6 +2323,14 @@ setclienttagprop(Client *c)
             PropModeReplace, (unsigned char *) data, 2);
 }
 
+void
+setmonposcenter(Monitor *m)
+{
+    long data[] = { m->mx + m->mw / 2, m->my + m->mh / 2 };
+    XChangeProperty(dpy, root, netatom[NetCurrentMonCenter], XA_CARDINAL, 32, PropModeReplace,
+            (unsigned char *) data, 2);
+}
+
 int
 sendevent(Client *c, Atom proto)
 {
@@ -2483,6 +2500,7 @@ setup(void)
     netatom[NetWMWindowTypeDialog] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
     netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
     netatom[NetCurrentDesktop] = XInternAtom(dpy, "_NET_CURRENT_DESKTOP", False);
+    netatom[NetCurrentMonCenter] = XInternAtom(dpy, "_NET_CURRENT_MON_CENTER", False);
     /* init cursors */
     cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
     cursor[CurResize] = drw_cur_create(drw, XC_sizing);
