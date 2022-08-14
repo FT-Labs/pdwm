@@ -1420,7 +1420,6 @@ focus(Client *c)
     if (c) {
         if (c->mon != selmon) {
             selmon = c->mon;
-            setmonposcenter(selmon);
         }
         if (c->isurgent)
             seturgent(c, 0);
@@ -1856,11 +1855,12 @@ manage(Window w, XWindowAttributes *wa)
     if (c->mon == selmon)
         unfocus(selmon->sel, 0);
     c->mon->sel = c;
-    if (!HIDDEN(c))
+    if (!HIDDEN(c)) {
+        arrange(c->mon);
         XMapWindow(dpy, c->win);
-    if (term)
-        swallow(term, c);
-    arrange(c->mon);
+        if (term)
+            swallow(term, c);
+    }
     focus(NULL);
 }
 
@@ -2560,10 +2560,10 @@ showhide(Client *c)
             c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
             c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
         }
-        /* show clients top down */
-        XMoveWindow(dpy, c->win, c->x, c->y);
         if ((!c->mon->lt[c->mon->sellt]->arrange || c->isfloating) && !c->isfullscreen)
             resize(c, c->x, c->y, c->w, c->h, 0);
+        /* show clients top down */
+        XMoveWindow(dpy, c->win, c->x, c->y);
         showhide(c->snext);
     } else {
         /* hide clients bottom up */
