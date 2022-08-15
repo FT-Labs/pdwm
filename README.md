@@ -34,10 +34,10 @@ Main account : **https://github.com/FT-Labs**
  - https://github.com/FT-Labs/phyOS-st
 
 ### IMPORTANT!! READ BELOW (If you just want statusbar scripts, you can omit this just read below)
-Make sure to use my dotfiles, all of the **scripts** and path variables need to be set correctly for full functionality.
+Please note that dotfiles doesn't contain any scripts. It's just configuration files for programs.
  - https://github.com/FT-Labs/dotfiles
 
-### ABOUT DWMBLOCKS AND SCRIPTS
+### ABOUT DWMBLOCKS AND SCRIPTS (This is old)
 All dwmblocks and scripts are in **dwmblocksconfig** directory. All configuration files can be read from single path only,
 if it is not found it will revert to default. Note that if __statusbar__ scripts are not in path, it won't work correctly. Please be sure that all scripts are something in your **$PATH** variable.
 #### Path for config file must be: "$HOME/.config/phyos/dwmblocks"
@@ -49,23 +49,7 @@ if it is not found it will revert to default. Note that if __statusbar__ scripts
 - Note that most scripts use glyphs, please install a compatible nerd font for it. You can checkout fonts-phyOS repo for default fonts that i currenty use.
 
 ### Requirement for total functionality:
-
- - light
- - picom-animations-git
- - unclutter
- - rofi
- - dmenu
- - conky
- - jgmenu
- - lf
- - s-tui (stress test)
- - cointop (terminal crypto prices)
- - pamixer
- - pulsemixer
- - imlib2
- - maim
- - joypixels emoji font
- - zathura (pdf reader, used for keys)
+- Check phyOS-Jun-22/packages.x86_64 for packages
 
 ### I am using this for phyOS arch iso only, therefore arch users can follow the below instructions to install everything easily:
 
@@ -85,10 +69,10 @@ After adding the repo, install keyring first:
 
 
 Then install necessary programs with **pacman** easily:
+- Check phyOS-Jun-22/packages.x86_64 for packages
 
-    sudo pacman -S phyOS-dwm phyOS-dunst phyOS-systemd-services phyOS-system-scripts phyOS-sysconf phyOS-st phyOS-fonts phyOS-dmenu phyOS-xmenu rofi unclutter lf-png ttf-joypixels light picom-animations-git
 
-#### Installation for different distros then arch linux:
+#### Installation for different distros then arch linux (Note that this has lots of dependencies just installing dwm won't work):
 
     git clone https://github.com/FT-Labs/phyOS-dwm
     cd dwm-phyOS && make && sudo make install
@@ -98,26 +82,10 @@ You need to install fonts to your system first (Nerd fonts, including all glyphs
     cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/
     sudo fc-cache
 
-
-#### For non-arch and arch users (updating dotfiles and configs)
-
-
-#### To pull newest dotfiles, just write `phyup dots`
-
-Note that this just pulls newest config from github repo. If any conflict happens, this will give error and won't replace current dotfiles. Just move them elsewhere if you prefer not to change them.
-
-#### If you want to force install dotfiles, write the command below:
-
-	phyup dots --force
-
-Note that this will replace all dots with new ones, if you have your current vim configuration or etc. please move them or rename them before using this command or just make them immutable with something like
-
-	sudo chattr +i .xinitrc
-
 ### NOTE: <kbd>Caps Lock</kbd> == <kbd>Win</kbd>
 ### NOTE: <kbd>Caps Lock</kbd> is also equal to <kbd>ESC</kbd> in terminal (vim etc..)
 
-## Program Keys:
+## Program Keys (man dwm will work too, or try keys sheet):
 
 <div align="center">
 
