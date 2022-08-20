@@ -75,7 +75,7 @@ static Key keys[] = {
     { MOD2KEY,          XK_Tab,     spawn,      SHCMD("pOS-windowswitch") },
     { MODKEY,           XK_q,       killclient, {0} },
     { MODKEY,           XK_w,       spawn,      SHCMD("$BROWSER") },
-    { MODKEY,           XK_t,       spawn,      SHCMD("pidof -s $COMPOSITOR && killall -9 $COMPOSITOR || $COMPOSITOR --experimental-backends --backend glx &") },
+    { MODKEY,           XK_t,       spawn,      SHCMD("pidof -s $COMPOSITOR && killall -9 $COMPOSITOR || pOS-compositor &") },
     { MODKEY,           XK_r,       spawn,      SHCMD(TERMINAL " -e lf") },
     { MODKEY,           XK_p,       spawn,      SHCMD("pass_menu") },
     { MODKEY|MOD2KEY,   XK_p,       spawn,      SHCMD(TERMINAL " -e htop") },
