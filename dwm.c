@@ -1318,7 +1318,7 @@ extendrules()
     rules[0] = (Rule) { TERMCLASS, "0",           "0",             0,            0,           1,         0,         0,         0,         -1 };
     rules[1] = (Rule) { "0",       "0",           "Event Tester",  0,            0,           0,         0,         1,         0,         -1 };
     rules[2] = (Rule) { "0",       "spterm",      "0",             SPTAG(0),     1,           1,         0,         0,         0,         -1 };
-    rules[3] = (Rule) { "0",       "key_tui",     "0",             0,            1,           1,         1,         0,         0,         -1 };
+    rules[3] = (Rule) { "0",       "physettings", "0",             0,            1,           1,         1,         0,         0,         -1 };
     rules[4] = (Rule) { "0",       "pavucontrol", "0",             0,            1,           0,         1,         1,         1,         -1 };
     rules[5] = (Rule) { "0",       "0",           "nmtui",         0,            1,           1,         1,         0,         0,         -1 };
     rules[6] = (Rule) { "0",       "physet-run",  "0",             0,            1,           1,         1,         0,         0,         -1 };

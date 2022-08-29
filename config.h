@@ -47,10 +47,10 @@ static char *colors[][3] = {
        [SchemeCritical] = { red, black, "#000000" } ,
 };
 
-const char *key_tui[] = {TERMINAL, "-n", "key_tui", "-g", "120x34", "-e", "mandwmtui", "dwm", NULL};
+const char *physettings[] = {TERMINAL, "-n", "physettings", "-g", "180x50", "-e", "physettings", NULL};
 
 const Config config[] = {
-    {key_tui, ""},
+    {physettings, ""},
 };
 
 typedef struct {
