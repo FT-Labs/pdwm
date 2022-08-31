@@ -1696,11 +1696,10 @@ killclient(const Arg *arg)
     if (!sendevent(selmon->sel, wmatom[WMDelete])) {
         XGrabServer(dpy);
         XSetErrorHandler(xerrordummy);
-        XUnmapWindow(dpy, selmon->sel->win);
         XSetCloseDownMode(dpy, DestroyAll);
         freeicon(selmon->sel);
         XKillClient(dpy, selmon->sel->win);
-        XSync(dpy, True);
+        XSync(dpy, False);
         XSetErrorHandler(xerror);
         XUngrabServer(dpy);
     }
@@ -2561,10 +2560,10 @@ showhide(Client *c)
             c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
             c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
         }
-        if ((!c->mon->lt[c->mon->sellt]->arrange || c->isfloating) && !c->isfullscreen)
-            resize(c, c->x, c->y, c->w, c->h, 0);
         /* show clients top down */
         XMoveWindow(dpy, c->win, c->x, c->y);
+        if ((!c->mon->lt[c->mon->sellt]->arrange || c->isfloating) && !c->isfullscreen)
+            resize(c, c->x, c->y, c->w, c->h, 0);
         showhide(c->snext);
     } else {
         /* hide clients bottom up */
