@@ -19,7 +19,7 @@ options:
 %.o: %.c
 	${CC} -c ${CFLAGS} $<
 
-${OBJ}: config.h keys.h config.mk
+${OBJ}: config.h config.mk
 
 ${OBJ_BLOCKS}: dwmblocks.h
 

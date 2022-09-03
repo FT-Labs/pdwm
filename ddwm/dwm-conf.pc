@@ -1,0 +1,7 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+
+Name: Dynamic dwm config
+Description: Dynamic dwm configuration for phyOS-dwm
+Libs: -L${libdir} -ldwm-conf

@@ -1,92 +1,65 @@
 /* See LICENSE file for copyright and license details. */
-
+#pragma once
+#include "dwm.h"
+#include <X11/XF86keysym.h>
 /* Constants */
 #define TERMINAL "st"
 #define TERMCLASS "St"
 
 /* appearance */
-static const unsigned int borderpx  = 3;        /* border pixel of windows */
-static const unsigned int snap      = 25;       /* snap pixel */
-static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
-static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
-static const unsigned int gappoh    = 15;       /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov    = 8;       /* vert outer gap between windows and screen edge */
-static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
-static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
-static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
-static const int user_dh            = 80;
-static const int docklrmargin       = 64;
-static const int user_bh            = 40;       /* 0 means normal bar height, >1 means user bar height */
-static const char *fonts[]          = { "JetBrains Mono:style=Regular:size=16", "Symbols Nerd Font:style=2048-em:size=23","JoyPixels:size=16:antialias=true:autohint=true"};
-static char dmenufont[]             = "JetBrains Mono:style=Regular:size=16";
-static char dmenuh[] = "40";
+const extern unsigned int borderpx;
+const extern unsigned int snap;
+const extern unsigned int gappih;
+const extern unsigned int gappiv;
+const extern unsigned int gappoh;
+const extern unsigned int gappov;
+const extern int swallowfloating;
+const extern int smartgaps;
+const extern int showbar;
+const extern int topbar;
+const extern int user_dh;
+const extern int docklrmargin;
+const extern int user_bh;
+char extern dmenufont[];
+char extern dmenuh[];
 
-#include "patches/themes/catpuccin.h"
+const extern char *fonts[];
+const extern int lenfonts;
 
 /* Default icon width, height, margin and delimiter width */
-static const unsigned int sb_icon_wh = 32;
-static const unsigned int sb_icon_margin_x = 12;
-static const unsigned int sb_delimiter_w = 4;
+const extern unsigned int sb_icon_wh;
+const extern unsigned int sb_icon_margin_x;
+const extern unsigned int sb_delimiter_w;
 
 /* Status bar x  y margin */
-static const unsigned int sb_padding_x = 12;
-static const unsigned int sb_padding_y = 12;
+const extern unsigned int sb_padding_x;
+const extern unsigned int sb_padding_y;
 
-static char *colors[][3] = {
-       /*               fg           bg           border   */
-       [SchemeNorm] = { black, black, gray2 },
-       [SchemeSel]  = { blue2,  green,  blue  },
-       [SchemeStatus] = { black, black, "#000000" },
-       [SchemeTagsSel] = { black, blue, "#000000" },
-       [SchemeTagsNorm] = { blue, black, "#000000" },
-       [SchemeInfoSel] = { blue, black, "#000000" },
-       [SchemeInfoNorm] = { black, black, "#000000" },
-       [SchemeStatus] = { white, black, "#000000" },
-       [SchemeOptimal] = { green, black, "#000000" },
-       [SchemeCritical] = { red, black, "#000000" } ,
-};
+char extern *colors[9][3];
 
-const char *physettings[] = {TERMINAL, "-n", "physettings", "-g", "120x35", "-e", "physettings", NULL};
+const extern char *physettings[];
 
-const Config config[] = {
-    {physettings, ""},
-};
+const extern Config config[];
+const extern int lenconfig;
 
 typedef struct {
     const char *name;
     const void *cmd;
 } Sp;
 
-const char *spcmd1[] = {TERMINAL, "-n", "spterm", "-g", "120x34", NULL };
+const extern char *spcmd1[];
 
-static Sp scratchpads[] = {
-    /* name          cmd  */
-    {"spterm",      spcmd1},
-};
+const extern Sp scratchpads[1];
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+const extern char *tags[10];
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+const extern float mfact;
+const extern int nmaster;
+const extern int resizehints;
 #define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
-#include "patches/vanitygaps.c"
-static const Layout layouts[] = {
-    /* symbol     arrange function */
-    { "[]=",    tile },         /* Default: Master on left, slaves on right */
-    { "TTT",    bstack },       /* Master on top, slaves on bottom */
-    { "[M]",    monocle },      /* All windows on top of eachother */
-    { "H[]",    deck },         /* Master on left, slaves in monocle-like mode on right */
-    { "[@]",    spiral },       /* Fibonacci spiral */
-    { "[\\]",   dwindle },      /* Decreasing in size right and leftward */
-    { "|M|",    centeredmaster },       /* Master in middle, slaves on sides */
-    { ">M>",    centeredfloatingmaster },   /* Same but master floats */
-    { "><>",    NULL },         /* no layout function means floating behavior */
-    { NULL,     NULL }
-};
+const extern Layout layouts[10];
 
 /* key definitions */
 #define MODKEY Mod4Mask
@@ -104,10 +77,16 @@ static const Layout layouts[] = {
 
 
 /* commands */
-static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", "#000000", "-nf", blue, "-sb", blue, "-sf", black, "-h", dmenuh,  NULL };
-static const char *layoutmenu_cmd = "pOS-layoutmenu";
+char extern dmenumon[2];
+const extern char *dmenucmd[];
+const extern char *layoutmenu_cmd;
 
-#include <X11/XF86keysym.h>
-#include "patches/shiftview.c"
-#include "keys.h"
+const extern char *termcmd[];
+
+/* button definitions */
+/* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
+const extern Button buttons[];
+const extern int lenbuttons;
+
+const extern Key keys[];
+const extern int lenkeys;

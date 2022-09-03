@@ -23,7 +23,6 @@
 #include <assert.h>
 #include <errno.h>
 #include <locale.h>
-#include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,9 +33,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <X11/cursorfont.h>
-#include <X11/keysym.h>
 #include <X11/Xatom.h>
-#include <X11/Xlib.h>
 #include <X11/Xproto.h>
 #include <X11/Xresource.h>
 #include <X11/Xutil.h>
@@ -49,9 +46,8 @@
 
 #include "drw.h"
 #include "util.h"
-
-/* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+#include "config.h"
+#include "dwm.h"
 
 /* macros */
 #define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)
@@ -92,102 +88,8 @@
                                   } \
                                 }
 
-/* enums */
-enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel, SchemeStatus, SchemeTagsSel, SchemeTagsNorm, SchemeInfoSel, SchemeInfoNorm, SchemeOptimal, SchemeCritical }; /* color schemes */
-enum { NetSupported, NetWMName, NetWMIcon, NetWMState, NetWMCheck,
-        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
-        NetWMWindowTypeDialog, NetClientList, NetWMDesktop, NetCurrentDesktop, NetCurrentMonCenter, NetLast}; /* EWMH atoms */
-enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
-enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
-       ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
-
-typedef union {
-    int i;
-    unsigned int ui;
-    float f;
-    const void *v;
-} Arg;
-
-typedef struct {
-    unsigned int click;
-    unsigned int mask;
-    unsigned int button;
-    void (*func)(const Arg *arg);
-    const Arg arg;
-} Button;
-
-typedef struct Monitor Monitor;
-typedef struct Client Client;
-struct Client {
-    char name[256];
-    float mina, maxa;
-    int x, y, w, h;
-    int oldx, oldy, oldw, oldh;
-    int basew, baseh, incw, inch, maxw, maxh, minw, minh;
-    int bw, oldbw;
-    int issteam;
-    unsigned int icw, ich; Picture icon;
-    unsigned int tags;
-    int isfixed, iscentered, isfloating, isurgent, neverfocus, oldstate, isfullscreen, isterminal, noswallow, managedsize, issticky;
-    pid_t pid;
-    Client *next;
-    Client *snext;
-    Client *curtagnext;
-    Client *swallowing;
-    Monitor *mon;
-    Window win;
-};
 static Client *curtagc;
-
-typedef struct {
-    unsigned int mod;
-    KeySym keysym;
-    void (*func)(const Arg *);
-    const Arg arg;
-} Key;
-
-typedef struct {
-    const char *symbol;
-    void (*arrange)(Monitor *);
-} Layout;
-
-typedef struct {
-    const char** cmd;
-    const char* name;
-} Config;
-
-typedef struct Pertag Pertag;
-struct Monitor {
-    char ltsymbol[16];
-    float mfact;
-    int nmaster;
-    int num;
-    int by;               /* bar geometry */
-    int bleftend, brightstart; /* left bar end, right bar start pos */
-    int mx, my, mw, mh;   /* screen size */
-    int wx, wy, ww, wh;   /* window area  */
-    unsigned int borderpx; /* Set border pixel */
-    int gappih;           /* horizontal gap between windows */
-    int gappiv;           /* vertical gap between windows */
-    int gappoh;           /* horizontal outer gaps */
-    int gappov;           /* vertical outer gaps */
-    unsigned int seltags;
-    unsigned int sellt;
-    unsigned int tagset[2];
-    int showbar;
-    int showdock;
-    int topbar;
-    Client *clients;
-    Client *sel;
-    Client *stack;
-    Monitor *next;
-    Window barwin;
-    Window dockwin;
-    const Layout *lt[2];
-    Pertag *pertag;
-};
-Window allbarwin[2];
+static Window allbarwin[2];
 
 typedef struct {
     char class[128];
@@ -205,138 +107,6 @@ static Rule *rules;
 static unsigned int rules_size = 7;
 static const int rules_count = 10;
 
-
-/* function declarations */
-static void autostart(void);
-static void applyrules(Client *c);
-static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact);
-static void arrange(Monitor *m);
-static void arrangemon(Monitor *m);
-static void attach(Client *c);
-static void attachstack(Client *c);
-static void buttonpress(XEvent *e);
-static void checkotherwm(void);
-static void cleanup(void);
-static void cleanupmon(Monitor *mon);
-static void clientmessage(XEvent *e);
-static void configure(Client *c);
-static void configurenotify(XEvent *e);
-static void configurerequest(XEvent *e);
-static void copyvalidchars(char *text, char *rawtext);
-static Monitor *createmon(void);
-static void cyclelayout(const Arg *arg);
-static void destroynotify(XEvent *e);
-static void detach(Client *c);
-static void detachstack(Client *c);
-static Monitor *dirtomon(int dir);
-static void dockevent(XEvent *e, int evtype);
-static void drawbar(Monitor *m, Client *cdock);
-static void drawbars(void);
-static void drawdock(Monitor *m);
-static void enternotify(XEvent *e);
-static void extendrules(void);
-static void expose(XEvent *e);
-static void freeicon(Client *c);
-static void focus(Client *c);
-static void focusin(XEvent *e);
-static void focusmon(const Arg *arg);
-static void focusstack(const Arg *arg);
-static void hide(const Arg *arg);
-static void hidewin(Client *c);
-static Picture geticonprop(Window w, unsigned int *icw, unsigned int *ich);
-static Atom getatomprop(Client *c, Atom prop);
-static int getrootptr(int *x, int *y);
-static long getstate(Window w);
-static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
-static void swaptags(const Arg *arg);
-static void grabbuttons(Client *c, int focused);
-static void grabkeys(void);
-static void layoutmenu(const Arg * arg);
-static void incnmaster(const Arg *arg);
-static void keypress(XEvent *e);
-static void killclient(const Arg *arg);
-static void loadxrdb(void);
-static void manage(Window w, XWindowAttributes *wa);
-static void mappingnotify(XEvent *e);
-static void maprequest(XEvent *e);
-static void monocle(Monitor *m);
-static void motionnotify(XEvent *e);
-static void movemouse(const Arg *arg);
-static Client *nexttiled(Client *c);
-static void pop(Client *);
-static int processrawtext(char* text);
-static void propertynotify(XEvent *e);
-static void pushstack(const Arg *arg);
-static void quit(const Arg *arg);
-static Monitor *recttomon(int x, int y, int w, int h);
-static void resize(Client *c, int x, int y, int w, int h, int interact);
-static void resizeclient(Client *c, int x, int y, int w, int h);
-static void resizemouse(const Arg *arg);
-static void restack(Monitor *m);
-static void run(void);
-static void scan(void);
-static int sendevent(Client *c, Atom proto);
-static void sendmon(Client *c, Monitor *m);
-static void setclientstate(Client *c, long state);
-static void setclienttagprop(Client *c);
-static void setmonposcenter(Monitor *m);
-static void setfocus(Client *c);
-static void setfullscreen(Client *c, int fullscreen);
-static void setlayout(const Arg *arg);
-static void setmfact(const Arg *arg);
-static void setup(void);
-static void seturgent(Client *c, int urg);
-static void showhide(Client *c);
-static void showwin(Client *c);
-static void sigchld(int unused);
-#ifndef __OpenBSD__
-static int getdwmblockspid();
-static void sigdwmblocks(const Arg *arg);
-#endif
-static void sighup(int unused);
-static void sigterm(int unused);
-static void spawn(const Arg *arg);
-static int stackpos(const Arg *arg);
-static void tag(const Arg *arg);
-static void tagmon(const Arg *arg);
-static void togglebar(const Arg *arg);
-static void toggledock(const Arg *arg);
-static void togglefloating(const Arg *arg);
-static void togglescratch(const Arg *arg);
-static void togglesticky(const Arg *arg);
-static void togglefullscr(const Arg *arg);
-static void toggletag(const Arg *arg);
-static void toggleview(const Arg *arg);
-static void unfocus(Client *c, int setfocus);
-static void unmanage(Client *c, int destroyed);
-static void unmapnotify(XEvent *e);
-static void updatebarpos(Monitor *m);
-static void updatebars(void);
-static void updatecurrentdesktop(Monitor *m);
-static void updateclientlist(void);
-static int updategeom(void);
-static void updateicon(Client *c);
-static void updatenumlockmask(void);
-static void updatesizehints(Client *c);
-static void updatestatus(void);
-static void updatetitle(Client *c);
-static void updatewindowtype(Client *c);
-static void updatewmhints(Client *c);
-static void view(const Arg *arg);
-static Client *wintoclient(Window w);
-static Monitor *wintomon(Window w);
-static int xerror(Display *dpy, XErrorEvent *ee);
-static int xerrordummy(Display *dpy, XErrorEvent *ee);
-static int xerrorstart(Display *dpy, XErrorEvent *ee);
-static void zoom(const Arg *arg);
-
-static pid_t getparentprocess(pid_t p);
-static int isdescprocess(pid_t p, pid_t c);
-static Client *swallowingclient(Window w);
-static Client *termforwin(const Client *c);
-static pid_t winpid(Window w);
-
-
 /* variables */
 static const char broken[] = "broken";
 static char* sb_arr[10]; /* Array that holds name of pngs */
@@ -351,6 +121,177 @@ static int bh, blw = 0;      /* bar geometry */
 static int lrpad;            /* sum of left and right padding for text */
 static int (*xerrorxlib)(Display *, XErrorEvent *);
 static unsigned int numlockmask = 0;
+static Atom wmatom[WMLast], netatom[NetLast];
+static int restart = 0;
+static int running = 1;
+static Cur *cursor[CurLast];
+static Clr **scheme;
+static Display *dpy;
+static Drw *drw;
+static Window root, wmcheckwin;
+
+static xcb_connection_t *xcon;
+
+struct Pertag {
+    unsigned int curtag, prevtag; /* current and previous tag */
+    int nmasters[LENGTH(tags) + 1]; /* number of windows in master area */
+    float mfacts[LENGTH(tags) + 1]; /* mfacts per tag */
+    unsigned int sellts[LENGTH(tags) + 1]; /* selected layouts */
+    const Layout *ltidxs[LENGTH(tags) + 1][2]; /* matrix of tags and layouts indexes  */
+    int showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
+};
+
+/* compile-time check if all tags fit into an unsigned int bit array. */
+struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
+
+/* function declarations */
+void autostart(void);
+void applyrules(Client *c);
+int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact);
+void arrange(Monitor *m);
+void arrangemon(Monitor *m);
+void attach(Client *c);
+void attachstack(Client *c);
+void buttonpress(XEvent *e);
+void checkotherwm(void);
+void cleanup(void);
+void cleanupmon(Monitor *mon);
+void clientmessage(XEvent *e);
+void configure(Client *c);
+void configurenotify(XEvent *e);
+void configurerequest(XEvent *e);
+void copyvalidchars(char *text, char *rawtext);
+Monitor *createmon(void);
+void cyclelayout(const Arg *arg);
+void destroynotify(XEvent *e);
+void detach(Client *c);
+void detachstack(Client *c);
+Monitor *dirtomon(int dir);
+void dockevent(XEvent *e, int evtype);
+void drawbar(Monitor *m, Client *cdock);
+void drawbars(void);
+void drawdock(Monitor *m);
+void enternotify(XEvent *e);
+void extendrules(void);
+void expose(XEvent *e);
+void freeicon(Client *c);
+void focus(Client *c);
+void focusin(XEvent *e);
+void focusmon(const Arg *arg);
+void focusstack(const Arg *arg);
+void hide(const Arg *arg);
+void hidewin(Client *c);
+Picture geticonprop(Window w, unsigned int *icw, unsigned int *ich);
+Atom getatomprop(Client *c, Atom prop);
+int getrootptr(int *x, int *y);
+long getstate(Window w);
+int gettextprop(Window w, Atom atom, char *text, unsigned int size);
+void swaptags(const Arg *arg);
+void grabbuttons(Client *c, int focused);
+void grabkeys(void);
+void layoutmenu(const Arg * arg);
+void incnmaster(const Arg *arg);
+void keypress(XEvent *e);
+void killclient(const Arg *arg);
+void loadxrdb(void);
+void manage(Window w, XWindowAttributes *wa);
+void mappingnotify(XEvent *e);
+void maprequest(XEvent *e);
+void monocle(Monitor *m);
+void motionnotify(XEvent *e);
+void movemouse(const Arg *arg);
+Client *nexttiled(Client *c);
+void pop(Client *);
+int processrawtext(char* text);
+void propertynotify(XEvent *e);
+void pushstack(const Arg *arg);
+void quit(const Arg *arg);
+Monitor *recttomon(int x, int y, int w, int h);
+void resize(Client *c, int x, int y, int w, int h, int interact);
+void resizeclient(Client *c, int x, int y, int w, int h);
+void resizemouse(const Arg *arg);
+void restack(Monitor *m);
+void run(void);
+void scan(void);
+int sendevent(Client *c, Atom proto);
+void sendmon(Client *c, Monitor *m);
+void setclientstate(Client *c, long state);
+void setclienttagprop(Client *c);
+void setmonposcenter(Monitor *m);
+void setfocus(Client *c);
+void setfullscreen(Client *c, int fullscreen);
+void setlayout(const Arg *arg);
+void setmfact(const Arg *arg);
+void setup(void);
+void seturgent(Client *c, int urg);
+void showhide(Client *c);
+void showwin(Client *c);
+void sigchld(int unused);
+#ifndef __OpenBSD__
+int getdwmblockspid();
+void sigdwmblocks(const Arg *arg);
+#endif
+void sighup(int unused);
+void sigterm(int unused);
+void spawn(const Arg *arg);
+int stackpos(const Arg *arg);
+void tag(const Arg *arg);
+void tagmon(const Arg *arg);
+void togglebar(const Arg *arg);
+void toggledock(const Arg *arg);
+void togglefloating(const Arg *arg);
+void togglescratch(const Arg *arg);
+void togglesticky(const Arg *arg);
+void togglefullscr(const Arg *arg);
+void toggletag(const Arg *arg);
+void toggleview(const Arg *arg);
+void unfocus(Client *c, int setfocus);
+void unmanage(Client *c, int destroyed);
+void unmapnotify(XEvent *e);
+void updatebarpos(Monitor *m);
+void updatebars(void);
+void updatecurrentdesktop(Monitor *m);
+void updateclientlist(void);
+int updategeom(void);
+void updateicon(Client *c);
+void updatenumlockmask(void);
+void updatesizehints(Client *c);
+void updatestatus(void);
+void updatetitle(Client *c);
+void updatewindowtype(Client *c);
+void updatewmhints(Client *c);
+void view(const Arg *arg);
+Client *wintoclient(Window w);
+Monitor *wintomon(Window w);
+int xerror(Display *dpy, XErrorEvent *ee);
+int xerrordummy(Display *dpy, XErrorEvent *ee);
+int xerrorstart(Display *dpy, XErrorEvent *ee);
+void zoom(const Arg *arg);
+
+static pid_t getparentprocess(pid_t p);
+static int isdescprocess(pid_t p, pid_t c);
+static Client *swallowingclient(Window w);
+static Client *termforwin(const Client *c);
+static pid_t winpid(Window w);
+void defaultgaps(const Arg *arg);
+void incrgaps(const Arg *arg);
+void togglegaps(const Arg *arg);
+void bstack(Monitor *m);
+void centeredmaster(Monitor *m);
+void centeredfloatingmaster(Monitor *m);
+void deck(Monitor *m);
+void dwindle(Monitor *m);
+void fibonacci(Monitor *m, int s);
+void spiral(Monitor *m);
+void tile(Monitor *);
+void getgaps(Monitor *m, int *oh, int *ov, int *ih, int *iv, unsigned int *nc);
+void setgaps(int oh, int ov, int ih, int iv);
+void shifttag(const Arg *arg);
+void shiftview(const Arg *arg);
+
+static Monitor *mons, *selmon;
+#include "vanitygaps.c" /* Needs selmon variable */
+
 static void (*handler[]) (XEvent *) = {
     [ButtonPress] = buttonpress,
     [ClientMessage] = clientmessage,
@@ -367,32 +308,7 @@ static void (*handler[]) (XEvent *) = {
     [PropertyNotify] = propertynotify,
     [UnmapNotify] = unmapnotify
 };
-static Atom wmatom[WMLast], netatom[NetLast];
-static int restart = 0;
-static int running = 1;
-static Cur *cursor[CurLast];
-static Clr **scheme;
-static Display *dpy;
-static Drw *drw;
-static Monitor *mons, *selmon;
-static Window root, wmcheckwin;
 
-static xcb_connection_t *xcon;
-
-/* configuration, allows nested code to access above variables */
-#include "config.h"
-
-struct Pertag {
-    unsigned int curtag, prevtag; /* current and previous tag */
-    int nmasters[LENGTH(tags) + 1]; /* number of windows in master area */
-    float mfacts[LENGTH(tags) + 1]; /* mfacts per tag */
-    unsigned int sellts[LENGTH(tags) + 1]; /* selected layouts */
-    const Layout *ltidxs[LENGTH(tags) + 1][2]; /* matrix of tags and layouts indexes  */
-    int showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
-};
-
-/* compile-time check if all tags fit into an unsigned int bit array. */
-struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
 
 /* function implementations */
 void
@@ -693,7 +609,7 @@ buttonpress(XEvent *e)
 
         x += blw;
 
-        for (i=0; i<LENGTH(config); i++) {
+        for (i=0; i<lenconfig; i++) {
             x += TEXTW(config[i].name) + sb_icon_wh + sb_icon_margin_x;
 
             if (ev->x < x) {
@@ -734,7 +650,7 @@ buttonpress(XEvent *e)
     }
 
 execute_handler:
-    for (i = 0; i < LENGTH(buttons); i++)
+    for (i = 0; i < lenbuttons; i++)
         if (click == buttons[i].click && buttons[i].func && buttons[i].button == ev->button
         && CLEANMASK(buttons[i].mask) == CLEANMASK(ev->state))
             buttons[i].func(click == ClkTagBar && buttons[i].arg.i == 0 ? &arg : &buttons[i].arg);
@@ -1193,7 +1109,7 @@ drawbar(Monitor *m, Client *cdock)
     drw_setscheme(drw, scheme[SchemeOptimal]);
     x = drw_text(drw, x, y, w, bh, lrpad / 2, m->ltsymbol, 0);
 
-    for (i=0; i<LENGTH(config); i++) {
+    for (i=0; i<lenconfig; i++) {
         w = strcmp(config[i].name, "") ? TEXTW(config[i].name) : 0;
         drw_setscheme(drw, scheme[SchemeTagsNorm]);
         drw_rect(drw, x, y, w + sb_icon_wh + sb_icon_margin_x, bh, 1, 1);
@@ -1592,7 +1508,7 @@ grabbuttons(Client *c, int focused)
         if (!focused)
             XGrabButton(dpy, AnyButton, AnyModifier, c->win, False,
                 BUTTONMASK, GrabModeSync, GrabModeSync, None, None);
-        for (i = 0; i < LENGTH(buttons); i++)
+        for (i = 0; i < lenbuttons; i++)
             if (buttons[i].click == ClkClientWin)
                 for (j = 0; j < LENGTH(modifiers); j++)
                     XGrabButton(dpy, buttons[i].button,
@@ -1612,7 +1528,7 @@ grabkeys(void)
         KeyCode code;
 
         XUngrabKey(dpy, AnyKey, AnyModifier, root);
-        for (i = 0; i < LENGTH(keys); i++)
+        for (i = 0; i < lenkeys; i++)
             if ((code = XKeysymToKeycode(dpy, keys[i].keysym)))
                 for (j = 0; j < LENGTH(modifiers); j++)
                     XGrabKey(dpy, code, keys[i].mod | modifiers[j], root,
@@ -1681,7 +1597,7 @@ keypress(XEvent *e)
 
     ev = &e->xkey;
     keysym = XKeycodeToKeysym(dpy, (KeyCode)ev->keycode, 0);
-    for (i = 0; i < LENGTH(keys); i++)
+    for (i = 0; i < lenkeys; i++)
         if (keysym == keys[i].keysym
         && CLEANMASK(keys[i].mod) == CLEANMASK(ev->state)
         && keys[i].func)
@@ -1726,32 +1642,32 @@ void layoutmenu(const Arg *arg)
 void
 loadxrdb()
 {
-  Display *display;
-  char * resm;
-  XrmDatabase xrdb;
-  char *type;
-  XrmValue value;
+  // Display *display;
+  // char * resm;
+  // XrmDatabase xrdb;
+  // char *type;
+  // XrmValue value;
 
-  display = XOpenDisplay(NULL);
+  // display = XOpenDisplay(NULL);
 
-  if (display != NULL) {
-    resm = XResourceManagerString(display);
+  // if (display != NULL) {
+  //   resm = XResourceManagerString(display);
 
-    if (resm != NULL) {
-      xrdb = XrmGetStringDatabase(resm);
+  //   if (resm != NULL) {
+  //     xrdb = XrmGetStringDatabase(resm);
 
-      if (xrdb != NULL) {
-        XRDB_LOAD_COLOR("dwm.color0", gray2);
-        XRDB_LOAD_COLOR("dwm.color8", blue);
-        XRDB_LOAD_COLOR("dwm.color0", black);
-        XRDB_LOAD_COLOR("dwm.color4", black);
-        XRDB_LOAD_COLOR("dwm.color0", black);
-        XRDB_LOAD_COLOR("dwm.color4", blue2);
-      }
-    }
-  }
+  //     if (xrdb != NULL) {
+  //       XRDB_LOAD_COLOR("dwm.color0", gray2);
+  //       XRDB_LOAD_COLOR("dwm.color8", blue);
+  //       XRDB_LOAD_COLOR("dwm.color0", black);
+  //       XRDB_LOAD_COLOR("dwm.color4", black);
+  //       XRDB_LOAD_COLOR("dwm.color0", black);
+  //       XRDB_LOAD_COLOR("dwm.color4", blue2);
+  //     }
+  //   }
+  // }
 
-  XCloseDisplay(display);
+  // XCloseDisplay(display);
 }
 
 void
@@ -2477,7 +2393,7 @@ setup(void)
     sh = DisplayHeight(dpy, screen);
     root = RootWindow(dpy, screen);
     drw = drw_create(dpy, screen, root, sw, sh);
-    if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
+    if (!drw_fontset_create(drw, fonts, lenfonts))
         die("no fonts could be loaded.");
     lrpad = drw->fonts->h;
     bh = user_bh ? user_bh : drw->fonts->h+2;
@@ -3297,6 +3213,71 @@ swallowingclient(Window w)
     return NULL;
 }
 
+void
+shiftview(const Arg *arg)
+{
+	Arg a;
+	Client *c;
+	unsigned visible = 0;
+	int i = arg->i;
+	int count = 0;
+	int nextseltags, curseltags = selmon->tagset[selmon->seltags];
+
+	do {
+		if(i > 0) // left circular shift
+			nextseltags = (curseltags << i) | (curseltags >> (LENGTH(tags) - i));
+
+		else // right circular shift
+			nextseltags = curseltags >> (- i) | (curseltags << (LENGTH(tags) + i));
+
+                // Check if tag is visible
+		for (c = selmon->clients; c && !visible; c = c->next)
+			if (nextseltags & c->tags) {
+				visible = 1;
+				break;
+			}
+		i += arg->i;
+	} while (!visible && ++count < 10);
+
+	if (count < 10) {
+		a.i = nextseltags;
+		view(&a);
+	}
+}
+
+void
+shifttag(const Arg *arg)
+{
+	Arg a;
+	Client *c;
+	unsigned visible = 0;
+	int i = arg->i;
+	int count = 0;
+	int nextseltags, curseltags = selmon->tagset[selmon->seltags];
+
+	do {
+		if(i > 0) // left circular shift
+			nextseltags = (curseltags << i) | (curseltags >> (LENGTH(tags) - i));
+
+		else // right circular shift
+			nextseltags = curseltags >> (- i) | (curseltags << (LENGTH(tags) + i));
+
+                // Check if tag is visible
+		for (c = selmon->clients; c && !visible; c = c->next)
+			if (nextseltags & c->tags) {
+				visible = 1;
+				break;
+			}
+		i += arg->i;
+	} while (!visible && ++count < 10);
+
+	if (count < 10) {
+		a.i = nextseltags;
+		tag(&a);
+	}
+}
+
+
 Client *
 wintoclient(Window w)
 {
@@ -3418,7 +3399,7 @@ main(int argc, char *argv[])
         die("dwm: cannot get xcb connection\n");
     checkotherwm();
         XrmInitialize();
-        loadxrdb();
+        //loadxrdb();
     setup();
 #ifdef __OpenBSD__
     if (pledge("stdio rpath proc exec", NULL) == -1)
