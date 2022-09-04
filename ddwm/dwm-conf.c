@@ -3,7 +3,9 @@
 #include "../patches/themes/catpuccin.h"
 #include <X11/XF86keysym.h>
 #define LENGTH(X)               (sizeof X / sizeof X[0])
-#define INC(X)                  ((X) + 2000)
+#define TERMINAL "st"
+#define TERMCLASS "St"
+#define MAKETERM(TERMINAL, cmd) TERMINAL cmd
 
 extern void cyclelayout(const Arg *arg);
 extern void focus(Client *c);
@@ -25,14 +27,12 @@ extern void spawn(const Arg *arg);
 extern void tag(const Arg *arg);
 extern void tagmon(const Arg *arg);
 extern void togglebar(const Arg *arg);
-extern void toggledock(const Arg *arg);
 extern void togglefloating(const Arg *arg);
 extern void togglescratch(const Arg *arg);
 extern void togglesticky(const Arg *arg);
 extern void togglefullscr(const Arg *arg);
 extern void toggletag(const Arg *arg);
 extern void toggleview(const Arg *arg);
-extern void unfocus(Client *c, int setfocus);
 extern void view(const Arg *arg);
 extern void zoom(const Arg *arg);
 extern void defaultgaps(const Arg *arg);
@@ -64,8 +64,6 @@ const unsigned int sb_padding_x = 12;
 const unsigned int sb_padding_y = 12;
 char dmenufont[]             = "JetBrains Mono:style=Regular:size=16";
 char dmenuh[] = "40";
-const int user_dh            = 80;
-const int docklrmargin       = 64;
 
 #include "appearance"
 const int lenfonts           = LENGTH(fonts);

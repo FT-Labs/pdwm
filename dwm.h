@@ -55,14 +55,12 @@ struct Monitor {
     unsigned int sellt;
     unsigned int tagset[2];
     int showbar;
-    int showdock;
     int topbar;
     Client *clients;
     Client *sel;
     Client *stack;
     Monitor *next;
     Window barwin;
-    Window dockwin;
     const Layout *lt[2];
     Pertag *pertag;
 };

@@ -3,6 +3,7 @@
 #include "dwm.h"
 #include <X11/XF86keysym.h>
 /* Constants */
+#define INC(X)                  ((X) + 2000)
 #define TERMINAL "st"
 #define TERMCLASS "St"
 
@@ -64,17 +65,6 @@ const extern Layout layouts[10];
 /* key definitions */
 #define MODKEY Mod4Mask
 #define MOD2KEY Mod1Mask
-#define TAGKEYS(KEY,TAG) \
-    { MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-    { MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-    { MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-    { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
-    { MODKEY|MOD2KEY,               KEY,      swaptags,       {.ui = 1 << TAG} },
-#define STACKKEYS(MOD,ACTION) \
-    { MOD,  XK_j,   ACTION##stack,  {.i = INC(+1) } }, \
-    { MOD,  XK_k,   ACTION##stack,  {.i = 0 } }, \
-    { MOD,  XK_v,   ACTION##stack,  {.i = 0 } }, \
-
 
 /* commands */
 char extern dmenumon[2];

@@ -5,10 +5,11 @@ include config.mk
 
 SRC = drw.c dwm.c util.c
 OBJ = ${SRC:.c=.o}
+OBJ_DDWM = ddwm/*
 SRC_BLOCKS = dwmblocks.c
 OBJ_BLOCKS = ${SRC_BLOCKS:.c=.o}
 
-all: options dwm dwmblocks
+all: options dwm dwmblocks dwm-conf
 
 options:
 	@echo dwm build options:
@@ -26,11 +27,15 @@ ${OBJ_BLOCKS}: dwmblocks.h
 dwm: ${OBJ}
 	${CC} -o $@ ${OBJ} ${LDFLAGS}
 
+dwm-conf: ${OBJ_DDWM}
+	${CC} -c ddwm/$@.c -fPIC
+	${CC} -shared $@.o -o libdwm-conf.so
+
 dwmblocks: ${OBJ_BLOCKS}
 	${CC} -o $@ ${OBJ_BLOCKS} ${LDFLAGS_BLOCKS}
 
 clean:
-	rm -f dwm dwmblocks ${OBJ} ${OBJ_BLOCKS} dwm-${VERSION}.tar.gz *.orig *.rej
+	rm -f dwm dwmblocks ${OBJ} ${OBJ_BLOCKS} dwm-${VERSION}.tar.gz *.orig *.rej *.so
 
 dist: clean
 	mkdir -p dwm-${VERSION}
@@ -51,6 +56,11 @@ install: all
 	cp -f patches/icons/*.png ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
 	mkdir -p $(DESTDIR)${PREFIX}/share/xsessions
 	cp -f patches/dwm.desktop ${DESTDIR}${PREFIX}/share/xsessions/dwm.desktop
+	mkdir -p ${DESTDIR}${PREFIX}/lib
+	cp -f libdwm-conf.so ${DESTDIR}${PREFIX}/lib
+	mkdir -p ${DESTDIR}${PREFIX}/lib/pkgconfig
+	cp -f ddwm/dwm-conf.pc ${DESTDIR}${PREFIX}/lib/pkgconfig
+	-kill -HUP $$(pidof -s dwm)
 
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwm \
@@ -58,5 +68,7 @@ uninstall:
 		${DESTDIR}${MANPREFIX}/man1/dwm.1
 	rm -rf ${DESTDIR}${PREFIX}/share/phyos/dwm
 	rm -f ${DESTDIR}${PREFIX}/share/xsessions/dwm.desktop
+	rm -f ${DESTDIR}${PREFIX}/lib/libdwm-conf.so \
+		${DESTDIR}${PREFIX}/lib/pkgconfig/dwm-conf.pc
 
-.PHONY: all options clean dist install uninstall
+.PHONY: all dwm-conf options clean dist install uninstall

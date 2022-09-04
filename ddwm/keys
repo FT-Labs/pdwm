@@ -1,25 +1,9 @@
 const Key keys[] = {
-    STACKKEYS(MODKEY,                          focus)
-    STACKKEYS(MODKEY|ShiftMask,                push)
-    /*{ MODKEY,         XK_F1,      spawn,      SHCMD("") },
-    { MODKEY,           XK_F2,      spawn,      SHCMD("")},
-    { MODKEY,           XK_F3,      spawn,      SHCMD(TERMINAL "")  },*/
     { MODKEY,           XK_F4,      spawn,      SHCMD("pavucontrol; kill -44 $(pidof dwmblocks)") },
     { MODKEY,           XK_F5,      spawn,      SHCMD("pOS-displayselect") },
-    /*{ MODKEY,         XK_F6,      spawn,      SHCMD("") },
-    { MODKEY,           XK_F7,      spawn,      SHCMD("") },*/
     { MODKEY,           XK_F9,      spawn,      SHCMD("pOS-mount") },
     { MODKEY,           XK_F10,     spawn,      SHCMD("pOS-umount") },
     { MODKEY,           XK_F11,     spawn,      SHCMD("mpv --no-cache --no-osc --no-input-default-bindings --profile=low-latency --input-conf=/dev/null --title=webcam $(ls /dev/video[0,2,4,6,8] | tail -n 1)") },
-    TAGKEYS(            XK_1,       0)
-    TAGKEYS(            XK_2,       1)
-    TAGKEYS(            XK_3,       2)
-    TAGKEYS(            XK_4,       3)
-    TAGKEYS(            XK_5,       4)
-    TAGKEYS(            XK_6,       5)
-    TAGKEYS(            XK_7,       6)
-    TAGKEYS(            XK_8,       7)
-    TAGKEYS(            XK_9,       8)
     { MODKEY,           XK_0,       view,       {.ui = ~0 } },
     { MODKEY,           XK_grave,   spawn,  SHCMD("pOS-unicode") },
     { MOD2KEY,          XK_1,       setlayout,  {.v = &layouts[0]} }, /* tile */
@@ -38,10 +22,10 @@ const Key keys[] = {
     { MODKEY,           XK_q,       killclient, {0} },
     { MODKEY,           XK_w,       spawn,      SHCMD("$BROWSER") },
     { MODKEY,           XK_t,       spawn,      SHCMD("pidof -s $COMPOSITOR && killall -9 $COMPOSITOR || pOS-compositor &") },
-    { MODKEY,           XK_r,       spawn,      SHCMD(TERMINAL " -e lf") },
+    { MODKEY,           XK_r,       spawn,      SHCMD(MAKETERM(TERMINAL, " -e lf"))},
     { MODKEY,           XK_p,       spawn,      SHCMD("pass_menu") },
-    { MODKEY|MOD2KEY,   XK_p,       spawn,      SHCMD(TERMINAL " -e htop") },
-    { MOD2KEY,          XK_p,       spawn,      SHCMD(TERMINAL " -e s-tui") },
+    { MODKEY|MOD2KEY,   XK_p,       spawn,      SHCMD(MAKETERM(TERMINAL, " -e htop")) },
+    { MOD2KEY,          XK_p,       spawn,      SHCMD(MAKETERM(TERMINAL, " -e s-tui")) },
     { MODKEY,           XK_a,       spawn,      SHCMD("rofi -show drun") },
     { MODKEY|ShiftMask, XK_a,       spawn,          {.v = dmenucmd } },
     { MODKEY,           XK_s,       togglesticky,   {0} },
@@ -83,10 +67,10 @@ const Key keys[] = {
     { 0, XF86XK_AudioStop,          spawn,      SHCMD("mpc stop") },
     { 0, XF86XK_AudioRewind,        spawn,      SHCMD("mpc seek -10") },
     { 0, XF86XK_AudioForward,       spawn,      SHCMD("mpc seek +10") },
-    { 0, XF86XK_AudioMedia,         spawn,      SHCMD(TERMINAL " -e ncmpcpp") },
+    { 0, XF86XK_AudioMedia,         spawn,      SHCMD(MAKETERM(TERMINAL, " -e ncmpcpp")) },
     { 0, XF86XK_AudioMicMute,       spawn,      SHCMD("pactl set-source-mute @DEFAULT_SOURCE@ toggle") },
     { 0, XF86XK_PowerOff,           spawn,      SHCMD("pOS-powermenu") },
-    { 0, XF86XK_Calculator,         spawn,      SHCMD(TERMINAL " -e bc -l") },
+    { 0, XF86XK_Calculator,         spawn,      SHCMD(MAKETERM(TERMINAL, " -e bc -l")) },
     { 0, XF86XK_WWW,                spawn,      SHCMD("$BROWSER") },
     { 0, XF86XK_DOS,                spawn,      SHCMD(TERMINAL) },
     { 0, XF86XK_TouchpadToggle,     spawn,      SHCMD("pOS-touchpadtoggle") },
