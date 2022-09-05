@@ -1,4 +1,4 @@
-const Key keys[] = {
+const struct Key keys[] = {
     { MODKEY,           XK_F4,      spawn,      SHCMD("pavucontrol; kill -44 $(pidof dwmblocks)") },
     { MODKEY,           XK_F5,      spawn,      SHCMD("pOS-displayselect") },
     { MODKEY,           XK_F9,      spawn,      SHCMD("pOS-mount") },
@@ -6,15 +6,15 @@ const Key keys[] = {
     { MODKEY,           XK_F11,     spawn,      SHCMD("mpv --no-cache --no-osc --no-input-default-bindings --profile=low-latency --input-conf=/dev/null --title=webcam $(ls /dev/video[0,2,4,6,8] | tail -n 1)") },
     { MODKEY,           XK_0,       view,       {.ui = ~0 } },
     { MODKEY,           XK_grave,   spawn,  SHCMD("pOS-unicode") },
-    { MOD2KEY,          XK_1,       setlayout,  {.v = &layouts[0]} }, /* tile */
-    { MOD2KEY,          XK_2,       setlayout,  {.v = &layouts[1]} }, /* bstack */
-    { MOD2KEY,          XK_3,       setlayout,  {.v = &layouts[2]} }, /* monocle */
-    { MOD2KEY,          XK_4,       setlayout,  {.v = &layouts[3]} }, /* deck */
-    { MOD2KEY,          XK_5,       setlayout,  {.v = &layouts[4]} }, /* spiral */
-    { MOD2KEY,          XK_6,       setlayout,  {.v = &layouts[5]} }, /* dwindle */
-    { MOD2KEY,          XK_7,       setlayout,  {.v = &layouts[6]} }, /* centeredmaster */
-    { MOD2KEY,          XK_8,       setlayout,  {.v = &layouts[7]} }, /* centeredfloatingmaster */
-    { MOD2KEY,          XK_9,       setlayout,  {.v = &layouts[8]} },      /* Floating layout */
+    { MOD2KEY,          XK_1,       setlayout,  {.v = &layouts[0]} },
+    { MOD2KEY,          XK_2,       setlayout,  {.v = &layouts[1]} },
+    { MOD2KEY,          XK_3,       setlayout,  {.v = &layouts[2]} },
+    { MOD2KEY,          XK_4,       setlayout,  {.v = &layouts[3]} },
+    { MOD2KEY,          XK_5,       setlayout,  {.v = &layouts[4]} },
+    { MOD2KEY,          XK_6,       setlayout,  {.v = &layouts[5]} },
+    { MOD2KEY,          XK_7,       setlayout,  {.v = &layouts[6]} },
+    { MOD2KEY,          XK_8,       setlayout,  {.v = &layouts[7]} },
+    { MOD2KEY,          XK_9,       setlayout,  {.v = &layouts[8]} },
     { MODKEY,           XK_Escape,  spawn,      SHCMD("pOS-powermenu") },
     { MODKEY,           XK_BackSpace,  spawn,   SHCMD("pOS-powermenu") },
     { MODKEY,           XK_Tab,     spawn,      SHCMD("pOS-windowswitchcurtag") },
