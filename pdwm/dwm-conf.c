@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
-#include "../dwm.h"
-#include "../patches/themes/catpuccin.h"
+#include "dwm.h"
+#include "colors.h"
 #include <X11/XF86keysym.h>
 #define LENGTH(X)               (sizeof X / sizeof X[0])
 #define TERMINAL "st"
@@ -120,8 +120,9 @@ const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod4Mask
-#define MOD2KEY Mod1Mask
+#define Win Mod4Mask
+#define Super Mod4Mask
+#define Alt Mod1Mask
 #define TAGKEYS(KEY,TAG) \
     { MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
     { MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \

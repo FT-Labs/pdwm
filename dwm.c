@@ -47,7 +47,7 @@
 #include "drw.h"
 #include "util.h"
 #include "config.h"
-#include "dwm.h"
+#include "pdwm/dwm.h"
 
 /* macros */
 #define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)
@@ -72,27 +72,12 @@
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
 #define TEXTW_SB(X)                (drw_fontset_getwidth(drw, (X)))
 #define TRUNC(X,A,B)            (MAX((A), MIN((X), (B))))
-#define XRDB_LOAD_COLOR(R,V)    if (XrmGetResource(xrdb, R, NULL, &type, &value) == True) { \
-                                  if (value.addr != NULL && strnlen(value.addr, 8) == 7 && value.addr[0] == '#') { \
-                                    int i = 1; \
-                                    for (; i <= 6; i++) { \
-                                      if (value.addr[i] < 48) break; \
-                                      if (value.addr[i] > 57 && value.addr[i] < 65) break; \
-                                      if (value.addr[i] > 70 && value.addr[i] < 97) break; \
-                                      if (value.addr[i] > 102) break; \
-                                    } \
-                                    if (i == 7) { \
-                                      strncpy(V, value.addr, 7); \
-                                      V[7] = '\0'; \
-                                    } \
-                                  } \
-                                }
 #define TAGKEYS(KEY,TAG) \
-    { MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-    { MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-    { MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-    { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
-    { MODKEY|MOD2KEY,               KEY,      swaptags,       {.ui = 1 << TAG} },
+    { Win,                       KEY,      view,           {.ui = 1 << TAG} }, \
+    { Win|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
+    { Win|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
+    { Win|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
+    { Win|Alt,               KEY,      swaptags,       {.ui = 1 << TAG} },
 #define STACKKEYS(MOD,ACTION) \
     { MOD,  XK_j,   ACTION##stack,  {.i = INC(+1) } }, \
     { MOD,  XK_k,   ACTION##stack,  {.i = 0 } }, \
@@ -188,7 +173,6 @@ void layoutmenu(const Arg * arg);
 void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
 void killclient(const Arg *arg);
-static void loadxrdb(void);
 static void manage(Window w, XWindowAttributes *wa);
 static void mappingnotify(XEvent *e);
 static void maprequest(XEvent *e);
@@ -287,8 +271,8 @@ static Monitor *mons, *selmon;
 #include "vanitygaps.c" /* Needs selmon variable */
 
 static const Key defkeys[] = {
-    STACKKEYS(MODKEY,                          focus)
-    STACKKEYS(MODKEY|ShiftMask,                push)
+    STACKKEYS(Win,                          focus)
+    STACKKEYS(Win|ShiftMask,                push)
     TAGKEYS(            XK_1,       0)
     TAGKEYS(            XK_2,       1)
     TAGKEYS(            XK_3,       2)
@@ -1588,37 +1572,6 @@ void layoutmenu(const Arg *arg)
 
     i = atoi(c);
     setlayout(&((Arg) {.v = &layouts[i]}));
-}
-
-void
-loadxrdb()
-{
-  // Display *display;
-  // char * resm;
-  // XrmDatabase xrdb;
-  // char *type;
-  // XrmValue value;
-
-  // display = XOpenDisplay(NULL);
-
-  // if (display != NULL) {
-  //   resm = XResourceManagerString(display);
-
-  //   if (resm != NULL) {
-  //     xrdb = XrmGetStringDatabase(resm);
-
-  //     if (xrdb != NULL) {
-  //       XRDB_LOAD_COLOR("dwm.color0", gray2);
-  //       XRDB_LOAD_COLOR("dwm.color8", blue);
-  //       XRDB_LOAD_COLOR("dwm.color0", black);
-  //       XRDB_LOAD_COLOR("dwm.color4", black);
-  //       XRDB_LOAD_COLOR("dwm.color0", black);
-  //       XRDB_LOAD_COLOR("dwm.color4", blue2);
-  //     }
-  //   }
-  // }
-
-  // XCloseDisplay(display);
 }
 
 void
@@ -3310,18 +3263,16 @@ int
 main(int argc, char *argv[])
 {
     if (argc == 2 && !strcmp("-v", argv[1]))
-        die("dwm-"VERSION);
+        die("pdwm-"VERSION);
     else if (argc != 1)
-        die("usage: dwm [-v]");
+        die("usage: pdwm [-v]");
     if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
         fputs("warning: no locale support\n", stderr);
     if (!(dpy = XOpenDisplay(NULL)))
-        die("dwm: cannot open display");
+        die("pdwm: cannot open display");
     if (!(xcon = XGetXCBConnection(dpy)))
-        die("dwm: cannot get xcb connection\n");
+        die("pdwm: cannot get xcb connection\n");
     checkotherwm();
-        XrmInitialize();
-        //loadxrdb();
     setup();
 #ifdef __OpenBSD__
     if (pledge("stdio rpath proc exec", NULL) == -1)

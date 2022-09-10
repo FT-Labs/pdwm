@@ -5,7 +5,7 @@ include config.mk
 
 SRC = drw.c dwm.c util.c
 OBJ = ${SRC:.c=.o}
-OBJ_DDWM = ddwm/*
+OBJ_PDWM = pdwm/*
 SRC_BLOCKS = dwmblocks.c
 OBJ_BLOCKS = ${SRC_BLOCKS:.c=.o}
 
@@ -27,8 +27,8 @@ ${OBJ_BLOCKS}: dwmblocks.h
 dwm: ${OBJ}
 	${CC} -o $@ ${OBJ} ${LDFLAGS}
 
-dwm-conf: ${OBJ_DDWM}
-	${CC} -c ddwm/$@.c -fPIC
+dwm-conf: ${OBJ_PDWM}
+	${CC} -c pdwm/$@.c -fPIC
 	${CC} -shared $@.o -o libdwm-conf.so
 
 dwmblocks: ${OBJ_BLOCKS}
@@ -59,8 +59,7 @@ install: all
 	mkdir -p ${DESTDIR}${PREFIX}/lib
 	cp -f libdwm-conf.so ${DESTDIR}${PREFIX}/lib
 	mkdir -p ${DESTDIR}${PREFIX}/lib/pkgconfig
-	cp -f ddwm/dwm-conf.pc ${DESTDIR}${PREFIX}/lib/pkgconfig
-	-kill -HUP $$(pidof -s dwm)
+	cp -f dwm-conf.pc ${DESTDIR}${PREFIX}/lib/pkgconfig
 
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwm \

@@ -72,7 +72,7 @@ typedef union {
     const void *v;
 } Arg;
 
-typedef struct {
+typedef struct Button {
     unsigned int click;
     unsigned int mask;
     unsigned int button;
@@ -80,13 +80,12 @@ typedef struct {
     const Arg arg;
 } Button;
 
-typedef struct {
+typedef struct Key {
     unsigned int mod;
     KeySym keysym;
     void (*func)(const Arg *);
     const Arg arg;
 } Key;
-
 
 typedef struct {
     const char** cmd;

@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 #pragma once
-#include "dwm.h"
+#include "pdwm/dwm.h"
 #include <X11/XF86keysym.h>
 /* Constants */
 #define INC(X)                  ((X) + 2000)
@@ -63,8 +63,8 @@ const extern int resizehints;
 const extern Layout layouts[10];
 
 /* key definitions */
-#define MODKEY Mod4Mask
-#define MOD2KEY Mod1Mask
+#define Win Mod4Mask
+#define Alt Mod1Mask
 
 /* commands */
 char extern dmenumon[2];
