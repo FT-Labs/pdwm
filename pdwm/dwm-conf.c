@@ -156,3 +156,9 @@ const int lenkeys = LENGTH(keys);
 const Key *get_keys() {
     return &keys[0];
 }
+
+#include "rules"
+const int lenrules = LENGTH(rules);
+const Rule *get_rules() {
+    return &rules[0];
+}

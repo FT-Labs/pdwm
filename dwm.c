@@ -67,7 +67,6 @@
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
 #define NUMTAGS         (LENGTH(tags) + LENGTH(scratchpads))
 #define TAGMASK         ((1 << NUMTAGS) - 1)
-#define SPTAG(i)        ((1 << LENGTH(tags)) << (i))
 #define SPTAGMASK       (((1 << LENGTH(scratchpads))-1) << LENGTH(tags))
 #define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
 #define TEXTW_SB(X)                (drw_fontset_getwidth(drw, (X)))
@@ -85,21 +84,8 @@
 
 static Window allbarwin[2];
 
-typedef struct {
-    char class[128];
-    char instance[128];
-    char title[128];
-    int tags;
-    int isfloating;
-    int isterminal;
-    int iscentered;
-    int noswallow;
-    int managedsize;
-    int monitor;
-} Rule;
-static Rule *rules;
-static unsigned int rules_size = 7;
-static const int rules_count = 10;
+const Rule *rules;
+extern const Rule *get_rules();
 
 extern const Button *get_buttons();
 const Button *buttons;
@@ -160,7 +146,6 @@ static Monitor *dirtomon(int dir);
 static void drawbar(Monitor *m);
 static void drawbars(void);
 static void enternotify(XEvent *e);
-static void extendrules(void);
 static void expose(XEvent *e);
 static void freeicon(Client *c);
 void focus(Client *c);
@@ -350,11 +335,11 @@ applyrules(Client *c)
     if (strstr(class, "Steam") || strstr(class, "steam_app_"))
         c->issteam = 1;
 
-    for (i = 0; i < rules_size; i++) {
+    for (i = 0; i < lenrules; i++) {
         r = &rules[i];
-        if ((r->title[0] == '0' || strstr(c->name, r->title))
-        && (r->class[0] == '0' || strstr(class, r->class))
-        && (r->instance[0] == '0' || strstr(instance, r->instance)))
+        if ((!r->title || strstr(c->name, r->title))
+        && (!r->class || strstr(class, r->class))
+        && (!r->instance || strstr(instance, r->instance)))
         {
             c->iscentered = r->iscentered;
             c->isterminal = r->isterminal;
@@ -704,7 +689,6 @@ cleanup(void)
     XSync(dpy, False);
     XSetInputFocus(dpy, PointerRoot, RevertToPointerRoot, CurrentTime);
     XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
-    free(rules);
 }
 
 void
@@ -1148,97 +1132,6 @@ enternotify(XEvent *e)
     } else if (!c || c == selmon->sel)
         return;
     focus(c);
-}
-
-void
-extendrules()
-{
-    rules = (Rule *) calloc(sizeof(Rule), rules_size);
-                    /* xprop(1):
-                     *  WM_CLASS(STRING) = instance, class
-                     *  WM_NAME(STRING) = title
-                    */
-                    /* class    instance        title          tagsmask    isfloating   isterminal  iscentered  noswallow  managedsize  monitor */
-    rules[0] = (Rule) { TERMCLASS, "0",           "0",             0,            0,           1,         0,         0,         0,         -1 };
-    rules[1] = (Rule) { "0",       "0",           "Event Tester",  0,            0,           0,         0,         1,         0,         -1 };
-    rules[2] = (Rule) { "0",       "spterm",      "0",             SPTAG(0),     1,           1,         0,         0,         0,         -1 };
-    rules[3] = (Rule) { "0",       "physettings", "0",             0,            1,           1,         1,         0,         0,         -1 };
-    rules[4] = (Rule) { "0",       "pavucontrol", "0",             0,            1,           0,         1,         1,         1,         -1 };
-    rules[5] = (Rule) { "0",       "0",           "nmtui",         0,            1,           1,         1,         0,         0,         -1 };
-    rules[6] = (Rule) { "0",       "physet-run",  "0",             0,            1,           1,         1,         0,         0,         -1 };
-
-
-    FILE *fp;
-
-    fp = popen("/bin/sh -c '[[ -f ~/.phypin ]] && cat ~/.phypin | sed '/#/d' | wc --lines && cat ~/.phypin | sed '/#/d''", "r");
-    if (fp == NULL) {
-        fprintf(stderr, "Failed to extend rules\n" );
-        return;
-    }
-
-    int n;
-    fscanf(fp, "%d", &n);
-
-    if (!n)
-        return;
-
-    int i = rules_size;
-    rules_size += n;
-    rules = realloc(rules, sizeof(Rule) * rules_size);
-
-    while (n--) {
-        for (int j = 0; j < rules_count; j++) {
-            char val[256];
-            int sel;
-            switch (j) {
-            case 0:
-                fscanf(fp, "%s", val);
-                strcpy(rules[i].class, val);
-                break;
-            case 1:
-                fscanf(fp, "%s", val);
-                strcpy(rules[i].instance, val);
-                break;
-            case 2:
-                fscanf(fp, "%s", val);
-                strcpy(rules[i].title, val);
-                break;
-            case 3:
-                fscanf(fp, "%d", &sel);
-                if (sel)
-                    rules[i].tags = (1 << (sel-1));
-                else
-                    rules[i].tags = 0;
-                break;
-            case 4:
-                fscanf(fp, "%d", &sel);
-                rules[i].isfloating = sel;
-                break;
-            case 5:
-                fscanf(fp, "%d", &sel);
-                rules[i].isterminal = sel;
-                break;
-            case 6:
-                fscanf(fp, "%d", &sel);
-                rules[i].iscentered = sel;
-                break;
-            case 7:
-                fscanf(fp, "%d", &sel);
-                rules[i].noswallow = sel;
-                break;
-            case 8:
-                fscanf(fp, "%d", &sel);
-                rules[i].managedsize = sel;
-                break;
-            case 9:
-                fscanf(fp, "%d", &sel);
-                rules[i].monitor = sel;
-                break;
-            }
-        }
-        i++;
-    }
-    pclose(fp);
 }
 
 void
@@ -2294,7 +2187,6 @@ setup(void)
 
     signal(SIGHUP, sighup);
     signal(SIGTERM, sigterm);
-    extendrules();
 
     /* init screen */
     screen = DefaultScreen(dpy);
@@ -3284,6 +3176,7 @@ main(int argc, char *argv[])
     buttons = get_buttons();
     keys = get_keys();
     fonts = get_fonts();
+    rules = get_rules();
     setup();
 #ifdef __OpenBSD__
     if (pledge("stdio rpath proc exec", NULL) == -1)

@@ -7,6 +7,7 @@
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
+#define SPTAG(i)        ((1 << LENGTH(tags)) << (i))
 
 typedef struct Monitor Monitor;
 typedef struct Client Client;
@@ -91,6 +92,19 @@ typedef struct {
     const char** cmd;
     const char* name;
 } Config;
+
+typedef struct Rule {
+    char *class;
+    char *instance;
+    char *title;
+    int tags;
+    int isfloating;
+    int isterminal;
+    int iscentered;
+    int noswallow;
+    int managedsize;
+    int monitor;
+} Rule;
 
 
 /* enums */

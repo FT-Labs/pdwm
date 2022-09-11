@@ -76,3 +76,4 @@ const extern char *termcmd[];
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 const extern int lenbuttons;
 const extern int lenkeys;
+const extern int lenrules;
