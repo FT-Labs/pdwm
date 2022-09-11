@@ -66,6 +66,9 @@ char dmenufont[]             = "JetBrains Mono:style=Regular:size=16";
 char dmenuh[] = "40";
 
 #include "appearance"
+const char **get_fonts() {
+    return fonts;
+}
 const int lenfonts           = LENGTH(fonts);
 
 char *colors[][3] = {
@@ -137,6 +140,10 @@ const Layout layouts[] = {
 #include "buttons"
 const int lenbuttons = LENGTH(buttons);
 
+const Button *get_buttons() {
+    return &buttons[0];
+}
+
 /* commands */
 char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", "#000000", "-nf", blue, "-sb", blue, "-sf", black, "-h", dmenuh,  NULL };
@@ -145,3 +152,7 @@ const char *termcmd[]  = { TERMINAL, NULL };
 
 #include "keys"
 const int lenkeys = LENGTH(keys);
+
+const Key *get_keys() {
+    return &keys[0];
+}

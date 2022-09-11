@@ -101,6 +101,14 @@ static Rule *rules;
 static unsigned int rules_size = 7;
 static const int rules_count = 10;
 
+extern const Button *get_buttons();
+const Button *buttons;
+extern const Key* get_keys();
+const Key *keys;
+
+const char **fonts;
+extern const char **get_fonts();
+
 /* variables */
 static const char broken[] = "broken";
 static char* sb_arr[10]; /* Array that holds name of pngs */
@@ -3273,6 +3281,9 @@ main(int argc, char *argv[])
     if (!(xcon = XGetXCBConnection(dpy)))
         die("pdwm: cannot get xcb connection\n");
     checkotherwm();
+    buttons = get_buttons();
+    keys = get_keys();
+    fonts = get_fonts();
     setup();
 #ifdef __OpenBSD__
     if (pledge("stdio rpath proc exec", NULL) == -1)

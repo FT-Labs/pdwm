@@ -1,4 +1,4 @@
-const struct Key keys[] = {
+static const struct Key keys[] = {
     { Win,           XK_F4,      spawn,      SHCMD("pavucontrol; kill -44 $(pidof dwmblocks)") },
     { Win,           XK_F5,      spawn,      SHCMD("pOS-displayselect") },
     { Win,           XK_F9,      spawn,      SHCMD("pOS-mount") },

@@ -24,7 +24,7 @@ ${OBJ}: config.h config.mk
 
 ${OBJ_BLOCKS}: dwmblocks.h
 
-dwm: ${OBJ}
+dwm: dwm-conf ${OBJ}
 	${CC} -o $@ ${OBJ} ${LDFLAGS}
 
 dwm-conf: ${OBJ_PDWM}

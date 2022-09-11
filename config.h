@@ -24,7 +24,6 @@ const extern int user_bh;
 char extern dmenufont[];
 char extern dmenuh[];
 
-const extern char *fonts[];
 const extern int lenfonts;
 
 /* Default icon width, height, margin and delimiter width */
@@ -75,8 +74,5 @@ const extern char *termcmd[];
 
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
-const extern Button buttons[];
 const extern int lenbuttons;
-
-const extern Key keys[];
 const extern int lenkeys;

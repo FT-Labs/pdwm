@@ -1,4 +1,4 @@
-const struct Button buttons[] = {
+static const struct Button buttons[] = {
     { ClkStatusText,        0,              Button1,        sigdwmblocks,   {.i = 1} },
     { ClkStatusText,        0,              Button2,        sigdwmblocks,   {.i = 2} },
     { ClkStatusText,        0,              Button3,        sigdwmblocks,   {.i = 3} },
