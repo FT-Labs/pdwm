@@ -312,6 +312,7 @@ void
 autostart(void)
 {
     system("killall -q dwmblocks; dwmblocks &");
+    system("killall -q dwmwatch; dwmwatch &");
 }
 
 
