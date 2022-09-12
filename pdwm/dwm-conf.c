@@ -123,19 +123,18 @@ const Layout layouts[] = {
 };
 
 /* key definitions */
+#ifndef KEY_DEFS
+#define KEY_DEFS
 #define Win Mod4Mask
-#define Super Mod4Mask
 #define Alt Mod1Mask
-#define TAGKEYS(KEY,TAG) \
-    { MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
-    { MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-    { MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-    { MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
-    { MODKEY|MOD2KEY,               KEY,      swaptags,       {.ui = 1 << TAG} },
-#define STACKKEYS(MOD,ACTION) \
-    { MOD,  XK_j,   ACTION##stack,  {.i = INC(+1) } }, \
-    { MOD,  XK_k,   ACTION##stack,  {.i = 0 } }, \
-    { MOD,  XK_v,   ACTION##stack,  {.i = 0 } }, \
+#define Shift ShiftMask
+#define Control ControlMask
+#define LeftClick Button1
+#define MiddleClick Button2
+#define RightClick Button3
+#define WheelUp Button4
+#define WheelDown Button5
+#endif
 
 #include "buttons"
 const int lenbuttons = LENGTH(buttons);

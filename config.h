@@ -61,10 +61,6 @@ const extern int resizehints;
 #define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
 const extern Layout layouts[10];
 
-/* key definitions */
-#define Win Mod4Mask
-#define Alt Mod1Mask
-
 /* commands */
 char extern dmenumon[2];
 const extern char *dmenucmd[];

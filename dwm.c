@@ -72,11 +72,11 @@
 #define TEXTW_SB(X)                (drw_fontset_getwidth(drw, (X)))
 #define TRUNC(X,A,B)            (MAX((A), MIN((X), (B))))
 #define TAGKEYS(KEY,TAG) \
-    { Win,                       KEY,      view,           {.ui = 1 << TAG} }, \
-    { Win|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
-    { Win|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
-    { Win|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
-    { Win|Alt,               KEY,      swaptags,       {.ui = 1 << TAG} },
+    { Mod4Mask,                       KEY,      view,           {.ui = 1 << TAG} }, \
+    { Mod4Mask|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
+    { Mod4Mask|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
+    { Mod4Mask|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} }, \
+    { Mod4Mask|Mod1Mask,               KEY,      swaptags,       {.ui = 1 << TAG} },
 #define STACKKEYS(MOD,ACTION) \
     { MOD,  XK_j,   ACTION##stack,  {.i = INC(+1) } }, \
     { MOD,  XK_k,   ACTION##stack,  {.i = 0 } }, \
@@ -264,8 +264,8 @@ static Monitor *mons, *selmon;
 #include "vanitygaps.c" /* Needs selmon variable */
 
 static const Key defkeys[] = {
-    STACKKEYS(Win,                          focus)
-    STACKKEYS(Win|ShiftMask,                push)
+    STACKKEYS(Mod4Mask,                          focus)
+    STACKKEYS(Mod4Mask|ShiftMask,                push)
     TAGKEYS(            XK_1,       0)
     TAGKEYS(            XK_2,       1)
     TAGKEYS(            XK_3,       2)
