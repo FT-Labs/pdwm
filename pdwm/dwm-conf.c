@@ -134,6 +134,23 @@ const Layout layouts[] = {
 #define RightClick Button3
 #define WheelUp Button4
 #define WheelDown Button5
+#define XK_AudioMute         XF86XK_AudioMute
+#define XK_AudioRaiseVolume  XF86XK_AudioRaiseVolume
+#define XK_AudioLowerVolume  XF86XK_AudioLowerVolume
+#define XK_AudioPrev         XF86XK_AudioPrev
+#define XK_AudioNext         XF86XK_AudioNext
+#define XK_AudioPause        XF86XK_AudioPause
+#define XK_AudioPlay         XF86XK_AudioPlay
+#define XK_AudioStop         XF86XK_AudioStop
+#define XK_AudioRewind       XF86XK_AudioRewind
+#define XK_AudioForward      XF86XK_AudioForward
+#define XK_AudioMicMute      XF86XK_AudioMicMute
+#define XK_PowerOff          XF86XK_PowerOff
+#define XK_TouchpadToggle    XF86XK_TouchpadToggle
+#define XK_MonBrightnessUp   XF86XK_MonBrightnessUp
+#define XK_MonBrightnessDown XF86XK_MonBrightnessDown
+#define XK_KbdBrightnessDown XF86XK_KbdBrightnessDown
+#define XK_KbdBrightnessUp   XF86XK_KbdBrightnessUp
 #endif
 
 #include "buttons"
