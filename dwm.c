@@ -87,6 +87,15 @@ static Window allbarwin[2];
 const Rule *rules;
 extern const Rule *get_rules();
 
+static struct Rule defrules[] = {
+{ TERMCLASS,  NULL,           NULL,            0,            0,           1,         0,         0,         0,         -1 },
+{ NULL,       NULL,           "Event Tester",  0,            0,           0,         0,         1,         0,         -1 },
+{ NULL,       "spterm",      NULL,             SPTAG(0),     1,           1,         0,         0,         0,         -1 },
+{ NULL,       "physettings", NULL,             0,            1,           1,         1,         0,         0,         -1 },
+{ NULL,       "physet-run",  NULL,             0,            1,           1,         1,         0,         0,         -1 },
+};
+
+
 extern const Button *get_buttons();
 const Button *buttons;
 extern const Key* get_keys();
@@ -335,6 +344,34 @@ applyrules(Client *c)
 
     if (strstr(class, "Steam") || strstr(class, "steam_app_"))
         c->issteam = 1;
+
+    for (i = 0; i < LENGTH(defrules); i++) {
+        r = &defrules[i];
+        if ((!r->title || strstr(c->name, r->title))
+        && (!r->class || strstr(class, r->class))
+        && (!r->instance || strstr(instance, r->instance)))
+        {
+            c->iscentered = r->iscentered;
+            c->isterminal = r->isterminal;
+            c->isfloating = r->isfloating;
+            c->noswallow  = r->noswallow;
+            c->managedsize = r->managedsize;
+            c->tags |= r->tags;
+            if ((r->tags & SPTAGMASK) && r->isfloating) {
+                c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
+                c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
+            }
+
+            if (c->managedsize) {
+                c->w = c->mon->ww / 2;
+                c->h = c->mon->wh / 2;
+            }
+
+            for (m = mons; m && m->num != r->monitor; m = m->next);
+            if (m)
+                c->mon = m;
+        }
+    }
 
     for (i = 0; i < lenrules; i++) {
         r = &rules[i];
