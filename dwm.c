@@ -1041,12 +1041,12 @@ drawbar(Monitor *m)
 
 
         /* Fill all bar with colorscheme first, some png might have empty locations */
-        drw_setscheme(drw, scheme[SchemeInfoSel]);
+        drw_setscheme(drw, scheme[ClrBarBg]);
         drw_rect(drw, m->ww - twtmp, y, twtmp, bh, 1, 1);
         twtmp -= sb_icon_margin_x;
 
         while (sb_arr[i] != NULL) {
-            drw_setscheme(drw, scheme[SchemeInfoSel]);
+            drw_setscheme(drw, scheme[ClrBarBg]);
 
             if (strlen(sb_arr[i]) == 1) {
                 int idx = sb_arr[i++][0] - '0';
@@ -1063,9 +1063,9 @@ drawbar(Monitor *m)
                     int x = atoi(start);
 
                     if (x <= 30)
-                        drw_setscheme(drw, scheme[SchemeCritical]);
+                        drw_setscheme(drw, scheme[ClrCritical]);
                     else
-                        drw_setscheme(drw, scheme[SchemeOptimal]);
+                        drw_setscheme(drw, scheme[ClrOptimal]);
                 }
                 drw_text(drw, m->ww - twtmp, y, TEXTW_SB(sb_arr[i]), bh, 0, sb_arr[i], 0);
                 twtmp -= TEXTW_SB(sb_arr[i]);
@@ -1074,7 +1074,7 @@ drawbar(Monitor *m)
             /* Below draws seperators */
             if (sb_arr[i+1] != NULL) {
                 twtmp -= sb_icon_margin_x;
-                drw_setscheme(drw, scheme[SchemeSel]);
+                drw_setscheme(drw, scheme[ClrSeperator]);
                 drw_rect(drw, m->ww - twtmp + sb_delimiter_w / 4, y, sb_delimiter_w / 2, bh , 1, 0);
                 drw_rect(drw, m->ww - twtmp, y + bh/10, sb_delimiter_w, bh - 2 * bh/10, 1, 0);
                 twtmp -= sb_delimiter_w + sb_icon_margin_x;
@@ -1091,7 +1091,7 @@ drawbar(Monitor *m)
 
     x = 0;
     /* Draw logo offset with margin */
-    drw_setscheme(drw, scheme[SchemeTagsSel]);
+    drw_setscheme(drw, scheme[ClrBarFg]);
     drw_rect(drw, 0, y, 2 * sb_delimiter_w + sb_icon_wh, bh, 1, 0);
     drw_pic(drw, sb_delimiter_w, y + (bh - sb_icon_wh) / 2, sb_icon_wh, sb_icon_wh, None, 0);
     x += sb_icon_wh + 2 * sb_delimiter_w;
@@ -1103,17 +1103,17 @@ drawbar(Monitor *m)
             continue;
 
         w = TEXTW(tags[0]);
-        drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeTagsSel : SchemeTagsNorm]);
+        drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? ClrBarBg: ClrBarFg]);
         drw_text(drw, x, y, w, bh, lrpad / 2, tags[i], urg & 1 << i);
         x += w;
     }
     w = blw = TEXTW(m->ltsymbol);
-    drw_setscheme(drw, scheme[SchemeOptimal]);
+    drw_setscheme(drw, scheme[ClrLtSymbol]);
     x = drw_text(drw, x, y, w, bh, lrpad / 2, m->ltsymbol, 0);
 
     for (i=0; i<lenconfig; i++) {
         w = strcmp(config[i].name, "") ? TEXTW(config[i].name) : 0;
-        drw_setscheme(drw, scheme[SchemeTagsNorm]);
+        drw_setscheme(drw, scheme[ClrBarFg]);
         drw_rect(drw, x, y, w + sb_icon_wh + sb_icon_margin_x, bh, 1, 1);
         drw_text(drw, x, y, w, bh, lrpad / 2, config[i].name, 0);
         drw_pic(drw, x + w, (bh - sb_icon_wh) / 2, sb_icon_wh, sb_icon_wh, None, i+1);
@@ -1128,7 +1128,7 @@ drawbar(Monitor *m)
         int s;
         if (m->sel && m == selmon) {
             c = m->sel;
-            drw_setscheme(drw, scheme[SchemeStatus]);
+            drw_setscheme(drw, scheme[ClrStatusText]);
             s = drw_text(drw, x, 0, MIN(w, TEXTW(c->name) + (c->icon ? c->icw + sb_icon_margin_x : 0) + lrpad), bh, lrpad / 2 + (c->icon ? c->icw + sb_icon_margin_x : 0), c->name, HIDDEN(c) ? 1 : 0) - x;
             if (c->icon) drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon, -1);
             if (c->isfloating)
@@ -1203,7 +1203,7 @@ focus(Client *c)
         detachstack(c);
         attachstack(c);
         grabbuttons(c, 1);
-        XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
+        XSetWindowBorder(dpy, c->win, scheme[ClrFocusedBorder]->pixel);
         setfocus(c);
     } else {
         XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
@@ -1593,7 +1593,7 @@ manage(Window w, XWindowAttributes *wa)
         wc.border_width = 0;
     }
     XConfigureWindow(dpy, w, CWBorderWidth, &wc);
-    XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
+    XSetWindowBorder(dpy, w, scheme[ClrUnfocusedBorder]->pixel);
     configure(c); /* propagates border_width, if size doesn't change */
     XSelectInput(dpy, w, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
     grabbuttons(c, 0);
@@ -2264,7 +2264,7 @@ setup(void)
     /* init appearance */
     scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
     for (i = 0; i < LENGTH(colors); i++)
-        scheme[i] = drw_scm_create(drw, colors[i], 3);
+        scheme[i] = drw_scm_create(drw, colors[i], 2);
     /* init bars */
     updatebars();
     updatestatus();
@@ -2551,7 +2551,7 @@ unfocus(Client *c, int setfocus)
     if (!c)
         return;
     grabbuttons(c, 0);
-    XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
+    XSetWindowBorder(dpy, c->win, scheme[ClrUnfocusedBorder]->pixel);
     if (setfocus) {
         XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
         XDeleteProperty(dpy, root, netatom[NetActiveWindow]);

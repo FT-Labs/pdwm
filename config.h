@@ -35,7 +35,7 @@ const extern unsigned int sb_delimiter_w;
 const extern unsigned int sb_padding_x;
 const extern unsigned int sb_padding_y;
 
-char extern *colors[9][3];
+char extern *colors[9][2];
 
 const extern char *physettings[];
 

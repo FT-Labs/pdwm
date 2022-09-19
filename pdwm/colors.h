@@ -1,7 +1,9 @@
-static char black[]       = "#1e222a";
-static char gray2[]       = "#282737"; // unfocused window border
-static char blue[]        = "#96CDFB";  // focused window border
-static char blue2[]       = "#c9cbff";
-static char green[]       = "#ABE9B3";
-static char red[]         = "#F28FAD";
-static char white[]       = "#eff1f5";
+static char bar_bg[]       = "#1e222a";
+static char bar_fg[]       = "#96CDFB";
+static char window_border_unfocused[]       = "#282737"; // unfocused window border
+static char window_border_focused[]        = "#96CDFB";  // focused window border
+static char seperator_fg[]       = "#c9cbff";
+static char bar_optimal_fg[]       = "#ABE9B3";
+static char bar_critical_fg[]         = "#F28FAD";
+static char bar_status_text_fg[]       = "#eff1f5";
+static char bar_lt_symbol_fg[]       = "#ABE9B3";

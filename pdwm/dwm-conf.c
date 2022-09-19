@@ -71,17 +71,15 @@ const char **get_fonts() {
 }
 const int lenfonts           = LENGTH(fonts);
 
-char *colors[][3] = {
-       /*               fg           bg           border   */
-       [SchemeNorm] = { black, black, gray2 },
-       [SchemeSel]  = { blue2,  green,  blue  },
-       [SchemeTagsSel] = { black, blue, "#000000" },
-       [SchemeTagsNorm] = { blue, black, "#000000" },
-       [SchemeInfoSel] = { blue, black, "#000000" },
-       [SchemeInfoNorm] = { black, black, "#000000" },
-       [SchemeStatus] = { white, black, "#000000" },
-       [SchemeOptimal] = { green, black, "#000000" },
-       [SchemeCritical] = { red, black, "#000000" } ,
+char *colors[][2] = {
+    [ClrBarFg] = { bar_fg, bar_bg },
+    [ClrBarBg] = { bar_bg, bar_fg },
+    [ClrSeperator] = { seperator_fg, bar_bg },
+    [ClrOptimal] = { bar_optimal_fg, bar_bg },
+    [ClrCritical] = { bar_critical_fg, bar_bg },
+    [ClrFocusedBorder] = { window_border_focused, bar_bg },
+    [ClrUnfocusedBorder] = { window_border_unfocused, bar_bg },
+    [ClrLtSymbol] = { bar_lt_symbol_fg, bar_bg }
 };
 
 const char *physettings[] = {TERMINAL, "-n", "physettings", "-g", "120x35", "-e", "physettings", NULL};
@@ -134,6 +132,8 @@ const Layout layouts[] = {
 #define RightClick Button3
 #define WheelUp Button4
 #define WheelDown Button5
+#define ButtonSide 8
+#define ButtonExtra 9
 #define XK_AudioMute         XF86XK_AudioMute
 #define XK_AudioRaiseVolume  XF86XK_AudioRaiseVolume
 #define XK_AudioLowerVolume  XF86XK_AudioLowerVolume
@@ -162,7 +162,7 @@ const Button *get_buttons() {
 
 /* commands */
 char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", "#000000", "-nf", blue, "-sb", blue, "-sf", black, "-h", dmenuh,  NULL };
+const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", "#000000", "-nf", bar_fg, "-sb", bar_fg, "-sf", bar_bg, "-h", dmenuh,  NULL };
 const char *layoutmenu_cmd = "pOS-layoutmenu";
 const char *termcmd[]  = { TERMINAL, NULL };
 
