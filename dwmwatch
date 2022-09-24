@@ -1,4 +1,0 @@
-#!/bin/sh
-
-inotifywait /usr/bin/dwm /usr/lib/libdwm-conf.so
-pOS-powermenu restart
