@@ -1,6 +1,8 @@
-## dwm-phyOS (dwm and dwmblocks in one)
-## Clickable and modifiable dwmblocks without compiling, all editing can be done from configuration files
-
+### pdwm & phyOS-dwm
+#### pdwm & phyOS-dwm are both suckless dwm forks. Both of them are in this repo, please read below to understand why. Also note that dwmblocks is embedded in this project, you don't need to download it from somewhere else.
+#### For full animation support, please install ``` phyOS-picom ``` fork. Any other picom fork won't work.
+#### phyOS-dwm is the oldest master branch of this project. This has been changed to pdwm branch. phyOS-dwm is just modified suckless dwm, with dwmblocks in it. Please note that this dwmblocks uses libconf library, which you can add/remove statusbar blocks with .cfg files. Also more than 10 statusbar blocks available for phyOS users. However, all of these can be installed on base arch linux too. Statusbar configuration can be made easily with ``` pOS-make-bar ``` script.
+#### Settings button on top left (blue one) will open up a terminal application, which you can choose powermenu themes - colorschemes, and animation options from there. It also has some extra scripts in it to make your statusbar, choose sddm & grub themes.
 ### Gifs
 
 ![alt text](https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/g1.gif)
@@ -17,41 +19,46 @@
 <img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/s5.png">
 (Power menu 'right one is to renew dwm without restart')
 <img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/s6.png">
+#### Why the change? What is pdwm?
+Originally, dwm configuration options are compiled into a single binary. Therefore, to be able to change any attribute you need to edit configuration file and recompile it into dwm again. With pdwm, this changes. Since dwm is supposed to be minimalistic and performant, simply putting a configuration library to handle these options doesn't make sense. It will increase SLOC a lot. To overcome this issue, another simple method has been made:
+All of the configuration variables in dwm (nearly everything, except some edge cases) have been marked as extern variables. In ``` pdwm ``` folder, you can see all the configuration options. These options are made a shared library (.so). With this flexibility, and minor lines of code, at the execution stage of dwm, all of the variables are being loaded into dwm from an outside source, which is the shared library. This way, by just compiling the variables and renewing dwm, all options have been renewed. Without even using ``` sudo ```.
+Note that from now on, mostly pdwm will get updated. However, the older fork, phyOS-dwm is still available on master branch. This is much of a choice now, choose whatever you prefer.
+The tool to configure dwm is a python program, which is called ``` pdwm ```. It is the main control center of pdwm.
+Link: https://github.com/FT-Labs/pdwm
+#### pdwm Usage
+**IMPORTANT**: Please extend your "LD_LIBRARY_PATH" to this location:
+E.G: ``` export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.config/phyos/pdwm" ```
+You must do this, because fallback library will be in /usr/lib. Your local configurations (.so) file will be stored here, and you must extend it to this place for linux ld linker to be able to see it.
+As said before pdwm is a simple python program. It both has support for changing/printing any configuration options from terminal, or via QT app. Now lets get on with options.
+```
+usage: pdwm [-h] [-w] [-b] [-g] [-s {appearance,buttons,keys,rules}]
+            [-c {appr,font,button,key,rule}] [-a {font,button,key,rule}]
+            [-d {font,button,key,rule}] [-q]
 
- This modified suckless **dwm** window manager is built for arch based _phyOS_ distro but can be installed with following for any linux OS.
+options:
+  -h, --help            show this help message and exit
+  -w, --write           Write current dwm configuration to edit [Use this before to
+                        edit dwm configuration] or reset your changes
+  -b, --build           Save changes to dwm
+  -g, --get             Get default dwm settings (overrides current) to use pdwm,
+                        also runs -w flag
+  -s {appearance,buttons,keys,rules}, --show {appearance,buttons,keys,rules}
+  -c {appr,font,button,key,rule}, --change {appr,font,button,key,rule}
+                        Choose and change attribute
+  -a {font,button,key,rule}, --add {font,button,key,rule}
+                        Add new attribute
+  -d {font,button,key,rule}, --delete {font,button,key,rule}
+                        Delete an attribute
+  -q, --qt              Run pdwm as a QT application
+  ```
+  If you prefer a gui application, just run ``` pdwm -q ```. It is a simple and editable QT app, also catches your keypresses, which will save you some time from learning keysym's from internet. If key is not detected, simply find it from google and edit the key.
+### pdwm Gui screenshots
+<img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/pdwm1.png">
+<img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/pdwm2.png">
+<img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/pdwm3.png">
 
-### Click on 'Keys' button on top left in status bar to check out keybindings.
-#### Non-arch users need to install all of them seperately from links below:
-Programs below are all **source code modified** programs therefore all of them are needed to download from:
- - Simple installation would work for all repos other than phyOS-fonts, clone the repo and:
-
-     `make && sudo make install`
-
-Main account : **https://github.com/FT-Labs**
-
- - https://github.com/FT-Labs/phyOS-dunst
- - https://github.com/FT-Labs/phyOS-fonts
- - https://github.com/FT-Labs/phyOS-st
-
-### IMPORTANT!! READ BELOW (If you just want statusbar scripts, you can omit this just read below)
-Please note that dotfiles doesn't contain any scripts. It's just configuration files for programs.
- - https://github.com/FT-Labs/dotfiles
-
-### ABOUT DWMBLOCKS AND SCRIPTS (This is old)
-All dwmblocks and scripts are in **dwmblocksconfig** directory. All configuration files can be read from single path only,
-if it is not found it will revert to default. Note that if __statusbar__ scripts are not in path, it won't work correctly. Please be sure that all scripts are something in your **$PATH** variable.
-#### Path for config file must be: "$HOME/.config/phyos/dwmblocks"
-- I thought about creating this folder and configuration files automatically, however they will erase on if you changed your config file and reinstalled dwm. Therefore please create this folder, move everything in **dwmblocksconfig** to path above and follow the steps below.
-- All blocks in bar is clickable. It will open programs, or make some action if clicked. Just check scripts for how to implement your own.
-- In **dwmblocksconfig** folder, there is a main configuration file called __dwmblocks.cfg__ . This is the main config file, you can add or delete any configuration files from there by __@include__ directive, just use the same syntax in that file.
-- All the bash scripts can be found in **dwmblocksconfig/scripts**. Choose any scripts you want, then add them on your path, like "/usr/local/bin" etc. or anywhere you want.
-- Don't delete .cfg files contained in **dwmblocksconfig/statusbar**, you can add or remove them from main config file. Not included files won't be loaded in dwmblocks.
-- Note that most scripts use glyphs, please install a compatible nerd font for it. You can checkout fonts-phyOS repo for default fonts that i currenty use.
-
-### Requirement for total functionality:
-- Check phyOS-Jun-22/packages.x86_64 for packages
-
-### I am using this for phyOS arch iso only, therefore arch users can follow the below instructions to install everything easily:
+### To be able to install these, please follow the steps below. Also if interested, you can download iso image to a vm, build it then update to system to be able to try.
+#### These explanations are only for arch linux based distributions (any pacman using distro is okay). There are important dependencies, which I could not find all packages to fit all distributions. Later on a debian package version may come too.
 
 Append package repo end of your `/etc/pacman.conf` :
 
@@ -66,21 +73,12 @@ After adding the repo, install keyring first:
     sudo pacman -Syy phyOS-keyring
     sudo pacman-key --init
     sudo pacman-key --populate phyOS
+Now install necessary packages (This will install most of the phyOS packages, if you which packages to choose simply install them, this is a general guide):
+``` sudo pacman -Syy ```
+``` curl [https://raw.githubusercontent.com/FT-Labs/phyOS-Aug-22/master/packages.x86_64](https://raw.githubusercontent.com/FT-Labs/phyOS-Aug-22/master/packages.x86_64) | sed -e '/\#/d' | tr -s "\n" | xargs sudo pacman -S --noconfirm ```
+After the installation, please reboot your computer. Now you will need dotfiles, please move your current dots to somewhere else if they are important.
+Run: ``` phyup dots --force ``` to get latest dotfiles. This is required to set your .xinitrc, .xprofile and picom options etc. correctly. Anyway, if you want you can just check dotfiles repo and choose whatever is required from there.
 
-
-Then install necessary programs with **pacman** easily:
-- Check phyOS-Jun-22/packages.x86_64 for packages
-
-
-#### Installation for different distros then arch linux (Note that this has lots of dependencies just installing dwm won't work):
-
-    git clone https://github.com/FT-Labs/phyOS-dwm
-    cd dwm-phyOS && make && sudo make install
-You need to install fonts to your system first (Nerd fonts, including all glyphs etc.):
-
-    git clone github.com/FT-Labs/phyOS-fonts
-    cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/
-    sudo fc-cache
 
 ### NOTE: <kbd>Caps Lock</kbd> == <kbd>Win</kbd>
 ### NOTE: <kbd>Caps Lock</kbd> is also equal to <kbd>ESC</kbd> in terminal (vim etc..)
