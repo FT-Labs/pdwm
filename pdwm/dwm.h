@@ -110,7 +110,9 @@ typedef struct Rule {
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
 enum { SchemeNorm, SchemeSel, SchemeStatus, SchemeTagsSel, SchemeTagsNorm, SchemeInfoSel, SchemeInfoNorm, SchemeOptimal, SchemeCritical }; /* color schemes */
+enum { Manager, Xembed, XembedInfo, XLast }; /* Xembed atoms */
 enum { NetSupported, NetWMName, NetWMIcon, NetWMState, NetWMCheck,
+        NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation, NetSystemTrayOrientationHorz, /* System tray */
         NetWMFullscreen, NetActiveWindow, NetWMWindowType,
         NetWMWindowTypeDialog, NetClientList, NetWMDesktop, NetCurrentDesktop, NetCurrentMonCenter, NetLast}; /* EWMH atoms */
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */

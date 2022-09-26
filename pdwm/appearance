@@ -8,5 +8,6 @@ const int swallowfloating    = 0;
 const int smartgaps          = 0;
 const int showbar            = 1;
 const int topbar             = 1;
+const int showsystray        = 1;
 const int user_bh            = 40;
 static const char *fonts[]          = { "JetBrains Mono:style=Regular:size=16", "Symbols Nerd Font:style=2048-em:size=23","JoyPixels:size=16:antialias=true:autohint=true"};

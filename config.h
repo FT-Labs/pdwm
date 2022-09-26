@@ -21,6 +21,7 @@ const extern int topbar;
 const extern int user_dh;
 const extern int docklrmargin;
 const extern int user_bh;
+const extern int showsystray;
 char extern dmenufont[];
 char extern dmenuh[];
 
