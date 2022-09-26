@@ -79,6 +79,8 @@ Now install necessary packages (This will install most of the phyOS packages, if
 After the installation, please reboot your computer. Now you will need dotfiles, please move your current dots to somewhere else if they are important.
 Run: ``` phyup dots --force ``` to get latest dotfiles. This is required to set your .xinitrc, .xprofile and picom options etc. correctly. Anyway, if you want you can just check dotfiles repo and choose whatever is required from there.
 
+#### Running:
+Simply run startx from tty, or use a display manager. Desktop file is automatically made and installed.
 
 ### NOTE: <kbd>Caps Lock</kbd> == <kbd>Win</kbd>
 ### NOTE: <kbd>Caps Lock</kbd> is also equal to <kbd>ESC</kbd> in terminal (vim etc..)
