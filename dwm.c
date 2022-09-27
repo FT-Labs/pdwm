@@ -1213,7 +1213,7 @@ drawbar(Monitor *m)
             if (c->icon) drw_pic(drw, x + lrpad / 2, (bh - c->ich) / 2, c->icw, c->ich, c->icon, -1);
             if (c->isfloating)
                 drw_rect(drw, x + boxs, boxs, boxw, boxw, c->isfixed, 0);
-            XMoveResizeWindow(dpy, allbarwin[0], m->wx + (m->bleftend + m->brightstart - s) / 2 + 2 * sb_padding_x, m->by, s - 2 * sb_padding_x, bh);
+            XMoveResizeWindow(dpy, allbarwin[0], m->wx + (m->bleftend + m->brightstart - s - stw - sb_padding_x) / 2 + 2 * sb_padding_x, m->by, s - 2 * sb_padding_x, bh);
             drw_map(drw, allbarwin[0], m->bleftend, 0, m->ww, bh);
         } else if (!m->sel && m == selmon) {
             XMoveWindow(dpy, allbarwin[0], m->wx + m->ww / 2, -2 * (bh + sb_padding_y));
