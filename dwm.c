@@ -799,7 +799,7 @@ clientmessage(XEvent *e)
 				wa.height = sb_icon_wh;
 				wa.border_width = 0;
 			}
-            wa.width = sb_icon_wh, wa.height = sb_icon_wh;
+            wa.width = 24, wa.height = 24;
 			c->x = c->oldx = c->y = c->oldy = 0;
 			c->w = c->oldw = wa.width;
 			c->h = c->oldh = wa.height;
