@@ -1204,7 +1204,7 @@ drawbar(Monitor *m)
     XMoveResizeWindow(dpy, m->barwin, m->wx + sb_padding_x, m->by, x, bh);
     m->bleftend = x;
 
-    if ((w = m->ww - tw - x) > bh) {
+    if ((w = m->ww - tw - x - stw - 2 * sb_padding_x) > bh) {
         int s;
         if (m->sel && m == selmon) {
             c = m->sel;
