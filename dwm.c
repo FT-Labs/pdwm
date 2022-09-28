@@ -2017,7 +2017,7 @@ resizerequest(XEvent *e)
 	Client *i;
 
 	if ((i = wintosystrayicon(ev->window))) {
-		updatesystrayicongeom(i, 24, 24);
+		updatesystrayicongeom(i, i->w, i->h);
 		updatesystray();
 	}
 }
