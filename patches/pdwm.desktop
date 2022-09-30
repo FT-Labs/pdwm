@@ -1,0 +1,6 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=pdwm
+Comment=Runs pdwm
+Exec=pdwm
+Type=Xsession

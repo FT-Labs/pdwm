@@ -47,7 +47,7 @@
 #include "drw.h"
 #include "util.h"
 #include "config.h"
-#include "pdwm/dwm.h"
+#include "pdwmc/dwm.h"
 
 /* macros */
 #define BUTTONMASK              (ButtonPressMask|ButtonReleaseMask)

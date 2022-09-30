@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 #pragma once
-#include "pdwm/dwm.h"
+#include "pdwmc/dwm.h"
 #include <X11/XF86keysym.h>
 /* Constants */
 #define INC(X)                  ((X) + 2000)

@@ -1,15 +1,16 @@
+# pdwm - shared library configuration window manager for phyOS
 # dwm - dynamic window manager
 # See LICENSE file for copyright and license details.
 
 include config.mk
 
-SRC = drw.c dwm.c util.c
+SRC = drw.c pdwm.c util.c
 OBJ = ${SRC:.c=.o}
-OBJ_PDWM = pdwm/*
+OBJ_PDWM = pdwmc/*
 SRC_BLOCKS = dwmblocks.c
 OBJ_BLOCKS = ${SRC_BLOCKS:.c=.o}
 
-all: options dwm dwmblocks dwm-conf
+all: options pdwm dwmblocks dwm-conf
 
 options:
 	@echo dwm build options:
@@ -24,18 +25,18 @@ ${OBJ}: config.h config.mk
 
 ${OBJ_BLOCKS}: dwmblocks.h
 
-dwm: dwm-conf ${OBJ}
+pdwm: dwm-conf ${OBJ}
 	${CC} -o $@ ${OBJ} ${LDFLAGS}
 
 dwm-conf: ${OBJ_PDWM}
-	${CC} -c pdwm/$@.c -fPIC
+	${CC} -c pdwmc/$@.c -fPIC
 	${CC} -shared $@.o -o libdwm-conf.so
 
 dwmblocks: ${OBJ_BLOCKS}
 	${CC} -o $@ ${OBJ_BLOCKS} ${LDFLAGS_BLOCKS}
 
 clean:
-	rm -f dwm dwmblocks ${OBJ} ${OBJ_BLOCKS} dwm-${VERSION}.tar.gz *.orig *.rej *.so
+	rm -f pdwm dwmblocks ${OBJ} ${OBJ_BLOCKS} dwm-${VERSION}.tar.gz *.orig *.rej *.so
 
 dist: clean
 	mkdir -p dwm-${VERSION}
@@ -47,26 +48,26 @@ dist: clean
 
 install: all
 	mkdir -p ${DESTDIR}${PREFIX}/bin
-	cp -f dwm dwmblocks ${DESTDIR}${PREFIX}/bin
-	chmod 755 ${DESTDIR}${PREFIX}/bin/dwm
+	cp -f pdwm dwmblocks ${DESTDIR}${PREFIX}/bin
+	chmod 755 ${DESTDIR}${PREFIX}/bin/pdwm
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwmblocks
 	mkdir -p ${DESTDIR}${MANPREFIX}/man1
 	cp -f dwm.1 ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	mkdir -p ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
 	cp -f patches/icons/*.png ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
 	mkdir -p $(DESTDIR)${PREFIX}/share/xsessions
-	cp -f patches/dwm.desktop ${DESTDIR}${PREFIX}/share/xsessions/dwm.desktop
+	cp -f patches/pdwm.desktop ${DESTDIR}${PREFIX}/share/xsessions/pdwm.desktop
 	mkdir -p ${DESTDIR}${PREFIX}/lib
 	cp -f libdwm-conf.so ${DESTDIR}${PREFIX}/lib
 	mkdir -p ${DESTDIR}${PREFIX}/lib/pkgconfig
 	cp -f dwm-conf.pc ${DESTDIR}${PREFIX}/lib/pkgconfig
 
 uninstall:
-	rm -f ${DESTDIR}${PREFIX}/bin/dwm \
+	rm -f ${DESTDIR}${PREFIX}/bin/pdwm \
 		${DESTDIR}${PREFIX}/bin/dwmblocks \
 		${DESTDIR}${MANPREFIX}/man1/dwm.1
 	rm -rf ${DESTDIR}${PREFIX}/share/phyos/dwm
-	rm -f ${DESTDIR}${PREFIX}/share/xsessions/dwm.desktop
+	rm -f ${DESTDIR}${PREFIX}/share/xsessions/pdwm.desktop
 	rm -f ${DESTDIR}${PREFIX}/lib/libdwm-conf.so \
 		${DESTDIR}${PREFIX}/lib/pkgconfig/dwm-conf.pc
 
