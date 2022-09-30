@@ -23,15 +23,15 @@
 Originally, dwm configuration options are compiled into a single binary. Therefore, to be able to change any attribute you need to edit configuration file and recompile it into dwm again. With pdwm, this changes. Since dwm is supposed to be minimalistic and performant, simply putting a configuration library to handle these options doesn't make sense. It will increase SLOC a lot. To overcome this issue, another simple method has been made:
 All of the configuration variables in dwm (nearly everything, except some edge cases) have been marked as extern variables. In ``` pdwm ``` folder, you can see all the configuration options. These options are made a shared library (.so). With this flexibility, and minor lines of code, at the execution stage of dwm, all of the variables are being loaded into dwm from an outside source, which is the shared library. This way, by just compiling the variables and renewing dwm, all options have been renewed. Without even using ``` sudo ```.
 Note that from now on, mostly pdwm will get updated. However, the older fork, phyOS-dwm is still available on master branch. This is much of a choice now, choose whatever you prefer.
-The tool to configure dwm is a python program, which is called ``` pdwm ```. It is the main control center of pdwm.
-Link: https://github.com/FT-Labs/pdwm
+The tool to configure dwm is a python program, which is called ``` pdwmc ```. It is the main control center of pdwm.
+Link: https://github.com/FT-Labs/pdwmc
 #### pdwm Usage
 **IMPORTANT**: Please extend your "LD_LIBRARY_PATH" to this location:
 E.G: ``` export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.config/phyos/pdwm" ```
 You must do this, because fallback library will be in /usr/lib. Your local configurations (.so) file will be stored here, and you must extend it to this place for linux ld linker to be able to see it.
 As said before pdwm is a simple python program. It both has support for changing/printing any configuration options from terminal, or via QT app. Now lets get on with options.
 ```
-usage: pdwm [-h] [-w] [-b] [-g] [-s {appearance,buttons,keys,rules}]
+usage: pdwmc [-h] [-w] [-b] [-g] [-s {appearance,buttons,keys,rules}]
             [-c {appr,font,button,key,rule}] [-a {font,button,key,rule}]
             [-d {font,button,key,rule}] [-q]
 
@@ -51,7 +51,7 @@ options:
                         Delete an attribute
   -q, --qt              Run pdwm as a QT application
   ```
-  If you prefer a gui application, just run ``` pdwm -q ```. It is a simple and editable QT app, also catches your keypresses, which will save you some time from learning keysym's from internet. If key is not detected, simply find it from google and edit the key.
+  If you prefer a gui application, just run ``` pdwmc -q ```. It is a simple and editable QT app, also catches your keypresses, which will save you some time from learning keysym's from internet. If key is not detected, simply find it from google and edit the key.
 ### pdwm Gui screenshots
 <img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/pdwm1.png">
 <img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/pdwm2.png">
@@ -78,6 +78,8 @@ Now install necessary packages (This will install most of the phyOS packages, if
 ``` curl [https://raw.githubusercontent.com/FT-Labs/phyOS-Aug-22/master/packages.x86_64](https://raw.githubusercontent.com/FT-Labs/phyOS-Aug-22/master/packages.x86_64) | sed -e '/\#/d' | tr -s "\n" | xargs sudo pacman -S --noconfirm ```
 After the installation, please reboot your computer. Now you will need dotfiles, please move your current dots to somewhere else if they are important.
 Run: ``` phyup dots --force ``` to get latest dotfiles. This is required to set your .xinitrc, .xprofile and picom options etc. correctly. Anyway, if you want you can just check dotfiles repo and choose whatever is required from there.
+pdwm Packages: pdwm pdwmc
+phyOS-dwm (classic compiled dwm) packages: phyOS-dwm
 
 #### Running:
 Simply run startx from tty, or use a display manager. Desktop file is automatically made and installed.
