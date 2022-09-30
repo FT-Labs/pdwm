@@ -3014,7 +3014,7 @@ void
 updatestatus(void)
 {
     if (!gettextprop(root, XA_WM_NAME, rawstext, sizeof(rawstext)))
-        strcpy(stext, "phyOS-dwm-"VERSION);
+        strcpy(stext, "pdwm-"VERSION);
     else
         copyvalidchars(stext, rawstext);
     drawbar(selmon);
