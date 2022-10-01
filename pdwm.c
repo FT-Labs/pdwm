@@ -1060,36 +1060,8 @@ applyrules(Client *c)
     if (strstr(class, "Steam") || strstr(class, "steam_app_"))
         c->issteam = 1;
 
-    for (i = 0; i < LENGTH(defrules); i++) {
-        r = &defrules[i];
-        if ((!r->title || strstr(c->name, r->title))
-        && (!r->class || strstr(class, r->class))
-        && (!r->instance || strstr(instance, r->instance)))
-        {
-            c->iscentered = r->iscentered;
-            c->isterminal = r->isterminal;
-            c->isfloating = r->isfloating;
-            c->noswallow  = r->noswallow;
-            c->managedsize = r->managedsize;
-            c->tags |= r->tags;
-            if ((r->tags & SPTAGMASK) && r->isfloating) {
-                c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
-                c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
-            }
-
-            if (c->managedsize) {
-                c->w = c->mon->ww / 2;
-                c->h = c->mon->wh / 2;
-            }
-
-            for (m = mons; m && m->num != r->monitor; m = m->next);
-            if (m)
-                c->mon = m;
-        }
-    }
-
-    for (i = 0; i < lenrules; i++) {
-        r = &rules[i];
+    for (i = 0; i < LENGTH(defrules) + lenrules; i++) {
+        r = i < LENGTH(defrules) ? &defrules[i] : &rules[i - LENGTH(defrules)];
         if ((!r->title || strstr(c->name, r->title))
         && (!r->class || strstr(class, r->class))
         && (!r->instance || strstr(instance, r->instance)))
@@ -1246,6 +1218,7 @@ swallow(Client *p, Client *c)
     Window w = p->win;
     p->win = c->win;
     c->win = w;
+    applyrules(p);
     updateicon(p);
     updatetitle(p);
     XMoveResizeWindow(dpy, p->win, p->x, p->y, p->w, p->h);
