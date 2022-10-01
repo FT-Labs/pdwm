@@ -528,7 +528,7 @@ load_png_icons(Drw* drw, unsigned int w, unsigned int h)
 			return;
 		}
 
-		char fname[284];
+		char fname[512];
 
 		while ((dp = readdir(dfd)))
 		{
