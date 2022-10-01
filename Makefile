@@ -62,6 +62,17 @@ install: all
 	mkdir -p ${DESTDIR}${PREFIX}/lib/pkgconfig
 	cp -f dwm-conf.pc ${DESTDIR}${PREFIX}/lib/pkgconfig
 
+install_pdwm:
+	mkdir -p ${DESTDIR}${PREFIX}/bin
+	cp -f pdwm ${DESTDIR}${PREFIX}/bin
+	chmod 755 ${DESTDIR}${PREFIX}/bin/pdwm
+	mkdir -p $(DESTDIR)${PREFIX}/share/xsessions
+	cp -f patches/pdwm.desktop ${DESTDIR}${PREFIX}/share/xsessions/pdwm.desktop
+	mkdir -p ${DESTDIR}${PREFIX}/lib
+	cp -f libdwm-conf.so ${DESTDIR}${PREFIX}/lib
+	mkdir -p ${DESTDIR}${PREFIX}/lib/pkgconfig
+	cp -f dwm-conf.pc ${DESTDIR}${PREFIX}/lib/pkgconfig
+
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/pdwm \
 		${DESTDIR}${PREFIX}/bin/dwmblocks \
@@ -71,4 +82,4 @@ uninstall:
 	rm -f ${DESTDIR}${PREFIX}/lib/libdwm-conf.so \
 		${DESTDIR}${PREFIX}/lib/pkgconfig/dwm-conf.pc
 
-.PHONY: all dwm-conf options clean dist install uninstall
+.PHONY: all dwm-conf options clean dist install install_pdwm uninstall
