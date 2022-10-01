@@ -514,7 +514,7 @@ load_png_icons(Drw* drw, unsigned int w, unsigned int h)
 	if (!drw || icon_ximg[0])
 		return;
 
-	static const char* iconpath = "/usr/share/phyos/dwm/icons";
+	static const char* iconpath = "/usr/local/share/phyos/dwm/icons";
 		unsigned int* data;
 		Imlib_Image image;
 		Picture pic;

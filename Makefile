@@ -47,8 +47,8 @@ install: all
 	chmod 755 ${DESTDIR}${PREFIX}/bin/dwmblocks
 	mkdir -p ${DESTDIR}${MANPREFIX}/man1
 	cp -f dwm.1 ${DESTDIR}${MANPREFIX}/man1/dwm.1
-	#mkdir -p ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
-	#cp -f patches/icons/*.png ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
+	mkdir -p ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
+	cp -f patches/icons/*.png ${DESTDIR}${PREFIX}/share/phyos/dwm/icons
 	#mkdir -p $(DESTDIR)${PREFIX}/share/xsessions
 	#cp -f patches/dwm.desktop ${DESTDIR}${PREFIX}/share/xsessions/dwm.desktop
 
