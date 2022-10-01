@@ -5,9 +5,9 @@
 *.gcno
 *.gcov
 .*
-dwm
+pdwm
 dwmblocks
-ddwm/*.so
+pdwmc/*.so
 /lcov.info
 **/compile_commands.json
 .cache/**
