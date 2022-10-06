@@ -3998,11 +3998,6 @@ updatesystray(void)
 		w += i->w;
 	}
     w = w > sb_delimiter_w ? w - sb_delimiter_w : 1;
-    XWindowChanges wc;
-	wc.x = 0; wc.y = 0; wc.width = w; wc.height = bh;
-	wc.stack_mode = Above; wc.sibling = allbarwin[1];
-	XConfigureWindow(dpy, systray->win, CWX|CWY|CWWidth|CWHeight|CWSibling|CWStackMode, &wc);
-
 	XSetForeground(dpy, drw->gc, scheme[SchemeNorm][ColBg].pixel);
 	XFillRectangle(dpy, systray->win, drw->gc, 0, 0, w + 2 * sb_padding_x, bh);
 	XSync(dpy, False);
