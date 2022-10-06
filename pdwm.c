@@ -1212,10 +1212,10 @@ swallow(Client *p, Client *c)
     setclientstate(c, WithdrawnState);
     XUnmapWindow(dpy, p->win);
 
+    applyrules(p);
     p->swallowing = c;
     c->mon = p->mon;
 
-    applyrules(p);
     Window w = p->win;
     p->win = c->win;
     c->win = w;
