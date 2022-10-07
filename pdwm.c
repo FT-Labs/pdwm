@@ -524,13 +524,13 @@ swallow(Client *p, Client *c)
     setclientstate(c, WithdrawnState);
     XUnmapWindow(dpy, p->win);
 
-    applyrules(p);
     p->swallowing = c;
     c->mon = p->mon;
 
     Window w = p->win;
     p->win = c->win;
     c->win = w;
+    applyrules(p);
     updateicon(p);
     updatetitle(p);
     XMoveResizeWindow(dpy, p->win, p->x, p->y, p->w, p->h);
