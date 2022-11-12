@@ -78,7 +78,7 @@ Then install necessary programs with **pacman** easily:
     cd dwm-phyOS && make && sudo make install
 You need to install fonts to your system first (Nerd fonts, including all glyphs etc.):
 
-    git clone github.com/FT-Labs/phyOS-fonts
+    git clone https://github.com/FT-Labs/phyOS-fonts
     cd fonts-phyOS && sudo mv *.otf *.ttf /usr/fonts/
     sudo fc-cache
 
