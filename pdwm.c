@@ -1611,38 +1611,39 @@ manage(Window w, XWindowAttributes *wa)
     if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
         c->mon = t->mon;
         c->tags = t->tags;
+	updatewindowtype(c);
     } else {
         c->mon = selmon;
         applyrules(c);
         term = termforwin(c);
+	updatewindowtype(c);
+	{
+	int format;
+	unsigned long *data, n, extra;
+	Monitor *m;
+	Atom atom;
+
+	if (XGetWindowProperty(dpy, c->win, netatom[NetWMDesktop], 0L, 2L, False, XA_CARDINAL,
+		&atom, &format, &n, &extra, (unsigned char **)&data) == Success && n == 2)
+	{
+
+	    c->tags = *data;
+
+	    for (m = mons; m; m = m->next)
+	    {
+		if (m->num == *(data+1))
+		{
+		    c->mon = m;
+		    break;
+		}
+	    }
+	}
+	if (n > 0)
+	    XFree(data);
+	}
+	setclienttagprop(c);
     }
-    updatewindowtype(c);
 
-    {
-        int format;
-        unsigned long *data, n, extra;
-        Monitor *m;
-        Atom atom;
-
-        if (XGetWindowProperty(dpy, c->win, netatom[NetWMDesktop], 0L, 2L, False, XA_CARDINAL,
-                &atom, &format, &n, &extra, (unsigned char **)&data) == Success && n == 2)
-        {
-
-            c->tags = *data;
-
-            for (m = mons; m; m = m->next)
-            {
-                if (m->num == *(data+1))
-                {
-                    c->mon = m;
-                    break;
-                }
-            }
-        }
-        if (n > 0)
-            XFree(data);
-    }
-    setclienttagprop(c);
 
     if (!c->iscentered) {
         if (c->x + WIDTH(c) > c->mon->mx + c->mon->mw)
