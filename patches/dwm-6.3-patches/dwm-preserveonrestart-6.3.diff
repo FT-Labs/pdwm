@@ -8,7 +8,7 @@ Subject: [PATCH] preserve clients on old tags when renewing dwm
  1 file changed, 37 insertions(+), 1 deletion(-)
 
 diff --git a/dwm.c b/dwm.c
-index a96f33c..a12e0bd 100644
+index 03baf42..b11eabc 100644
 --- a/dwm.c
 +++ b/dwm.c
 @@ -62,7 +62,7 @@ enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
@@ -28,34 +28,54 @@ index a96f33c..a12e0bd 100644
  static void setfocus(Client *c);
  static void setfullscreen(Client *c, int fullscreen);
  static void setlayout(const Arg *arg);
-@@ -1060,6 +1061,26 @@ manage(Window w, XWindowAttributes *wa)
- 	updatewindowtype(c);
+@@ -1049,9 +1050,35 @@ manage(Window w, XWindowAttributes *wa)
+ 	if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
+ 		c->mon = t->mon;
+ 		c->tags = t->tags;
++		updatewindowtype(c);
+ 	} else {
+ 		c->mon = selmon;
+ 		applyrules(c);
++		updatewindowtype(c);
++		{
++			int format;
++			unsigned long *data, n, extra;
++			Monitor *m;
++			Atom atom;
++
++			if (XGetWindowProperty(dpy, c->win, netatom[NetClientInfo], 0L, 2L, False, XA_CARDINAL,
++				&atom, &format, &n, &extra, (unsigned char **)&data) == Success && n == 2)
++			{
++	    		c->tags = *data;
++
++	    		for (m = mons; m; m = m->next)
++	    		{
++					if (m->num == *(data+1))
++					{
++		    			c->mon = m;
++		    			break;
++					}
++	    		}
++			}
++			if (n > 0)
++	    		XFree(data);
++		}
++		setclienttagprop(c);
+ 	}
+
+ 	if (c->x + WIDTH(c) > c->mon->wx + c->mon->ww)
+@@ -1066,9 +1093,9 @@ manage(Window w, XWindowAttributes *wa)
+ 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
+ 	XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
+ 	configure(c); /* propagates border_width, if size doesn't change */
+-	updatewindowtype(c);
  	updatesizehints(c);
  	updatewmhints(c);
-+	{
-+		int format;
-+		unsigned long *data, n, extra;
-+		Monitor *m;
-+		Atom atom;
-+		if (XGetWindowProperty(dpy, c->win, netatom[NetClientInfo], 0L, 2L, False, XA_CARDINAL,
-+				&atom, &format, &n, &extra, (unsigned char **)&data) == Success && n == 2) {
-+			c->tags = *data;
-+			for (m = mons; m; m = m->next) {
-+				if (m->num == *(data+1)) {
-+					c->mon = m;
-+					break;
-+				}
-+			}
-+		}
-+		if (n > 0)
-+			XFree(data);
-+	}
-+	setclienttagprop(c);
 +
  	XSelectInput(dpy, w, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
  	grabbuttons(c, 0);
  	if (!c->isfloating)
-@@ -1423,6 +1444,7 @@ sendmon(Client *c, Monitor *m)
+@@ -1430,6 +1457,7 @@ sendmon(Client *c, Monitor *m)
  	c->tags = m->tagset[m->seltags]; /* assign tags of target monitor */
  	attach(c);
  	attachstack(c);
@@ -63,7 +83,7 @@ index a96f33c..a12e0bd 100644
  	focus(NULL);
  	arrange(NULL);
  }
-@@ -1566,6 +1588,7 @@ setup(void)
+@@ -1573,6 +1601,7 @@ setup(void)
  	netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
  	netatom[NetWMWindowTypeDialog] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
  	netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
@@ -71,7 +91,7 @@ index a96f33c..a12e0bd 100644
  	/* init cursors */
  	cursor[CurNormal] = drw_cur_create(drw, XC_left_ptr);
  	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
-@@ -1589,6 +1612,7 @@ setup(void)
+@@ -1596,6 +1625,7 @@ setup(void)
  	XChangeProperty(dpy, root, netatom[NetSupported], XA_ATOM, 32,
  		PropModeReplace, (unsigned char *) netatom, NetLast);
  	XDeleteProperty(dpy, root, netatom[NetClientList]);
@@ -79,10 +99,10 @@ index a96f33c..a12e0bd 100644
  	/* select events */
  	wa.cursor = cursor[CurNormal]->cursor;
  	wa.event_mask = SubstructureRedirectMask|SubstructureNotifyMask
-@@ -1656,11 +1680,22 @@ spawn(const Arg *arg)
+@@ -1660,11 +1690,22 @@ spawn(const Arg *arg)
  	}
  }
- 
+
 +void
 +setclienttagprop(Client *c)
 +{
@@ -102,7 +122,7 @@ index a96f33c..a12e0bd 100644
  		focus(NULL);
  		arrange(selmon);
  	}
-@@ -1735,6 +1770,7 @@ toggletag(const Arg *arg)
+@@ -1739,6 +1780,7 @@ toggletag(const Arg *arg)
  	newtags = selmon->sel->tags ^ (arg->ui & TAGMASK);
  	if (newtags) {
  		selmon->sel->tags = newtags;
@@ -110,6 +130,3 @@ index a96f33c..a12e0bd 100644
  		focus(NULL);
  		arrange(selmon);
  	}
--- 
-2.36.1
-
