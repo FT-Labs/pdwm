@@ -1151,12 +1151,12 @@ drawbar(Monitor *m)
     x += sb_icon_wh + 2 * sb_delimiter_w;
 
 
-    for (i = 0; i < LENGTH(tags); i++) {
+    for (i = 0; i < LENGTH(tags) - 1; i++) {
         /* do not draw vacant tags */
         if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
             continue;
 
-        w = TEXTW(tags[0]);
+        w = TEXTW(tags[i]);
         drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeTagsSel : SchemeTagsNorm]);
         drw_text(drw, x, y, w, bh, lrpad / 2, tags[i], urg & 1 << i);
         x += w;
