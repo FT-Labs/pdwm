@@ -75,7 +75,7 @@ After adding the repo, install keyring first:
     sudo pacman-key --populate phyOS
 Now install necessary packages (This will install most of the phyOS packages, if you which packages to choose simply install them, this is a general guide):
 ``` sudo pacman -Syy ```
-``` curl [https://raw.githubusercontent.com/FT-Labs/phyOS-Aug-22/master/packages.x86_64](https://raw.githubusercontent.com/FT-Labs/phyOS-Aug-22/master/packages.x86_64) | sed -e '/\#/d' | tr -s "\n" | xargs sudo pacman -S --noconfirm ```
+``` curl https://raw.githubusercontent.com/FT-Labs/phyOS-Aug-22/master/packages.x86_64 | sed -e '/\#/d' | tr -s "\n" | xargs sudo pacman -S --noconfirm ```
 After the installation, please reboot your computer. Now you will need dotfiles, please move your current dots to somewhere else if they are important.
 Run: ``` phyup dots --force ``` to get latest dotfiles. This is required to set your .xinitrc, .xprofile and picom options etc. correctly. Anyway, if you want you can just check dotfiles repo and choose whatever is required from there.
 pdwm Packages: pdwm pdwmc
