@@ -36,24 +36,24 @@ const extern unsigned int sb_delimiter_w;
 const extern unsigned int sb_padding_x;
 const extern unsigned int sb_padding_y;
 
-char extern* colors[9][3];
+char extern *colors[9][3];
 
-const extern char* physettings[];
+const extern char *physettings[];
 
 const extern Config config[];
 const extern int lenconfig;
 
 typedef struct {
-    const char* name;
-    const void* cmd;
+	const char *name;
+	const void *cmd;
 } Sp;
 
-const extern char* spcmd1[];
+const extern char *spcmd1[];
 
 const extern Sp scratchpads[1];
 
 /* tagging */
-const extern char* tags[10];
+const extern char *tags[10];
 
 /* layout(s) */
 const extern float mfact;
@@ -64,10 +64,10 @@ const extern Layout layouts[10];
 
 /* commands */
 char extern dmenumon[2];
-const extern char* dmenucmd[];
-const extern char* layoutmenu_cmd;
+const extern char *dmenucmd[];
+const extern char *layoutmenu_cmd;
 
-const extern char* termcmd[];
+const extern char *termcmd[];
 
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
