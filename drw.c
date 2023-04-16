@@ -22,7 +22,8 @@ static const long utfmax[UTF_SIZ + 1] = { 0x10FFFF, 0x7F, 0x7FF, 0xFFFF, 0x10FFF
 // Icon path to search for 32x32 png files -> statusbar
 static Picture icon_ximg[10];
 
-static long utf8decodebyte(const char c, size_t *i)
+static long
+utf8decodebyte(const char c, size_t *i)
 {
 	for (*i = 0; *i < (UTF_SIZ + 1); ++(*i))
 		if (((unsigned char)c & utfmask[*i]) == utfbyte[*i])
@@ -30,7 +31,8 @@ static long utf8decodebyte(const char c, size_t *i)
 	return 0;
 }
 
-static size_t utf8validate(long *u, size_t i)
+static size_t
+utf8validate(long *u, size_t i)
 {
 	if (!BETWEEN(*u, utfmin[i], utfmax[i]) || BETWEEN(*u, 0xD800, 0xDFFF))
 		*u = UTF_INVALID;
@@ -39,7 +41,8 @@ static size_t utf8validate(long *u, size_t i)
 	return i;
 }
 
-static size_t utf8decode(const char *c, long *u, size_t clen)
+static size_t
+utf8decode(const char *c, long *u, size_t clen)
 {
 	size_t i, j, len, type;
 	long udecoded;
@@ -209,7 +212,8 @@ void drw_pic(Drw *drw, int x, int y, unsigned int w, unsigned int h, Picture pic
 /* This function is an implementation detail. Library users should use
  * drw_fontset_create instead.
  */
-static Fnt *xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
+static Fnt *
+xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 {
 	Fnt *font;
 	XftFont *xfont = NULL;
@@ -251,7 +255,8 @@ static Fnt *xfont_create(Drw *drw, const char *fontname, FcPattern *fontpattern)
 	return font;
 }
 
-static void xfont_free(Fnt *font)
+static void
+xfont_free(Fnt *font)
 {
 	if (!font) return;
 	if (font->pattern) FcPatternDestroy(font->pattern);
