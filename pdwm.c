@@ -133,8 +133,8 @@ extern const char **get_fonts();
 static const char autostartblocksh[] = "autostart_blocking.sh";
 static const char autostartsh[] = "autostart.sh";
 static const char broken[] = "broken";
-static const char dwmdir[] = "pdwm";
-static const char localshare[] = ".config/phyos";
+static const char pdwmdir[] = "phyos/pdwm";
+static const char localshare[] = ".config";
 static char *sb_arr[10]; /* Array that holds name of pngs */
 static int sb_tw;
 static char stext[256];
@@ -2114,7 +2114,7 @@ runautostart(void)
 {
 	char *pathpfx;
 	char *path;
-	char *xdgdatahome;
+	char *xdgconfighome;
 	char *home;
 	struct stat sb;
 
@@ -2122,24 +2122,24 @@ runautostart(void)
 		/* this is almost impossible */
 		return;
 
-	/* if $XDG_DATA_HOME is set and not empty, use $XDG_DATA_HOME/dwm,
-	 * otherwise use ~/.local/share/dwm as autostart script directory
+	/* if $XDG_CONFIG_HOME is set and not empty, use $XDG_CONFIG_HOME/phyos/pdwm,
+	 * otherwise use ~/.config/phyos/pdwm as autostart script directory
 	 */
-	xdgdatahome = getenv("XDG_DATA_HOME");
-	if (xdgdatahome != NULL && *xdgdatahome != '\0') {
+	xdgconfighome = getenv("XDG_CONFIG_HOME");
+	if (xdgconfighome != NULL && *xdgconfighome != '\0') {
 		/* space for path segments, separators and nul */
-		pathpfx = ecalloc(1, strlen(xdgdatahome) + strlen(dwmdir) + 2);
+		pathpfx = ecalloc(1, strlen(xdgconfighome) + strlen(pdwmdir) + 2);
 
-		if (sprintf(pathpfx, "%s/%s", xdgdatahome, dwmdir) <= 0) {
+		if (sprintf(pathpfx, "%s/%s", xdgconfighome, pdwmdir) <= 0) {
 			free(pathpfx);
 			return;
 		}
 	} else {
 		/* space for path segments, separators and nul */
 		pathpfx = ecalloc(1, strlen(home) + strlen(localshare)
-		                     + strlen(dwmdir) + 3);
+		                     + strlen(pdwmdir) + 3);
 
-		if (sprintf(pathpfx, "%s/%s/%s", home, localshare, dwmdir) < 0) {
+		if (sprintf(pathpfx, "%s/%s/%s", home, localshare, pdwmdir) < 0) {
 			free(pathpfx);
 			return;
 		}
@@ -2148,16 +2148,16 @@ runautostart(void)
 	/* check if the autostart script directory exists */
 	if (! (stat(pathpfx, &sb) == 0 && S_ISDIR(sb.st_mode))) {
 		/* the XDG conformant path does not exist or is no directory
-		 * so we try ~/.dwm instead
+		 * so we try ~/.pdwm instead
 		 */
-		char *pathpfx_new = realloc(pathpfx, strlen(home) + strlen(dwmdir) + 3);
+		char *pathpfx_new = realloc(pathpfx, strlen(home) + strlen(pdwmdir) + 3);
 		if(pathpfx_new == NULL) {
 			free(pathpfx);
 			return;
 		}
 		pathpfx = pathpfx_new;
 
-		if (sprintf(pathpfx, "%s/.%s", home, dwmdir) <= 0) {
+		if (sprintf(pathpfx, "%s/.%s", home, pdwmdir) <= 0) {
 			free(pathpfx);
 			return;
 		}
