@@ -273,6 +273,7 @@ static void updatewmhints(Client *c);
 void view(const Arg *arg);
 static Client *wintoclient(Window w);
 static Monitor *wintomon(Window w);
+static void setsticky(Client *c, int sticky);
 static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
@@ -780,6 +781,10 @@ void clientmessage(XEvent *e)
 				c, (cme->data.l[0] == 1 /* _NET_WM_STATE_ADD    */
 				    || (cme->data.l[0] == 2 /* _NET_WM_STATE_TOGGLE */ &&
 					!c->isfullscreen)));
+		if (cme->data.l[1] == netatom[NetWMSticky] ||
+		    cme->data.l[2] == netatom[NetWMSticky])
+			setsticky(c, (cme->data.l[0] == 1 ||
+				      (cme->data.l[0] == 2 && !c->issticky)));
 	} else if (cme->message_type == netatom[NetActiveWindow]) {
 		i = 0;
 		do {
@@ -2414,6 +2419,7 @@ void setup(void)
 	netatom[NetWMDesktop] = XInternAtom(dpy, "_NET_WM_DESKTOP", False);
 	netatom[NetWMFullscreen] = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
 	netatom[NetWMWindowType] = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
+	netatom[NetWMSticky] = XInternAtom(dpy, "_NET_WM_STATE_STICKY", False);
 	netatom[NetWMWindowTypeDialog] =
 		XInternAtom(dpy, "_NET_WM_WINDOW_TYPE_DIALOG", False);
 	netatom[NetClientList] = XInternAtom(dpy, "_NET_CLIENT_LIST", False);
@@ -2604,7 +2610,7 @@ void togglefullscr(const Arg *arg)
 void togglesticky(const Arg *arg)
 {
 	if (!selmon->sel) return;
-	selmon->sel->issticky = !selmon->sel->issticky;
+	setsticky(selmon->sel, !selmon->sel->issticky);
 	arrange(selmon);
 }
 
@@ -3036,6 +3042,7 @@ void updatewindowtype(Client *c)
 		c->iscentered = 1;
 		c->isfloating = 1;
 	}
+	if (state == netatom[NetWMSticky]) setsticky(c, 1);
 }
 
 void updatewmhints(Client *c)
@@ -3386,6 +3393,22 @@ void zoom(const Arg *arg)
 	if (c == nexttiled(selmon->clients))
 		if (!c || !(c = nexttiled(c->next))) return;
 	pop(c);
+}
+
+void setsticky(Client *c, int sticky)
+{
+
+	if (sticky && !c->issticky) {
+		XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
+				PropModeReplace, (unsigned char *)&netatom[NetWMSticky],
+				1);
+		c->issticky = 1;
+	} else if (!sticky && c->issticky) {
+		XChangeProperty(dpy, c->win, netatom[NetWMState], XA_ATOM, 32,
+				PropModeReplace, (unsigned char *)0, 0);
+		c->issticky = 0;
+		arrange(c->mon);
+	}
 }
 
 void swaptags(const Arg *arg)
