@@ -401,6 +401,29 @@ void applyrules(Client *c)
 	}
 	if (ch.res_class) XFree(ch.res_class);
 	if (ch.res_name) XFree(ch.res_name);
+
+	{
+		int format;
+		unsigned long *data, n, extra;
+		Monitor *m;
+		Atom atom;
+
+		if (XGetWindowProperty(dpy, c->win, netatom[NetWMDesktop], 0L, 2L, False,
+				       XA_CARDINAL, &atom, &format, &n, &extra,
+				       (unsigned char **)&data) == Success &&
+		    n == 2) {
+
+			if (!c->tags) c->tags = *data;
+
+			for (m = mons; m; m = m->next) {
+				if (m->num == *(data + 1)) {
+					c->mon = m;
+					break;
+				}
+			}
+		}
+		if (n > 0) XFree(data);
+	}
 	c->tags = c->tags & TAGMASK ? c->tags & TAGMASK :
 				      (c->mon->tagset[c->mon->seltags] & ~SPTAGMASK);
 }
@@ -1596,29 +1619,6 @@ void manage(Window w, XWindowAttributes *wa)
 		applyrules(c);
 		term = termforwin(c);
 		updatewindowtype(c);
-		{
-			int format;
-			unsigned long *data, n, extra;
-			Monitor *m;
-			Atom atom;
-
-			if (XGetWindowProperty(dpy, c->win, netatom[NetWMDesktop], 0L, 2L,
-					       False, XA_CARDINAL, &atom, &format, &n,
-					       &extra,
-					       (unsigned char **)&data) == Success &&
-			    n == 2) {
-
-				c->tags = *data;
-
-				for (m = mons; m; m = m->next) {
-					if (m->num == *(data + 1)) {
-						c->mon = m;
-						break;
-					}
-				}
-			}
-			if (n > 0) XFree(data);
-		}
 		setclienttagprop(c);
 	}
 
@@ -2114,8 +2114,7 @@ void run(void)
 		if (handler[ev.type]) handler[ev.type](&ev); /* call handler */
 }
 
-void
-runautostart(void)
+void runautostart(void)
 {
 	char *pathpfx;
 	char *path;
@@ -2123,8 +2122,7 @@ runautostart(void)
 	char *home;
 	struct stat sb;
 
-	if ((home = getenv("HOME")) == NULL)
-		/* this is almost impossible */
+	if ((home = getenv("HOME")) == NULL) /* this is almost impossible */
 		return;
 
 	/* if $XDG_CONFIG_HOME is set and not empty, use $XDG_CONFIG_HOME/phyos/pdwm,
@@ -2141,8 +2139,8 @@ runautostart(void)
 		}
 	} else {
 		/* space for path segments, separators and nul */
-		pathpfx = ecalloc(1, strlen(home) + strlen(localshare)
-		                     + strlen(pdwmdir) + 3);
+		pathpfx = ecalloc(1, strlen(home) + strlen(localshare) + strlen(pdwmdir) +
+					     3);
 
 		if (sprintf(pathpfx, "%s/%s/%s", home, localshare, pdwmdir) < 0) {
 			free(pathpfx);
@@ -2151,12 +2149,12 @@ runautostart(void)
 	}
 
 	/* check if the autostart script directory exists */
-	if (! (stat(pathpfx, &sb) == 0 && S_ISDIR(sb.st_mode))) {
+	if (!(stat(pathpfx, &sb) == 0 && S_ISDIR(sb.st_mode))) {
 		/* the XDG conformant path does not exist or is no directory
 		 * so we try ~/.pdwm instead
 		 */
 		char *pathpfx_new = realloc(pathpfx, strlen(home) + strlen(pdwmdir) + 3);
-		if(pathpfx_new == NULL) {
+		if (pathpfx_new == NULL) {
 			free(pathpfx);
 			return;
 		}
@@ -2175,8 +2173,7 @@ runautostart(void)
 		free(pathpfx);
 	}
 
-	if (access(path, X_OK) == 0)
-		system(path);
+	if (access(path, X_OK) == 0) system(path);
 
 	/* now the non-blocking script */
 	if (sprintf(path, "%s/%s", pathpfx, autostartsh) <= 0) {
@@ -2184,13 +2181,11 @@ runautostart(void)
 		free(pathpfx);
 	}
 
-	if (access(path, X_OK) == 0)
-		system(strcat(path, " &"));
+	if (access(path, X_OK) == 0) system(strcat(path, " &"));
 
 	free(pathpfx);
 	free(path);
 }
-
 
 void scan(void)
 {
