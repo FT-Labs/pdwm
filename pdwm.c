@@ -1320,27 +1320,27 @@ void focusstack(const Arg *arg)
 
 	if (arg->i > 0) {
 		if (selmon->sel)
-			for (c = selmon->sel->next; (c && (!ISVISIBLE(c) || HIDDEN(c)));
+			for (c = selmon->sel->next; c && (!ISVISIBLE(c) || HIDDEN(c) || (c->issticky && c->isfloating));
 			     c = c->next)
 				;
-		if (!c)
-			for (c = selmon->clients; c && (!ISVISIBLE(c) || HIDDEN(c));
+		if (!c || (c->isfloating && c->issticky))
+			for (c = selmon->clients; c && (!ISVISIBLE(c) || HIDDEN(c) || (c->issticky && c->isfloating));
 			     c = c->next)
 				;
 	} else {
 		if (selmon->sel) {
 			for (i = selmon->clients; i != selmon->sel; i = i->next)
-				if (ISVISIBLE(i) && !HIDDEN(i)) c = i;
+				if (ISVISIBLE(i) && !HIDDEN(i) && !(i->issticky && i->isfloating)) c = i;
 		}
 		if (!c)
 			for (; i; i = i->next)
-				if (ISVISIBLE(i) && !HIDDEN(i)) c = i;
+				if (ISVISIBLE(i) && !HIDDEN(i) && !(i->issticky && i->isfloating)) c = i;
 	}
 
 	if (c) {
+		if (!c->isfloating) XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
 		focus(c);
 		restack(selmon);
-		XWarpPointer(dpy, None, c->win, 0, 0, 0, 0, c->w / 2, c->h / 2);
 	}
 }
 
