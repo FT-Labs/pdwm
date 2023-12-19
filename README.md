@@ -52,10 +52,12 @@ options:
   -q, --qt              Run pdwm as a QT application
   ```
   If you prefer a gui application, just run ``` pdwmc -q ```. It is a simple and editable QT app, also catches your keypresses, which will save you some time from learning keysym's from internet. If key is not detected, simply find it from google and edit the key.
-### pdwm Gui screenshots
-<img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/pdwm1.png">
-<img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/pdwm2.png">
-<img src="https://github.com/FT-Labs/phyOS-dwm/blob/screenshots/screenshots/pdwm3.png">
+### pdwmc screenshots
+<img src="https://github.com/FT-Labs/phyOS-iso/blob/images/pdwmc/pdwmc-1.png">
+<img src="https://github.com/FT-Labs/phyOS-iso/blob/images/pdwmc/pdwmc-2.png">
+<img src="https://github.com/FT-Labs/phyOS-iso/blob/images/pdwmc/pdwmc-3.png">
+<img src="https://github.com/FT-Labs/phyOS-iso/blob/images/pdwmc/pdwmc-4.png">
+<img src="https://github.com/FT-Labs/phyOS-iso/blob/images/pdwmc/pdwmc-5.png">
 
 ### To be able to install these, please follow the steps below. Also if interested, you can download iso image to a vm, build it then update to system to be able to try.
 #### These explanations are only for arch linux based distributions (any pacman using distro is okay). There are important dependencies, which I could not find all packages to fit all distributions. Later on a debian package version may come too.
