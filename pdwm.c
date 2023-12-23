@@ -116,7 +116,7 @@ static struct Rule defrules[] = {
 	{ TERMCLASS, NULL, NULL, 0, 0, 1, 0, 0, 0, -1 },
 	{ NULL, NULL, "Event Tester", 0, 0, 0, 0, 1, 0, -1 },
 	{ NULL, "spterm", NULL, SPTAG(0), 1, 1, 0, 0, 0, -1 },
-	{ NULL, "physettings", NULL, 0, 1, 1, 1, 0, 0, -1 },
+	{ NULL, "physettings", NULL, 0, 1, 0, 1, 1, 0, -1 },
 	{ NULL, "physet-run", NULL, 0, 1, 1, 1, 0, 0, -1 },
 	{ NULL, NULL, "Pdwm Gui", 0, 1, 1, 1, 0, 0, -1 },
 };

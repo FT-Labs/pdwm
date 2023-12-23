@@ -21,7 +21,7 @@ static const struct Key keys[] = {
     { Alt,          XK_Tab,     spawn,      SHCMD("pOS-windowswitch") },
     { Win,           XK_q,       killclient, {0} },
     { Win,           XK_w,       spawn,      SHCMD("$BROWSER") },
-    { Win,           XK_t,       spawn,      SHCMD("pidof -s $COMPOSITOR && killall -9 $COMPOSITOR || pOS-compositor &") },
+    { Win,           XK_t,       spawn,      SHCMD("pidof -s picom && killall -9 picom || picom &") },
     { Win,           XK_r,       spawn,      SHCMD(MAKETERM(TERMINAL, " -e lf"))},
     { Win,           XK_p,       spawn,      SHCMD("pass_menu") },
     { Win|Alt,   XK_p,       spawn,      SHCMD(MAKETERM(TERMINAL, " -e htop")) },

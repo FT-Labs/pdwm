@@ -85,8 +85,8 @@ char *colors[][3] = {
 	[SchemeCritical] = { red, black, "#000000" },
 };
 
-const char *physettings[] = { TERMINAL, "-n", "physettings", "-g",
-			      "120x35", "-e", "physettings", NULL };
+const char *physettings[] = { "physettings", "NULL" };
+
 const Config config[] = {
 	{ physettings, "" },
 };
